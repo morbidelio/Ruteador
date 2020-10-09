@@ -1,0 +1,563 @@
+﻿td .letra
+{
+ font-size:large;    
+    
+}
+
+.marcado
+{
+   background-color: #BFFFD4;
+}
+ .controles
+        {
+            position: absolute;
+            border: 1px solid #333;
+            background-color: blue;
+            border-radius: 5px;
+            padding: 7px;
+            width:40px;
+            color: #fff;
+            font-size: 12px Arial;
+            opacity: 0.5;
+            z-index: 2;
+            right:15px;
+            bottom:15px;
+        }
+        .controles > .glyphicon
+        {
+            font-size:x-large;
+            margin-bottom:5px;
+            margin-top:5px;
+        }
+
+[data-notify="progressbar"] {
+	margin-bottom: 0px;
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	width: 100%;
+	height: 5px;
+}
+
+    .row-color3
+    {
+        color:red;
+        
+    }
+
+.incompatible span.rlbText 
+{
+    color: Red;    
+}
+
+.form-control
+{
+    font-size:12px;
+    height: 22.5px !important;
+    color: Black;
+    padding:0px;
+}
+.RadListBox li
+{ 
+    height: 25px;
+}
+.RadListBox span.rlbText 
+{
+    padding-left: 5px;
+    padding-top: 3px;
+}
+
+#minus
+{
+    color: rgb(53, 146, 255);
+}
+
+.panel_label
+{
+    border: 1px solid #3592ff;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.list_trans td
+{
+    text-align: left;
+    
+}
+.filtro
+{
+    border-top: solid 1px rgb(114, 179, 255);
+    border-bottom: solid 1px rgb(114, 179, 255);
+    min-height: 80px;
+    background: white;
+    color: rgb(53, 146, 255);
+}
+.NavQ
+{
+    background-color: rgba(53, 146, 255, 0.5) !important;
+}
+
+.NavLa
+{
+    background-color: rgba(53, 146, 255, 0.5) !important;
+    border: 6px solid rgb(135, 186, 247);
+    border-radius: 5px !important;
+    color: #3592ff;
+}
+
+.NavQA
+{
+    font-weight: bold !important;
+    background-color: transparent;
+    color: #00489c !important;
+}
+
+body
+{
+    background-color: #d1dfef;
+    margin-top: 0px;
+    font-family: font-qmgps !important;
+    height: 100%;
+    overflow: hidden;
+}
+
+#Container #Datos
+{
+    max-height: calc(80% - 50px);
+    overflow: auto;
+}
+
+h2
+{
+    color: #3a98fd;
+}
+
+#CD
+{
+    height: 100%;
+    width: 100%;
+}
+
+.jumbotron
+{
+    padding: 5px 0px;
+    background: white !important;
+    border: 0.5px solid rgb(53, 146, 255);
+    color: #3592ff;
+    font-weight: bold;
+    margin-bottom: 0px !important;
+    border-radius: 0px !important;
+}
+
+.jumboLoL
+{
+    background: white !important;
+    background-color: white !important;
+    border: 0.5px solid rgb(53, 146, 255);
+    color: #3592ff;
+    font-weight: bold;
+    padding-top: 5px !important;
+    padding-bottom: 0px !important;
+    margin-bottom: 0px !important;
+    border-radius: 0px !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    position: relative;
+    height: auto;
+}
+
+.jumboCuadrado
+{
+    background: white !important;
+    background-color: white !important;
+    border: 0.5px solid rgb(53, 146, 255);
+    color: #3592ff;
+    font-weight: bold;
+    padding-top: 5px !important;
+    padding-bottom: 1px !important; /* cambio a 1 por que en status gps la imagen se come a la linea */
+    margin-bottom: 0px !important;
+    border-radius: 0px !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    position: relative;
+    height: auto;
+   
+}
+
+.jumboLoL2
+{
+    background: white !important;
+    background-color: white !important;
+    border: 0.5px solid rgb(53, 146, 255);
+    color: #3592ff;
+    font-weight: bold;
+    padding-top: 5px !important;
+    padding-bottom: 0px !important;
+    margin-bottom: 0px !important;
+    border-radius: 0px !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    position: relative;
+    height: 100px;
+}
+
+td
+{
+    color: #555;
+    font-size: 12px;
+    text-align: center;
+}
+
+th
+{
+    font-size: 12px;
+    text-align: center;
+    min-height: 100px;
+    background: #eee;
+}
+
+.ocultar
+{
+    display: none;
+    visibility: hidden;
+}
+.oculta
+{
+    display: none;
+    visibility: hidden;
+}
+.modal-header
+{
+    background-color: #3592ff;
+    color: White;
+    border-radius: 6px 6px 0px 0px;
+}
+
+.modal-footer
+{
+    background-color: #3592ff;
+    color: White;
+    border-radius: 0px 0px 6px 6px;
+}
+
+.separador
+{
+    height: 10px;
+}
+
+.cuerpo
+{
+    border-top: solid 1px rgb(114, 179, 255);
+    border-bottom: solid 1px rgb(114, 179, 255);
+    min-height: 80vh !important; 
+    background: white;
+    color: rgb(53, 146, 255);
+    padding-top: 15px;
+    overflow-y: auto;
+    padding-bottom: 0px !important;
+    height: 100%;
+    width:100%;
+}
+.cuerpo2
+{
+    border-top: solid 1px rgb(114, 179, 255);
+    border-bottom: solid 1px rgb(114, 179, 255);
+    min-height: 500px !important;
+    max-height: 500px !important;
+    background: white;
+    color: rgb(53, 146, 255);
+    padding-top: 15px;
+    overflow-y: auto;
+    padding-bottom: 0px !important;
+}
+.cuerpoScroll
+{
+    border-top: solid 1px rgb(114, 179, 255);
+    border-bottom: solid 1px rgb(114, 179, 255);
+    min-height: 450px !important;
+    max-height: 450px !important;
+    background: white;
+    color: rgb(53, 146, 255);
+    padding-top: 15px;
+    overflow: scroll !important;
+}
+
+.cuerpoDobleFiltro
+{
+    border-top: solid 1px rgb(114, 179, 255);
+    border-bottom: solid 1px rgb(114, 179, 255);
+    min-height: 470px;
+    background: white;
+    color: rgb(53, 146, 255);
+    padding-top: 15px;
+}
+
+td.opcion-icono
+{
+    color: rgb(53, 146, 255);
+    font-size: large;
+    cursor: pointer;
+}
+td.opcion-icono:hover
+{
+    background: rgb(53, 146, 255);
+    color: White;
+}
+
+.cabecera_row_group td
+{
+    cursor: pointer;
+    background: #d1dfef;
+    color: black !important;
+    font-weight: bold;
+}
+.cabecera_row_group:hover td
+{
+    background: black;
+    color: White !important;
+}
+
+
+
+table
+{
+    margin-bottom: 5px !important;
+}
+
+.ventana
+{
+    color: rgb(53, 146, 255);
+    font-size: large;
+    cursor: pointer;
+    vertical-align: middle !important;
+}
+.ventana:hover
+{
+    background: rgb(53, 146, 255);
+    color: White;
+}
+
+.btn-primary span
+{
+    color: White !important;
+}
+.btn-primary
+{
+    color: White !important;
+    
+}
+.btn-danger
+{
+    color: White !important;
+}
+
+.material-switch > input[type="checkbox"]
+{
+    display: none;   
+}
+
+.material-switch > label
+{
+    cursor: pointer;
+    height: 0px;
+    position: relative; 
+    width: 40px;  
+}
+
+.material-switch > label::before
+{
+    background: rgb(0, 0, 0);
+    box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    content: '';
+    height: 16px;
+    margin-top: -8px;
+    position: absolute;
+    opacity: 0.3;
+    transition: all 0.4s ease-in-out;
+    width: 40px;
+}
+.material-switch > label::after
+{
+    background: rgb(255, 255, 255);
+    border-radius: 16px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+    content: '';
+    height: 24px;
+    left: -4px;
+    margin-top: -8px;
+    position: absolute;
+    top: -4px;
+    transition: all 0.3s ease-in-out;
+    width: 24px;
+}
+.material-switch > input[type="checkbox"]:checked + label::before
+{
+    background: inherit;
+    opacity: 0.5;
+}
+.material-switch > input[type="checkbox"]:checked + label::after
+{
+    background: inherit;
+    left: 20px;
+}
+
+.letraoscura
+{
+    color: Black;
+}
+    
+.row .panel-control
+{
+    padding-left: 20px;
+    margin: 0px;
+}
+.lugar, .lugar-especifico
+{
+    float: left;
+    margin: 1px;
+    border: solid 1px black;
+    border-radius: 2px;
+}
+.lugar
+{
+    width: 40px;
+    font-size: x-small;
+}
+.lugar-especifico
+{
+    font-size: small;
+    width: 60px;
+}
+.columna-anden
+{
+    display: flex;
+    align-items: center;
+    margin: 0px;
+}
+.detalle-lugar, .detalle-lugar-especifico
+{
+    justify-content: center;
+    margin: 2px;
+    border: gray solid 1px; 
+    overflow:hidden;
+    
+
+}
+.detalle-lugar
+{
+    height: 18px;
+}
+.detalle-lugar-especifico
+{
+    height: 25px;
+}
+.detalle-trailer
+{
+    height: 20px;
+}
+.detalle-trailer, .detalle-trailer-especifico
+{
+    justify-content: space-around;
+}
+.detalle-trailer-especifico
+{
+    height: 35px;
+}
+.lugar .inhabilitado
+{
+    background-color: black;
+}
+    
+.tablita
+{
+    color: rgb(53, 146, 255);
+    background-color: rgb(238, 238, 238);
+   width:100%;
+}
+
+table.dataTable,
+table.dataTable th,
+table.dataTable td {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+
+
+.header-color2 > th
+{
+    background-color: aliceblue;
+}
+
+.row-color2
+{
+    background-color: rgb(169, 169, 169);
+}
+
+.pagination-ys {
+    /*display: inline-block;*/
+    padding-left: 0;
+    margin: 20px 0;
+    border-radius: 4px;
+}
+        
+.pagination-ys > td
+{
+    text-align: -moz-center;
+    text-align: -webkit-center;
+    text-align: -ms-center;
+    text-align: -o-center;
+}
+
+.pagination-ys table > tbody > tr > td {
+    display: inline;
+}
+
+.pagination-ys table > tbody > tr > td > a,
+.pagination-ys table > tbody > tr > td > span {
+    position: relative;
+    float: left;
+    padding: 8px 12px;
+    line-height: 1.42857143;
+    text-decoration: none;
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    margin-left: -1px;
+}
+
+.pagination-ys table > tbody > tr > td > span {
+    position: relative;
+    float: left;
+    padding: 8px 12px;
+    line-height: 1.42857143;
+    text-decoration: none;    
+    margin-left: -1px;
+    z-index: 2;
+    color: #aea79f;
+    background-color: #f5f5f5;
+    border-color: #dddddd;
+    cursor: default;
+}
+
+.pagination-ys table > tbody > tr > td:first-child > a,
+.pagination-ys table > tbody > tr > td:first-child > span {
+    margin-left: 0;
+    border-bottom-left-radius: 4px;
+    border-top-left-radius: 4px;
+}
+
+.pagination-ys table > tbody > tr > td:last-child > a,
+.pagination-ys table > tbody > tr > td:last-child > span {
+    border-bottom-right-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.pagination-ys table > tbody > tr > td > a:hover,
+.pagination-ys table > tbody > tr > td > span:hover,
+.pagination-ys table > tbody > tr > td > a:focus,
+.pagination-ys table > tbody > tr > td > span:focus {
+    background-color: #eeeeee;
+    border-color: #dddddd;
+}

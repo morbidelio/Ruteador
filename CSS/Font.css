@@ -1,0 +1,401 @@
+﻿    #rlplayas td
+        {
+            text-align:left;
+            padding-left:10px;
+            font-family: font-qmgps !important;
+            font-size: 13px;
+            line-height: 1.42857143;
+        }
+
+
+        .cpHeader
+        {
+            color: white;
+            background-color: #719DDB;
+            font: bold 11px auto "Trebuchet MS", Verdana;
+            font-size: 12px;
+            cursor: pointer;
+                      height:18px;
+            padding: 4px;           
+        }
+        .cpBody
+        {
+            background-color: #DCE4F9;
+            font: normal 11px auto Verdana, Arial;
+            border: 1px gray;               
+                    padding: 4px;
+            padding-top: 7px;
+        }      
+
+
+        .modal-cuerpo
+        {
+            width: 100% !important;
+            min-height: 400px !important;
+            max-height: 400px !important;
+        }
+        #wrapper
+        {
+            z-index: 3;
+            position: relative;
+            padding-left: 0;
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            transition: all 0.5s ease;
+        }
+        
+        #wrapper.toggled
+        {
+            padding-left: 250px;
+        }
+        html
+        {
+            height: 100%;
+        }
+        body
+        {
+            min-height: 100%;
+        }
+        
+        #wrapper.toggled #sidebar-wrapper
+        {
+            width: 450px;
+        }
+        #page-content-wrapper
+        {
+            width: 100%;
+            position: absolute;
+            padding: 15px;
+            margin-top: 90px;
+        }
+        #wrapper.toggled #page-content-wrapper
+        {
+            position: absolute;
+            margin-right: -150px;
+        }
+        
+        #sidebar-wrapper
+        {
+            z-index: 1000;
+            position: fixed;
+            left: 250px;
+            width: 0;
+            height: 80%;
+            margin-left: -250px;
+            margin-top: 90px;
+            overflow-y: hidden;
+            background: #000;
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            transition: all 0.5s ease;
+        }
+        #deslizar
+        {
+            margin-top: 35px;
+        }
+        
+               
+
+   #zoomG { width:95%; height:80%;}
+   .zoom        { width: 100%;  height:100%    }
+   #large      { width: 100%; height:100%; border-radius: 6px; padding-right: 5px;  padding-left: 5px;  background-size:contain; 
+                 
+                  background-repeat: no-repeat; display:none;
+    width: 100%;
+    height: 100%;
+    
+                 
+                   }
+/*  .small img { width: 6px; height: 25px;  } */
+.small td {  font-size:x-small; border:1px solid black;  }
+/* .large img {    filter: drop-shadow(0 2px 4px rgba(0,0,0,.5)); margin-left:auto; margin-right:auto; margin-top:auto; margin-bottom:auto;
+              }
+  */
+  
+  .lugar
+  {
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,.5)); margin-left:auto; margin-right:auto; margin-top:auto; margin-bottom:auto; transform: transale3d(0,0,0); 
+      }
+  
+  
+              
+  .patente_1
+  {
+   position:absolute;
+    display:inline-block;
+    -webkit-transform:rotate(-90deg);
+    text-align:center;
+    font-size:3px;
+    color:orange;
+    z-index:2;
+  /* margin-left:3px;
+    margin-bottom:3px;*/
+    width:3px;
+    -webkit-transform-origin: 3.8px;
+     margin-top:10px;
+     filter: drop-shadow(0 2px 4px rgba(0,0,0,.5));
+     transform: transale3d(0,0,0); 
+  }   
+  
+  .patente_2
+  {
+   position:absolute;
+    display:inline-block;
+    text-align:center;
+    font-size:3px;
+    color:orange;
+    z-index:2;
+    margin-top:2px;
+    margin-left:3px;
+    width:3px;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,.5));
+    transform: transale3d(0,0,0); 
+  }              
+  
+  .icono
+  
+  {
+      vertical-align:middle;
+      transform: transale3d(0,0,0); 
+  }
+              
+              
+    .selecciona {  background-color:green;     border-radius:2px;
+    -moz-border-radius:2px;
+        }   
+        
+        
+    .selecciona_destino {  background-color:blue;     border-radius:2px;
+    -moz-border-radius:2px;
+        }        
+        
+    .pallet_izq
+       {
+      /*    position:absolute; 
+          margin-left:-3px;
+          margin-right:auto;
+          margin-top:4px;
+          margin-bottom:auto;  */    
+        }
+        
+       .ottawa_der
+       {
+/*          position:absolute;    
+          margin-left:28px;
+          margin-right:auto;
+          margin-top:4px;
+          margin-bottom:auto;  */
+        }  
+        
+        .ottawa_up
+       {
+     
+   /*      position:absolute;    
+          margin-left:3px;
+          margin-right:auto;
+          margin-top:-5px;
+          margin-bottom:auto;  
+*/ 
+        }
+        
+        
+    .pallet_down
+       {
+     
+       /*   margin-left:3px;
+  */
+        }
+        
+          .tabla_lugar {
+           /*   border:1px solid white; */
+              width:100%;
+              height:100%;
+          }
+          
+          .tabla_lugar td
+          {
+        /*      border:1px solid white; */
+          }            
+              
+.large td { font-size: x-large;   }  
+
+.escondido
+{
+    visibility:hidden;
+    display:none;
+}
+
+.mostrado
+{
+    visibility: visible;
+    display:block;
+    height:100%;
+    width:100%;
+}
+
+.mostradogrande
+{
+    visibility: visible;
+    display:block;
+    height:300%;
+    width:300%;
+    background-size: cover;
+}
+
+.zona
+{
+ position:absolute; 
+ transform: transale3d(0,0,0); 
+
+ }
+ 
+         #contextMenu{position:absolute;}
+#contextMenu{
+  border:1px solid green;
+  background:white;
+  list-style:none;
+  padding:3px;
+}
+
+        .opcion-icono
+        {
+            color: rgb(53, 146, 255);
+            font-size: large;
+            cursor: pointer;
+        }
+        
+        
+        thead, tbody tr
+        {
+            white-space: nowrap;
+        }
+        td
+        {
+            font-size: 12px;
+        }
+        
+        .filtro
+        {
+            padding-top: 5px;
+        }
+        
+        .Altu_body
+        {
+            height: 70vh;
+        }
+        .letra
+        {
+            font-size: 12px;
+        }
+
+
+.tool {
+	display:none; 
+	position:absolute; 
+	border:1px solid #333;
+	background-color:green;
+	border-radius:5px;
+	padding:10px;
+	color:#fff;
+	font-size:12px Arial;
+	opacity: 0.5;
+}
+
+.tool1 {
+	position:absolute; 
+	border:1px solid #333;
+	background-color:blue;
+	border-radius:5px;
+	padding:10px;
+	color:#fff;
+	font-size:12px Arial;
+	opacity: 0.5;
+}
+.panel_indicadores {
+	position:absolute; 
+	border:1px solid #333;
+	background-color:blue;
+	border-radius:5px;
+	padding:10px;
+	color:#fff;
+	font-size:12px Arial;
+	opacity: 0.5;
+	z-index:2;
+	margin-top:20px;
+	margin-left:8px;
+	
+}
+
+
+.controles {
+	position:absolute; 
+	border:2px solid gray;
+	background-color:white;
+	border-radius:2px;
+	
+	color:#fff;
+	font-size:10px Arial;
+	opacity: 0.9;
+ 	z-index:2;/*
+ margin-top:-20px;
+ margin-left:500px;*/
+     width:30px;
+ 	
+}
+
+
+.controles img
+{
+    
+    width:25px;
+    padding-left:0px;
+    margin-left:0px;
+    }
+
+.cambiomapa {
+	position:absolute; 
+	border:1px solid #333;
+	background-color:blue;
+	border-radius:5px;
+	padding:10px;
+	color:#fff;
+	font-size:12px Arial;
+	opacity: 0.5;
+	z-index:2;
+ margin-top:10px;
+  margin-left:600px;
+	
+}
+
+.panel_lugar {
+	position:absolute; 
+	border:1px solid #333;
+	background-color:blue;
+	border-radius:5px;
+	padding:10px;
+	color:#fff;
+	font-size:12px Arial;
+	opacity: 0.5;
+	z-index:2;
+	margin-top:10px;
+
+}
+
+
+
+
+
+@font-face
+{
+    font-family: 'font-qmgps';
+    src:    url('../fonts/font-qmgps.eot');
+    src:    url('../fonts/font-qmgps.eot?#iefix') format('embedded-opentype'), 
+            url('../fonts/font-qmgps.woff2') format('woff2'), 
+            url('../fonts/font-qmgps.woff') format('woff'), 
+            url('../fonts/font-qmgps.ttf') format('truetype'), 
+            url('../fonts/font-qmgps.svg#font-qmgps') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
