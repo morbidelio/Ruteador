@@ -1,118 +1,105 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Master/MasterPage.Master" AutoEventWireup="true" CodeFile="Pre_Rutas.aspx.cs" Inherits="App_Pre_Rutas" %>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="titulo" runat="server">
-    <div class="col-lg-12 separador"></div>
+    <div class="col-xs-12 separador"></div>
     <h2>PROPUESTA RUTAS</h2>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="Filtro" runat="server">
- <div class="col-lg-12 separador"></div>
+    <div class="col-xs-12 separador"></div>
     <asp:UpdatePanel ID="up_reload" runat="server">
         <ContentTemplate>
-        <div class="col-xs-9 oculta">
-        
-            <div class="col-lg-1">
-                Region
+            <div class="col-xs-9 oculta">
+                <div class="col-xs-1">
+                    Region
+                </div>
+                <div class="col-xs-2">
+                    <asp:DropDownList ID="ddl_buscarRegion" OnSelectedIndexChanged="ddl_buscarRegion_SelectedIndexChanged" AutoPostBack="true" CssClass="form-control" runat="server">
+                        <asp:ListItem Value="0">Todos...</asp:ListItem>
+                    </asp:DropDownList>
+                </div>
+                <div class="col-xs-1">
+                    Ciudad
+                </div>
+                <div class="col-xs-2">
+                    <asp:DropDownList ID="ddl_buscarCiudad" OnSelectedIndexChanged="ddl_buscarCiudad_SelectedIndexChanged" AutoPostBack="true" CssClass="form-control" runat="server">
+                        <asp:ListItem Value="0">Todos...</asp:ListItem>
+                    </asp:DropDownList>
+                </div>
+                <div class="col-xs-1">
+                    Comuna
+                </div>
+                <div class="col-xs-2">
+                    <asp:DropDownList ID="ddl_buscarComuna" CssClass="form-control" runat="server">
+                        <asp:ListItem Value="0">Todos...</asp:ListItem>
+                    </asp:DropDownList>
+                </div>
             </div>
-            <div class="col-lg-2">
-                <asp:DropDownList ID="ddl_buscarRegion" OnSelectedIndexChanged="ddl_buscarRegion_SelectedIndexChanged" AutoPostBack="true" CssClass="form-control" runat="server">
-                    <asp:ListItem Value="0">Todos...</asp:ListItem>
-                </asp:DropDownList>
-            </div>
-            <div class="col-lg-1">
-                Ciudad
-            </div>
-            <div class="col-lg-2">
-                <asp:DropDownList ID="ddl_buscarCiudad" OnSelectedIndexChanged="ddl_buscarCiudad_SelectedIndexChanged" AutoPostBack="true" CssClass="form-control" runat="server">
-                    <asp:ListItem Value="0">Todos...</asp:ListItem>
-                </asp:DropDownList>
-            </div>
-            <div class="col-lg-1">
-                Comuna
-            </div>
-            <div class="col-lg-2">
-                <asp:DropDownList ID="ddl_buscarComuna" CssClass="form-control" runat="server">
-                    <asp:ListItem Value="0">Todos...</asp:ListItem>
-                </asp:DropDownList>
-            </div>
-            </div>
-            <div class="col-lg-3">
+            <div class="col-xs-3">
                 <asp:Label ID="lbl_reload" runat="server" />
-                   </div>
-            <div class="col-lg-12 separador"></div>
-            <div class="col-xs-9">
-            <div class="col-lg-1">
+            </div>
+            <div class="col-xs-12 separador"></div>
+            <div class="col-xs-2">
                 Fecha Desde
             </div>
-            <div class="col-lg-1">
+            <div class="col-xs-2">
                 <asp:TextBox ID="txt_buscarDesde" runat="server" CssClass="form-control input-fecha" />
             </div>
-            <div class="col-lg-1">
+            <div class="col-xs-2">
                 Fecha Hasta
             </div>
-            <div class="col-lg-1">
+            <div class="col-xs-2">
                 <asp:TextBox ID="txt_buscarHasta" runat="server" CssClass="form-control input-fecha" />
             </div>
-            <div class="col-lg-1">
+            <div class="col-xs-2">
                 Hora Salida
             </div>
-            <div class="col-lg-1">
+            <div class="col-xs-2">
                 <asp:DropDownList ID="ddl_buscarHorario" CssClass="form-control" runat="server" ClientIDMode="Static">
                     <asp:ListItem Value="0">Todos...</asp:ListItem>
                 </asp:DropDownList>
             </div>
-            <div class="col-lg-1">
+            <div class="col-xs-12 separador"></div>
+            <div class="col-xs-2">
                 N° Ruta
             </div>
-            <div class="col-lg-1">
+            <div class="col-xs-2">
                 <asp:TextBox ID="txt_buscarNro" runat="server" AutoCompleteType="Search" CssClass="form-control" />
             </div>
-            <div class="col-lg-1">
+            <div class="col-xs-2">
                 N° envío
             </div>
-            <div class="col-lg-1">
+            <div class="col-xs-2">
                 <asp:TextBox ID="txt_buscaenvio" runat="server" AutoCompleteType="Search" CssClass="form-control" />
-
             </div>
-             <div class="col-lg-2">
+            <div class="col-xs-2">
                 Seleccionadas:
             <asp:Label ID="lblgds" runat="server" Text="0" CssClass="tituloCh" />
             </div>
-
-
-           </div>
-           <div class="col-xs-2">
-            <div class="col-lg-12">
-                <asp:LinkButton ID="btnBuscar" runat="server" CssClass="btn btn-primary" OnClick="btnBuscar_Click" ToolTip="Buscar">
+            <div class="col-xs-2">
+                <asp:LinkButton ID="btn_buscar" runat="server" CssClass="btn btn-primary" OnClick="btn_buscar_Click" ToolTip="Buscar">
       <span class="glyphicon glyphicon-search" />
                 </asp:LinkButton>
-                               <asp:LinkButton ID="btn_nuevo" runat="server" CssClass="btn btn-success" OnClick="btn_nuevo_Click" ToolTip="Nuevo">
+                <asp:LinkButton ID="btn_nuevo" runat="server" CssClass="btn btn-success" OnClick="btn_nuevo_Click" ToolTip="Nuevo">
       <span class="glyphicon glyphicon-plus" />
                 </asp:LinkButton>
-                                <asp:LinkButton ID="btnenviar" runat="server" CssClass="btn btn-info" OnClick="btnenviar_Click" ToolTip="Enviar pedidos">
+                <asp:LinkButton ID="btn_enviar" runat="server" CssClass="btn btn-info" OnClick="btn_enviar_Click" ToolTip="Enviar pedidos">
             <span class="glyphicon glyphicon-send" />
                 </asp:LinkButton>
-
             </div>
-            </div>
-              
         </ContentTemplate>
         <Triggers>
-            
             <asp:AsyncPostBackTrigger ControlID="ddl_buscarRegion" />
             <asp:AsyncPostBackTrigger ControlID="ddl_buscarCiudad" />
-          
-      
         </Triggers>
     </asp:UpdatePanel>
-   
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="Contenedor" runat="server">
     <asp:UpdatePanel runat="server">
         <ContentTemplate>
             <asp:GridView ID="gv_listar" AutoGenerateColumns="false" AllowSorting="true" Width="100%" CssClass="table table-bordered table-hover tablita tab-nopag" runat="server"
-                OnRowCreated="gv_listar_RowCreated" OnRowCommand="gv_listar_RowCommand" OnSorting="gv_listar_Sorting" DataKeyNames="ID,ID_ORIGEN">
+                EmptyDataText="No hay registros" OnRowCreated="gv_listar_RowCreated" OnRowCommand="gv_listar_RowCommand" OnSorting="gv_listar_Sorting" DataKeyNames="ID,ID_ORIGEN">
                 <Columns>
-                <asp:TemplateField HeaderText="Todas" ShowHeader="False" ItemStyle-Width="1%">
+                    <asp:TemplateField HeaderText="Todas" ShowHeader="False" ItemStyle-Width="1%">
                         <HeaderTemplate>
                             <input type="checkbox" id="chkTodos" class="chkTodos" onclick="checkAll(this);" />
                         </HeaderTemplate>
@@ -121,13 +108,13 @@
                         </ItemTemplate>
                     </asp:TemplateField>
 
-                    <asp:TemplateField> 
+                    <asp:TemplateField>
                         <ItemTemplate>
                             <asp:LinkButton ID="btn_puntos" CssClass="btn btn-xs btn-info" CommandArgument='<%#Container.DataItemIndex%>' CommandName="PUNTOS" runat="server">
                                 <span class="glyphicon glyphicon-map-marker" />
                             </asp:LinkButton>
                         </ItemTemplate>
-                        </asp:TemplateField>
+                    </asp:TemplateField>
 
                     <asp:TemplateField>
                         <ItemTemplate>
@@ -142,8 +129,8 @@
                     <asp:BoundField DataField="RUTA" SortExpression="RUTA" HeaderText="RUTA" Visible="false" />
                     <asp:BoundField DataField="ORIGEN_NOMBRE" SortExpression="ORIGEN_NOMBRE" HeaderText="CD ORIGEN" />
                     <asp:BoundField DataField="VIAJE_ESTADO" SortExpression="VIAJE_ESTADO" HeaderText="VIAJE_ESTADO" />
-                     <asp:BoundField DataField="ENVIO" SortExpression="ENVIO" HeaderText="ENVIO" />
-                     <asp:BoundField DataField="HORARIO" SortExpression="HORARIO" HeaderText="HORARIO" />
+                    <asp:BoundField DataField="ENVIO" SortExpression="ENVIO" HeaderText="ENVIO" />
+                    <asp:BoundField DataField="HORARIO" SortExpression="HORARIO" HeaderText="HORARIO" />
                 </Columns>
             </asp:GridView>
         </ContentTemplate>
@@ -156,23 +143,25 @@
                 <asp:UpdatePanel runat="server">
                     <ContentTemplate>
                         <div class="modal-header">
-                            <h4 class="modal-title">PROPUESTA RUTA
-                            </h4>
+                            <div class="col-xs-2">
+                                <h4 class="modal-title">PROPUESTA RUTA
+                                </h4>
+                            </div>
+                            <div class="col-xs-2">
+                                <asp:UpdatePanel runat="server" ID="act_cambia">
+                                    <ContentTemplate>
+                                        <asp:DropDownList ID="ddl_puntosCambiarPreruta" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddl_puntosCambiarPreruta_SelectedIndexChanged" ForeColor="Blue"></asp:DropDownList>
 
-                            <asp:updatepanel runat="server" ID="act_cambia" >
-                            <ContentTemplate>
-                            <asp:DropDownList ID="cambia_pre_ruta" runat="server" AutoPostBack="true" OnSelectedIndexChanged="cambiaruta" ForeColor="Blue"></asp:DropDownList>
-
-                            </ContentTemplate>
-                            </asp:updatepanel>
-                            
-                                                    </div>
+                                    </ContentTemplate>
+                                </asp:UpdatePanel>
+                            </div>
+                        </div>
                         <div class="modal-body" style="height: auto; overflow: auto">
                             <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDjAnu30d80TbLCujKOmvnMKcEj2GI5H3o&sensor=false&lenguage=es&v=3.20"></script>
                             <script src="../Scripts/ruteador.js" type="text/javascript"></script>
-                            <div class="col-lg-7" style="height: 65vh" id="map">
+                            <div class="col-xs-7" style="height: 65vh" id="map">
                             </div>
-                            <div class="col-lg-5">
+                            <div class="col-xs-5">
                                 <%--<asp:GridView ID="gv_puntos" CssClass="table table-bordered table-hover tablita" AutoGenerateColumns="false" runat="server"
                                     onrowcommand="gv_puntos_RowCommand">
                                     <Columns>
@@ -180,17 +169,21 @@
                                         <asp:BoundField DataField="PERU_DIRECCION" HeaderText="Dirección" />
                                     </Columns>
                                 </asp:GridView>--%>
-                                Punto seleccionado
-                                <br />
-                                <asp:TextBox ID="txt_puntoNombre" Enabled="false" ClientIDMode="Static" runat="server" />
+                                <div class="col-xs-6">
+                                    Punto seleccionado
+                                </div>
+                                <div class="col-xs-3">
+                                    <asp:TextBox ID="txt_puntoNombre" Enabled="false" ClientIDMode="Static" runat="server" />
+                                </div>
+                                <div class="col-xs-12 separador"></div>
                                 <div id="tbl_puntos"></div>
-                                <div class="col-lg-12 separador"></div>
-                                <div class="col-lg-12" style="text-align: center">
-                                    <asp:LinkButton ID="btn_guardar" OnClick="btn_guardar_Click" CssClass="btn btn-primary" runat="server">
+                                <div class="col-xs-12 separador"></div>
+                                <div class="col-xs-12" style="text-align: center">
+                                    <asp:Label ID="txt_cant_punt" ClientIDMode="Static" runat="server" Text="Cant Puntos" Style="float: left"> </asp:Label>
+                                    <button id="btn_puntosGuardar" type="button" class="btn btn-success" data-toggle="modal" data-target="#modalVehiculo">
                                         <span class="glyphicon glyphicon-floppy-disk" />
-                                    </asp:LinkButton>
-                                    <asp:Label ID="txt_cant_punt" ClientIDMode="Static"  runat="server" Text="Cant Puntos" style="float:left"> </asp:Label>
-                                    <a onclick="javascript:cambia_direccion()"  style="float:right">Mostrar/Ocultar Letras</a>
+                                    </button>
+                                    <a href="#" onclick="javascript:cambia_direccion()" style="float: right">Mostrar/Ocultar Letras</a>
                                 </div>
                             </div>
                         </div>
@@ -204,7 +197,45 @@
             </div>
         </div>
     </div>
-      <div class="modal fade" id="modalConf" data-backdrop="static" role="dialog">
+    <div class="modal fade" id="modalVehiculo" data-backdrop="static" role="dialog">
+        <div class="modal-dialog" role="dialog">
+            <asp:UpdatePanel runat="server">
+                <ContentTemplate>
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4>
+                                Asignar vehículos
+                            </h4>
+                        </div>
+                        <div class="modal-body" style="height:auto;overflow-y:auto;">
+                            <div class="col-xs-6">
+                                Tracto
+                                <br />
+                                <asp:TextBox ID="txt_vehiculoTracto" CssClass="form-control input-mayus" runat="server" />
+                            </div>
+                            <div class="col-xs-6">
+                                Trailer
+                                <br />
+                                <asp:TextBox ID="txt_vehiculoTrailer" CssClass="form-control input-mayus" runat="server" />
+                            </div>
+                            <div class="col-xs-12 separador"></div>
+                            <div class="col-xs-12 text-center">
+                                <asp:LinkButton ID="btn_guardar" OnClick="btn_guardar_Click" CssClass="btn btn-success" runat="server">
+                                    <span class="glyphicon glyphicon-floppy-disk" />
+                                </asp:LinkButton>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">
+                                <span class="glyphicon glyphicon-remove" />
+                            </button>
+                        </div>
+                    </div>
+                </ContentTemplate>
+            </asp:UpdatePanel>
+        </div>
+    </div>
+    <div class="modal fade" id="modalConf" data-backdrop="static" role="dialog">
         <div class="modal-dialog" role="dialog">
             <asp:UpdatePanel ID="UpdatePanel5" runat="server">
                 <ContentTemplate>
@@ -230,7 +261,6 @@
             </asp:UpdatePanel>
         </div>
     </div>
-
     <div class="modal fade" id="modalenviar" data-backdrop="static" role="dialog">
         <div class="modal-dialog" role="dialog">
             <asp:UpdatePanel ID="UpdatePanel1" runat="server">
@@ -241,20 +271,14 @@
                                 <asp:Label ID="lbl_titulo_enviar" runat="server" />
                             </h4>
                         </div>
-                        <div class="modal-body" style="height:70px">
+                        <div class="modal-body" style="height: 70px">
                             <asp:Label ID="Label2" runat="server" />
-                            
                             <div class="col-xs-12">
                                 <asp:CheckBox runat="server" ID="chk_archivar" />
-
                             </div>
-
-
                         </div>
-                        
-
                         <div class="modal-footer">
-                            <asp:LinkButton ID="btn_confirmar_enviar" CssClass="btn btn-success" OnClick="envio_conf" runat="server">
+                            <asp:LinkButton ID="btn_confEnviar" CssClass="btn btn-success" OnClick="btn_confEnviar_Click" runat="server">
                 <span class="glyphicon glyphicon-ok" />
                             </asp:LinkButton>
                             <button type="button" class="btn btn-danger" data-dismiss="modal">
@@ -271,33 +295,102 @@
 <asp:Content ID="Content6" ContentPlaceHolderID="ocultos" runat="server">
     <asp:UpdatePanel runat="server">
         <ContentTemplate>
+            <asp:HiddenField ID="hf_trailer" runat="server" />
+            <asp:HiddenField ID="hf_tracto" runat="server" />
             <asp:HiddenField ID="hf_todos" runat="server" />
-             <asp:HiddenField ID="hf_origenes" runat="server" />
+            <asp:HiddenField ID="hf_origenes" runat="server" />
             <asp:HiddenField ID="hf_puntosruta" runat="server" />
             <asp:HiddenField ID="hf_idRuta" runat="server" />
             <asp:HiddenField ID="hf_idPunto" ClientIDMode="Static" runat="server" />
             <asp:HiddenField ID="hf_origen" ClientIDMode="Static" runat="server" />
-              <asp:HiddenField ID="hseleccionado" runat="server" />
-              <asp:Button ID="exporta_excel" runat="server" OnClick="exportar_excel" />
-              <asp:HiddenField ID="respuesta_direcction" ClientIDMode="Static" runat="server" />
+            <asp:HiddenField ID="hseleccionado" runat="server" />
+            <asp:HiddenField ID="respuesta_direcction" ClientIDMode="Static" runat="server" />
+            <asp:Button ID="btn_exportarExcel" runat="server" OnClick="btn_exportarExcel_Click" />
         </ContentTemplate>
         <Triggers>
-          <asp:PostBackTrigger ControlID="exporta_excel" />
+            <asp:PostBackTrigger ControlID="btn_exportarExcel" />
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
 <asp:Content ID="Content7" ContentPlaceHolderID="scripts" runat="server">
+    <style>
+        .ui-front {
+            z-index: 9999999 !important;
+        }
+        .sel-between > td {
+            height: 0px;
+            border: 0px;
+            padding: 0px !important;
+        }
+
+        .sel-between {
+        }
+
+        .sel-between.enabled>td {
+            height: 2px;
+            border: 1px;
+            padding: 1px !important;
+        }
+
+        .sel-between.enabled:hover {
+            background-color: red;
+        }
+    </style>
     <script type="text/javascript">
         var puntosTodos;
         var puntosRuta;
         var puntosOrigenes;
         function EndRequestHandler1(sender, args) {
             setTimeout(tabla2, 100);
+            var jsonTracto = JSON.parse($('#<%=hf_tracto.ClientID%>').val());
+            var jsonTrailer = JSON.parse($('#<%=hf_trailer.ClientID%>').val());
+            var tractos = [];
+            var trailers = [];
+            jsonTracto.map((o) => {
+                tractos.push(o.TRAC_PLACA)
+            });
+            jsonTrailer.map((o) => {
+                trailers.push(o.TRAI_PLACA)
+            });
+            $("#<%=txt_vehiculoTracto.ClientID%>").autocomplete({
+                source: tractos,
+            });
+            $("#<%=txt_vehiculoTracto.ClientID%>").change(function () {
+                if (!tractos.find((o) => o === this.value)) {
+                    showAlertClass('guardar', 'warn_tractoNoexiste');
+                    $("#<%=txt_vehiculoTracto.ClientID%>").val('');
+                }
+            });
+            $("#<%=txt_vehiculoTrailer.ClientID%>").autocomplete({
+                source: trailers,
+            });
+            $("#<%=txt_vehiculoTrailer.ClientID%>").change(function () {
+                if (!trailers.find((o) => o === this.value)) {
+                    showAlertClass('guardar', 'warn_trailerNoexiste');
+                    $("#<%=txt_vehiculoTrailer.ClientID%>").val('');
+                }
+            });
+<%--            $("#<%=btn_guardar.ClientID%>").click(function () {
+                if ($("#<%=txt_vehiculoTrailer.ClientID%>").val() == '' ||
+                    !$("#<%=txt_vehiculoTrailer.ClientID%>").val()) {
+                    return false;
+                }
+                if ($("#<%=txt_vehiculoTracto.ClientID%>").val() == '' ||
+                    !$("#<%=txt_vehiculoTracto.ClientID%>").val()) {
+                    return false;
+                }
+            });--%>
+            $('#<%= btn_enviar.ClientID%>').click(function () {
+                $("#<%= hseleccionado.ClientID %>").val(ids.toString());
+                if ($("#<%=hseleccionado.ClientID %>").val() == '') {
+                    showAlertClass("enviar", "warn_noSeleccionados");
+                    return false;
+                }
+            });
         }
         Sys.WebForms.PageRequestManager.getInstance().add_pageLoaded(EndRequestHandler1);
-        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(funcion1);
 
-   
+
         var calcDataTableHeight = function () {
             return $(window).height() - $("#scrolls").offset().top - 100;
         };
@@ -311,7 +404,7 @@
         function tabla2() {
             if ($('#gv_puntos')[0] != undefined && $('#gv_puntos')[0].rows.length > 1) {
                 $('#gv_puntos').DataTable({
-                    "scrollY": "45vh",
+                    "scrollY": "39vh",
                     "scrollX": true,
                     "scrollCollapse": true,
                     "paging": false,
@@ -336,19 +429,15 @@
             cargamapa(12, mapObject);
             $('#tbl_puntos').html(jsonToTable(puntosRuta));
             limpiarMarcadores();
-            for (var i = 0; i < puntosTodos.length; i++) {
-                insertarMarcador(puntosTodos[i]["PERU_ID"], puntosTodos[i]["PERU_LATITUD"], puntosTodos[i]["PERU_LONGITUD"], 'icon_pedido.png', puntosTodos[i]["PERU_CODIGO"]);
-            }
+            puntosTodos.map((o) => {
+                insertarMarcador(o.PERU_ID, o.PERU_LATITUD, o.PERU_LONGITUD, 'icon_pedido.png', o.PERU_CODIGO);
+            });
+            puntosOrigenes.map((o) => {
+                insertarOrigen(o.ID_PE, o.LAT_PE, o.LON_PE, 'icon_pe.png', o.NOMBRE_PE);
+            });
 
-            for (var i = 0; i < puntosOrigenes.length; i++) {
-                insertarOrigen(puntosOrigenes[i]["ID_PE"], puntosOrigenes[i]["LAT_PE"], puntosOrigenes[i]["LON_PE"], 'icon_pe.png', puntosOrigenes[i]["NOMBRE_PE"]);
-            }
-
-//            for (var i = 0; i < puntosRuta.length; i++) {
-//                insertarPuntoRuta(puntosRuta[i]["PERU_ID"]);
-//            }
             crearPoligono();
-            crearRuta();
+            //crearRuta();
         }
 
 
@@ -367,17 +456,16 @@
             cargamapa(12, mapObject);
             $('#tbl_puntos').html(jsonToTable(puntosRuta));
             limpiarMarcadores();
-            for (var i = 0; i < puntosTodos.length; i++) {
-                insertarMarcador(puntosTodos[i]["PERU_ID"], puntosTodos[i]["PERU_LATITUD"], puntosTodos[i]["PERU_LONGITUD"], 'icon_pedido.png', puntosTodos[i]["PERU_CODIGO"]);
-            }
 
-            for (var i = 0; i < puntosOrigenes.length; i++) {
-                insertarOrigen(puntosOrigenes[i]["ID_PE"], puntosOrigenes[i]["LAT_PE"], puntosOrigenes[i]["LON_PE"], 'icon_pe.png', puntosOrigenes[i]["NOMBRE_PE"]);
-            }
-           
-            for (var i = 0; i < puntosRuta.length; i++) {
-                insertarPuntoRuta(puntosRuta[i]["PERU_ID"]);
-            }
+            puntosTodos.map((o) => {
+                insertarMarcador(o.PERU_ID, o.PERU_LATITUD, o.PERU_LONGITUD, 'icon_pedido.png', o.PERU_CODIGO);
+            });
+            puntosOrigenes.map((o) => {
+                insertarOrigen(o.ID_PE, o.LAT_PE, o.LON_PE, 'icon_pe.png', o.NOMBRE_PE);
+            });
+            puntosRuta.map((o) => {
+                insertarPuntoRuta(o.PERU_ID);
+            });
             crearPoligono();
             crearRuta();
         }
@@ -395,20 +483,19 @@
             cargamapa(12, mapObject);
             $('#tbl_puntos').html(jsonToTable(puntosRuta));
             if (!hayMarcadores()) {
-                for (var i = 0; i < puntosTodos.length; i++) {
-                    insertarMarcador(puntosTodos[i]["PERU_ID"], puntosTodos[i]["PERU_LATITUD"], puntosTodos[i]["PERU_LONGITUD"], 'icon_pedido.png', puntosTodos[i]["PERU_CODIGO"]);
-                }
+                puntosTodos.map((o) => {
+                    insertarMarcador(o.PERU_ID, o.PERU_LATITUD, o.PERU_LONGITUD, 'icon_pedido.png', o.PERU_CODIGO);
+                });
             }
             else {
                 refrescarMarcadores();
             }
-            for (var i = 0; i < puntosRuta.length; i++) {
-                insertarPuntoRuta(puntosRuta[i]["PERU_ID"]);
-            }
-
-            for (var i = 0; i < puntosOrigenes.length; i++) {
-                insertarOrigen(puntosOrigenes[i]["ID_PE"], puntosOrigenes[i]["LAT_PE"], puntosOrigenes[i]["LON_PE"], 'icon_pe.png', puntosOrigenes[i]["NOMBRE_PE"]);
-            }
+            puntosRuta.map((o) => {
+                insertarPuntoRuta(o.PERU_ID);
+            });
+            puntosOrigenes.map((o) => {
+                insertarOrigen(o.ID_PE, o.LAT_PE, o.LON_PE, 'icon_pe.png', o.NOMBRE_PE);
+            });
 
             crearPoligono();
             crearRuta();
@@ -419,13 +506,13 @@
             output += '<thead>';
             output += '<tr>';
             output += '<th>';
-            output += 'Ordenar';
+            output += '<span class="glyphicon glyphicon-move" />';
             output += '</th>';
             output += '<th>';
-            output += '<span class="glyphicon glyphicon-remove" />';
+            output += '<span class="glyphicon glyphicon-remove text-danger" />';
             output += '</th>';
             output += '<th>';
-            output += 'Punto Entrega';
+            output += '<span class="glyphicon glyphicon-flag" />';
             output += '</th>';
             output += '<th>';
             output += 'Cliente';
@@ -442,8 +529,7 @@
             output += '</td>';
             output += '<td>';
             output += '</td>';
-            output += '<td class="letra" onclick="centrarPunto(' + json_origen["LAT_PE"] + ',' + json_origen["LON_PE"] + ');">A'; 
-       //     output += '<span style="font-size:medium" class="glyphicon glyphicon-map-marker" />';
+            output += '<td class="letra" onclick="centrarPunto(' + json_origen["LAT_PE"] + ',' + json_origen["LON_PE"] + ');">A';
             output += '</td>';
             output += '<td>';
             output += json_origen["NOMBRE_PE"];
@@ -465,38 +551,39 @@
             output += '<td></td>';
             output += '<td></td>';
             output += '</tr>';
-            for (var i = 0; i < puntosRuta.length; i++) {
+            puntosRuta.map((o, i) => {
                 output += '<tr>';
                 output += '<td>';
                 if (i > 0) {
-                    output += '<span style="font-size:medium" onclick="moverPunto(' + (i - 1) + ',' + puntosRuta[i]["PERU_ID"] + ');refrescar();" data-id=' + puntosRuta[i]["PERU_ID"] + ' class="glyphicon glyphicon-menu-up"></span>';
+                    output += '<a href="#" onclick="moverPunto(' + (i - 1) + ',' + o.PERU_ID + ');refrescar();" data-id=' + o.PERU_ID + '><span style="font-size:medium" class="glyphicon glyphicon-menu-up"></span></a>';
                 }
                 if (i != puntosRuta.length - 1) {
-                    output += '<span style="font-size:medium" onclick="moverPunto(' + (i + 1) + ',' + puntosRuta[i]["PERU_ID"] + ');refrescar();" class="glyphicon glyphicon-menu-down"></span>';
+                    output += ' <a href="#" onclick="moverPunto(' + (i + 1) + ',' + o.PERU_ID + ');refrescar();"><span style="font-size:medium" class="glyphicon glyphicon-menu-down"></span></a>';
                 }
                 output += '</td>';
                 if (puntosRuta.length > 1) {
-                    output += '<td onclick="quitarPunto(' + puntosRuta[i]["PERU_ID"] + ');refrescar();">';
-                    output += '<span style="font-size:medium" class="glyphicon glyphicon-remove" />';
+                    output += '<td>';
+                    output += '<a href="#" onclick="quitarPunto(' + o.PERU_ID + ');refrescar();"><span style="font-size:medium" class="glyphicon glyphicon-remove text-danger" /></a>';
                     output += '</td>';
                 }
                 else {
                     output += '<td>';
                     output += '</td>';
                 }
-                output += '<td class="letra" onclick="centrarPunto(' + puntosRuta[i]["PERU_LATITUD"] + ',' + puntosRuta[i]["PERU_LONGITUD"] + ');">' + (i + 2 + 9).toString(36).toUpperCase();
+                output += '<td class="letra">';
+                output += '<a class="btn btn-xs btn-primary" style="width:22px" onclick="centrarPunto(' + o.PERU_LATITUD + ',' + o.PERU_LONGITUD + ');">' + (i + 2 + 9).toString(36).toUpperCase() + '</a>';
                 //output += '<span style="font-size:medium" class="glyphicon glyphicon-map-marker" />';
                 output += '</td>';
-                output += '<td onclick="selecciona(\'' + puntosRuta[i]["PERU_ID"] + '\',\'' + puntosRuta[i]["PERU_CODIGO"] + '\');"  >';
-                output += puntosRuta[i]["PERU_CODIGO"];
+                output += '<td onclick="selecciona(\'' + o.PERU_ID + '\',\'' + o.PERU_CODIGO + '\');"  >';
+                output += o.PERU_CODIGO;
                 output += '</td>';
                 output += '<td>';
-                output += puntosRuta[i]["PERU_DIRECCION"];
+                output += o.PERU_DIRECCION;
                 output += '</td>';
-                output += '<td id="t_' + puntosRuta[i]["PERU_CODIGO"] + '"  >';
-                output += puntosRuta[i]["PERU_LLEGADA"];
+                output += '<td id="t_' + o.PERU_CODIGO + '"  >';
+                output += o.PERU_LLEGADA;
                 output += '</td>';
-                
+
                 output += '</tr>';
                 output += '<tr onclick="moverPunto(' + (i + 1) + ');refrescar();" class="sel-between">'
                 output += '<td></td>';
@@ -506,7 +593,7 @@
                 output += '<td></td>';
                 output += '<td></td>';
                 output += '</tr> ';
-            }
+            });
             output += '</tbody>';
             output += '<tfoot>';
             output += '<tr>';
@@ -525,7 +612,7 @@
             output += '</td>';
             output += '<td>&nbsp;';
             output += '</td>';
-             output += '</tr>';
+            output += '</tr>';
             output += '</tfoot>';
             output += '</table>';
             cantidad_puntos(i);
@@ -539,13 +626,11 @@
             var punto = buscarPuntosTodos(id);
             quitarPunto(id);
             insertarPuntoRuta(id, pos);
-           // setTimeout(centrarPunto, 1000, punto["PERU_LATITUD"], punto["PERU_LONGITUD"]);
             puntosRuta.splice(pos, 0, punto);
-         //   console.log('funcionó');
         }
         function quitarPunto(id) {
             for (var i = 0; i < puntosRuta.length; i++) {
-                if (puntosRuta[i]["PERU_ID"] == id) {
+                if (puntosRuta[i].PERU_ID === id) {
                     puntosRuta.splice(i, 1);
                     break;
                 }
@@ -555,7 +640,7 @@
         function centrarPunto(lat, lon) {
             var latLon = new google.maps.LatLng(lat, lon);
             map.setCenter(latLon);
-           // map.setZoom(13);
+            // map.setZoom(13);
         }
         function refrescar() {
             $('#<%=hf_puntosruta.ClientID%>').val(JSON.stringify(puntosRuta));
@@ -574,9 +659,8 @@
             return false;
         }
 
-       function selecciona(id,titulo)
-       {
-       
+        function selecciona(id, titulo) {
+
             $('#hf_idPunto').val(id);
             $('#txt_puntoNombre').val(titulo);
             $('.sel-between').addClass('enabled');
@@ -617,81 +701,14 @@
             console.log(ids);
         }
 
-
-        function funcion1() {
-
-            $('#<%= btnenviar.ClientID%>').click(function () {
-
-                //sumarTotales();
-                $("#<%= hseleccionado.ClientID %>").val(ids.toString());
-                // console.log($("#<%= hseleccionado.ClientID %>").val());
-                if ($("#<%=hseleccionado.ClientID %>").val() == '') {
-                    msj('Debe seleccionar al menos un pedido para enviar.', 'warn', true);
-                    return false;
-                }
-            });
-        }
-
-        $('#<%= btnenviar.ClientID%>').click(function () {
-
-            //sumarTotales();
-            $("#<%= hseleccionado.ClientID %>").val(ids.toString());
-            // console.log($("#<%= hseleccionado.ClientID %>").val());
-            if ($("#<%=hseleccionado.ClientID %>").val() == '') {
-                msj('Debe seleccionar al menos un pedido para enviar.', 'warn', true);
-                return false;
-            }
-        });
-
         function exportar() {
             ids = [];
             setTimeout(timeexporta, 200);
         }
 
-        function timeexporta()
-        {
-            $("#<%= exporta_excel.ClientID %>").click();
+        function timeexporta() {
+            $("#<%= btn_exportarExcel.ClientID %>").click();
         }
 
-//        function rutaCallback(result, context) {
-
-//            //sorry about the hardcoded element name...
-
-////            if (result != "") {
-////                msj(result, "success", false)
-////            }
-
-//            // document.getElementById('ctl00_ContentPlaceHolder1_txtClientName').setAttribute('value', result);
-
-//        }
-
-//        function rutaCallbackError(result, context) {
-
-//            //Not sure what error is likely to arise at this point, but...
-
-//            alert('Error in client name callback function !');
-
-//        }
-
-       
     </script>
-    <style>
-        .sel-between > td {
-            height: 1px;
-            padding: 1px !important;
-            border: 1px;
-        }
-
-        .sel-between {
-            display: none;
-        }
-
-            .sel-between.enabled {
-                display: block;
-            }
-
-                .sel-between.enabled:hover {
-                    background-color: red;
-                }
-    </style>
 </asp:Content>

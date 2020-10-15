@@ -93,24 +93,6 @@ public class UtilsWeb
         }
         return validacion;
     }
-    public bool patentevalida(string patente)
-    {
-        if (patente.Length != 6)
-        {
-            return false;
-        }
-
-        if ((char.IsLetter(patente[0]) == true && char.IsLetter(patente[1]) == true && char.IsDigit(patente[2]) == true && char.IsDigit(patente[3]) == true && char.IsDigit(patente[4]) == true && char.IsDigit(patente[5]) == true)
-            ||
-            ((char.IsLetter(patente[0]) == true && char.IsLetter(patente[1]) == true && char.IsLetter(patente[2]) == true && char.IsLetter(patente[3]) == true && char.IsDigit(patente[4]) == true && char.IsDigit(patente[5]) == true)))
-        {
-            return true;
-        }
-        else
-            return false;
-
-
-    }
     public void CargaDropCliente(object nombreDrop, string value, string text, DataTable dt)
     {
 
@@ -380,8 +362,6 @@ public class UtilsWeb
 
         return path;
     }
-
-
 
     public static void AddFileToZip(string zipFilename, string fileToAdd)
     {

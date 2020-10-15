@@ -61,7 +61,7 @@ namespace Ruteador.App_Code
             {
                 data.CargarSqlComando("[dbo].[LISTAR_OPERACION]");
                 if (usua_id != 0)
-                data.AgregarSqlParametro("@usua_id", usua_id);
+                    data.AgregarSqlParametro("@usua_id", usua_id);
                 return data.EjecutarSqlquery2();
             }
             catch (Exception ex)
@@ -80,7 +80,7 @@ namespace Ruteador.App_Code
             try
             {
                 data.CargarSqlComando("[dbo].[LISTAR_OPERACION]");
-                    data.AgregarSqlParametro("@OPER_ID", oper_id);
+                data.AgregarSqlParametro("@OPER_ID", oper_id);
                 data.EjecutarSqlLector();
                 while (data.SqlLectorDatos.Read())
                 {
@@ -216,8 +216,6 @@ namespace Ruteador.App_Code
                 data.CerrarSqlConeccion();
             }
         }
-
-
         internal OrigenBC Origen_ObtenerXIdruta(int ruta_id)
         {
             OrigenBC o = new OrigenBC();
@@ -278,7 +276,6 @@ namespace Ruteador.App_Code
                 data.CerrarSqlConeccion();
             }
         }
-
         internal bool Origen_Guardar(OrigenBC o)
         {
             try
@@ -445,8 +442,8 @@ namespace Ruteador.App_Code
             {
                 data.CargarSqlComando("[dbo].[PROCESAR_INTEGRA_PEDIDOS]");
                 data.AgregarSqlParametro("@id_usuario", usua_id);
-                dt=data.EjecutarSqlquery2();
-  
+                dt = data.EjecutarSqlquery2();
+
             }
             catch (Exception ex)
             {
@@ -471,7 +468,7 @@ namespace Ruteador.App_Code
                 data.AgregarSqlParametro("@id_usuario", usua_id);
                 data.EjecutaSqlInsertIdentity();
                 id = data.ID;
-               return true;
+                return true;
             }
             catch (Exception ex)
             {
@@ -488,9 +485,7 @@ namespace Ruteador.App_Code
 
 
         }
-
-
-        internal bool Pedido_CrearArchivo_integracion_old(int cliente_id , string archivo , string contenido , string nombre_comm)
+        internal bool Pedido_CrearArchivo_integracion_old(int cliente_id, string archivo, string contenido, string nombre_comm)
         {
 
 
@@ -501,11 +496,11 @@ namespace Ruteador.App_Code
                 data2.AgregarSqlParametro("@ID_CLIENTE", cliente_id);
                 data2.AgregarSqlParametro("@RUTA_ARCHIVO", archivo);
                 data2.AgregarSqlParametro("@DETALLE_ARCHIVO", contenido);
-                if (nombre_comm!="")
+                if (nombre_comm != "")
                     data2.AgregarSqlParametro("@nombre_comm", nombre_comm);
 
                 data2.EjecutarSqlEscritura();
-                
+
                 return true;
             }
             catch (Exception ex)
@@ -523,7 +518,6 @@ namespace Ruteador.App_Code
 
 
         }
-
         internal bool Pedido_CrearArchivo_integracion_v2(int cliente_id, string cabecera, string detalle, string nombre_comm, int id_envio)
         {
 
@@ -597,7 +591,7 @@ namespace Ruteador.App_Code
                     data.AgregarSqlParametro("@hora_id", hora_id);
                 if (!string.IsNullOrEmpty(peru_numero))
                     data.AgregarSqlParametro("@peru_numero", peru_numero);
-                if (solo_sin_ruta==true)
+                if (solo_sin_ruta == true)
                     data.AgregarSqlParametro("@solo_sin_ruta", solo_sin_ruta);
                 if (id_ruta != 0)
                     data.AgregarSqlParametro("@id_ruta", id_ruta);
@@ -685,7 +679,7 @@ namespace Ruteador.App_Code
         {
             try
             {
-                data.CargarSqlComando("[dbo].[GUARDAR_PEDIDO_RUTA]"); 
+                data.CargarSqlComando("[dbo].[GUARDAR_PEDIDO_RUTA]");
                 if (p.PERU_ID != 0)
                     data.AgregarSqlParametro("@PERU_ID", p.PERU_ID);
                 data.AgregarSqlParametro("@PERU_NUMERO", p.PERU_NUMERO);
@@ -731,7 +725,6 @@ namespace Ruteador.App_Code
                 data.CerrarSqlConeccion();
             }
         }
-
         internal bool PedidoModificarFechaAgendamiento(string ids, DateTime desde, int horario)
         {
             bool exito = false;
@@ -739,7 +732,7 @@ namespace Ruteador.App_Code
             data.CargarSqlComando("[dbo].[PEDIDOS_MODIFICAR_FECHA_MASIVA]");
             data.AgregarSqlParametro("@ID", ids);
             data.AgregarSqlParametro("@FECHA_DESDE", desde);
-            if (horario>0) data.AgregarSqlParametro("@horario", horario);
+            if (horario > 0) data.AgregarSqlParametro("@horario", horario);
             try
             {
                 data.EjecutarSqlEscritura();
@@ -751,7 +744,6 @@ namespace Ruteador.App_Code
             }
             return exito;
         }
-
         #endregion
         #region PuntoEntrega
         internal DataTable Parametro_ObtenerTodo(string para_nombre, string para_obs)
@@ -1047,68 +1039,17 @@ namespace Ruteador.App_Code
                 data.CerrarSqlConeccion();
             }
         }
-
-        internal bool Pre_ruta_Eliminar(long ruta_id)
-        {
-            try
-            {
-                data.CargarSqlComando("[dbo].[ELIMINAR_PRE_RUTA]");
-                data.AgregarSqlParametro("@ruta_id", ruta_id);
-                data.EjecutarSqlEscritura();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                data.LimpiarSqlParametros();
-                data.CerrarSqlConeccion();
-            }
-        }
-
-        internal string obtenerultimosprocesos()
-        {
-            try
-            {
-                data.CargarSqlComando("[dbo].[LISTAR_ULTIMOS_PROCESOS_PRE_RUTA]");
-               // data.AgregarSqlParametro("@ruta_id", ruta_id);
-                return data.EjecutaSqlScalar();
-                //return true;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                data.LimpiarSqlParametros();
-                data.CerrarSqlConeccion();
-            }
-        
-
-
-        }
-  
-
         #endregion
         #region Pre_Ruta
-
-        internal DataTable  pre_ruta_CrearEnvio(string gd, int usua_id, bool archivar)
+        internal DataTable PreRuta_CrearEnvio(string gd, int usua_id, bool archivar)
         {
-
-
-
             try
             {
                 data.CargarSqlComando("[dbo].[CREAR_ENVIO_PRE_RUTAS]");
                 data.AgregarSqlParametro("@pedidos", gd);
                 data.AgregarSqlParametro("@id_usuario", usua_id);
                 data.AgregarSqlParametro("@archivar", archivar);
-             return    data.EjecutarSqlquery2();
-//                id = data.ID;
-//                return true;
+                return data.EjecutarSqlquery2();
             }
             catch (Exception ex)
             {
@@ -1119,10 +1060,8 @@ namespace Ruteador.App_Code
                 data.LimpiarSqlParametros();
                 data.CerrarSqlConeccion();
             }
-
         }
-
-        internal DataTable PreRuta_ObtenerTodo(DateTime desde, DateTime hasta, int hora_id = 0, int regi_id = 0, int ciud_id = 0, int comu_id = 0, int usua_id = 0, string peru_numero = null, string envio=null)
+        internal DataTable PreRuta_ObtenerTodo(DateTime desde, DateTime hasta, int hora_id = 0, int regi_id = 0, int ciud_id = 0, int comu_id = 0, int usua_id = 0, string peru_numero = null, string envio = null)
         {
             try
             {
@@ -1144,10 +1083,10 @@ namespace Ruteador.App_Code
                 if (hora_id != 0)
                     data.AgregarSqlParametro("@hora_id", hora_id);
                 if (!string.IsNullOrEmpty(peru_numero))
-                             data.AgregarSqlParametro("@numero", peru_numero);
+                    data.AgregarSqlParametro("@numero", peru_numero);
                 if (!string.IsNullOrEmpty(envio))
                     data.AgregarSqlParametro("@envio", envio);
-                   return data.EjecutarSqlquery2();
+                return data.EjecutarSqlquery2();
 
             }
             catch (Exception ex)
@@ -1160,16 +1099,133 @@ namespace Ruteador.App_Code
                 data.CerrarSqlConeccion();
             }
         }
-        internal bool PreRuta_Guardar(int id_ruta, string id_destinos, string tiempos, string hora_salida)
+        internal PreRutaBC PreRuta_ObtenerXId(int id_preruta)
+        {
+            try
+            {
+                PreRutaBC pr = new PreRutaBC();
+                data.CargarSqlComando("[dbo].[LISTAR_PRERUTA]");
+                data.AgregarSqlParametro("@ID_PRERUTA", id_preruta);
+                data.EjecutarSqlLector();
+                while (data.SqlLectorDatos.Read())
+                {
+                    if (data.SqlLectorDatos["NUMERO"] != DBNull.Value)
+                        pr.NUMERO = Convert.ToString(data.SqlLectorDatos["NUMERO"]);
+                    if (data.SqlLectorDatos["FH_VIAJE"] != DBNull.Value)
+                        pr.FH_VIAJE = Convert.ToDateTime(data.SqlLectorDatos["FH_VIAJE"]);
+                    if (data.SqlLectorDatos["ID_CONDUCTOR"] != DBNull.Value)
+                        pr.ID_CONDUCTOR = Convert.ToInt32(data.SqlLectorDatos["ID_CONDUCTOR"]);
+                    if (data.SqlLectorDatos["ID_MOVIL"] != DBNull.Value)
+                        pr.ID_MOVIL = Convert.ToInt32(data.SqlLectorDatos["ID_MOVIL"]);
+                    if (data.SqlLectorDatos["ID_ESTADO"] != DBNull.Value)
+                        pr.ID_ESTADO = Convert.ToInt32(data.SqlLectorDatos["ID_ESTADO"]);
+                    if (data.SqlLectorDatos["OBSERVACION"] != DBNull.Value)
+                        pr.OBSERVACION = Convert.ToString(data.SqlLectorDatos["OBSERVACION"]);
+                    if (data.SqlLectorDatos["ID_TIPOVIAJE"] != DBNull.Value)
+                        pr.ID_TIPOVIAJE = Convert.ToInt32(data.SqlLectorDatos["ID_TIPOVIAJE"]);
+                    if (data.SqlLectorDatos["RETORNO"] != DBNull.Value)
+                        pr.RETORNO = Convert.ToString(data.SqlLectorDatos["RETORNO"]);
+                    if (data.SqlLectorDatos["FH_CREACION"] != DBNull.Value)
+                        pr.FH_CREACION = Convert.ToDateTime(data.SqlLectorDatos["FH_CREACION"]);
+                    if (data.SqlLectorDatos["FH_UPDATE"] != DBNull.Value)
+                        pr.FH_UPDATE = Convert.ToDateTime(data.SqlLectorDatos["FH_UPDATE"]);
+                    if (data.SqlLectorDatos["FH_RETORNO"] != DBNull.Value)
+                        pr.FH_RETORNO = Convert.ToDateTime(data.SqlLectorDatos["FH_RETORNO"]);
+                    if (data.SqlLectorDatos["FH_SALIDA"] != DBNull.Value)
+                        pr.FH_SALIDA = Convert.ToDateTime(data.SqlLectorDatos["FH_SALIDA"]);
+                    if (data.SqlLectorDatos["TOTAL_KG"] != DBNull.Value)
+                        pr.TOTAL_KG = Convert.ToDecimal(data.SqlLectorDatos["TOTAL_KG"]);
+                    if (data.SqlLectorDatos["CORREO_GPS"] != DBNull.Value)
+                        pr.CORREO_GPS = Convert.ToBoolean(data.SqlLectorDatos["CORREO_GPS"]);
+                    if (data.SqlLectorDatos["ID_CLIENTE_GPS"] != DBNull.Value)
+                        pr.ID_CLIENTE_GPS = Convert.ToInt32(data.SqlLectorDatos["ID_CLIENTE_GPS"]);
+                    if (data.SqlLectorDatos["RUTA"] != DBNull.Value)
+                        pr.RUTA = Convert.ToString(data.SqlLectorDatos["RUTA"]);
+                    if (data.SqlLectorDatos["FECHA_PRESENTACION"] != DBNull.Value)
+                        pr.FECHA_PRESENTACION = Convert.ToDateTime(data.SqlLectorDatos["FECHA_PRESENTACION"]);
+                    if (data.SqlLectorDatos["FECHA_INICIOCARGA"] != DBNull.Value)
+                        pr.FECHA_INICIOCARGA = Convert.ToDateTime(data.SqlLectorDatos["FECHA_INICIOCARGA"]);
+                    if (data.SqlLectorDatos["FECHA_FINCARGA"] != DBNull.Value)
+                        pr.FECHA_FINCARGA = Convert.ToDateTime(data.SqlLectorDatos["FECHA_FINCARGA"]);
+                    if (data.SqlLectorDatos["FECHA_DESPACHOEXP"] != DBNull.Value)
+                        pr.FECHA_DESPACHOEXP = Convert.ToDateTime(data.SqlLectorDatos["FECHA_DESPACHOEXP"]);
+                    if (data.SqlLectorDatos["FECHA_INICIOEXP"] != DBNull.Value)
+                        pr.FECHA_INICIOEXP = Convert.ToDateTime(data.SqlLectorDatos["FECHA_INICIOEXP"]);
+                    if (data.SqlLectorDatos["FECHA_FINEXP"] != DBNull.Value)
+                        pr.FECHA_FINEXP = Convert.ToDateTime(data.SqlLectorDatos["FECHA_FINEXP"]);
+                    // Origen
+                    if (data.SqlLectorDatos["ID_ORIGEN"] != DBNull.Value)
+                        pr.ORIGEN.ID = Convert.ToInt32(data.SqlLectorDatos["ID_ORIGEN"]);
+                    if (data.SqlLectorDatos["ORIGEN_NOMBRE"] != DBNull.Value)
+                        pr.ORIGEN.NOMBRE_PE = Convert.ToString(data.SqlLectorDatos["ORIGEN_NOMBRE"]);
+                    if (data.SqlLectorDatos["ORIGEN_DIRECCION"] != DBNull.Value)
+                        pr.ORIGEN.DIRECCION_PE = Convert.ToString(data.SqlLectorDatos["ORIGEN_DIRECCION"]);
+                    if (data.SqlLectorDatos["ORIGEN_LAT"] != DBNull.Value)
+                        pr.ORIGEN.LAT_PE = Convert.ToDecimal(data.SqlLectorDatos["ORIGEN_LAT"]);
+                    if (data.SqlLectorDatos["ORIGEN_LON"] != DBNull.Value)
+                        pr.ORIGEN.LON_PE = Convert.ToDecimal(data.SqlLectorDatos["ORIGEN_LON"]);
+                    // Operacion
+                    if (data.SqlLectorDatos["ID_OPE"] != DBNull.Value)
+                        pr.OPERACION.OPER_ID = Convert.ToInt32(data.SqlLectorDatos["ID_OPE"]);
+                    // Envio
+                    if (data.SqlLectorDatos["ID_ENVIO"] != DBNull.Value)
+                        pr.ENVIO.Env_ID = Convert.ToInt32(data.SqlLectorDatos["ID_ENVIO"]);
+                    // Trailer
+                    if (data.SqlLectorDatos["TRAI_ID"] != DBNull.Value)
+                        pr.TRAILER.TRAI_ID = Convert.ToInt32(data.SqlLectorDatos["TRAI_ID"]);
+                    if (data.SqlLectorDatos["TRAI_PLACA"] != DBNull.Value)
+                        pr.TRAILER.TRAI_PLACA = Convert.ToString(data.SqlLectorDatos["TRAI_PLACA"]);
+                    // Tracto
+                    if (data.SqlLectorDatos["TRAC_ID"] != DBNull.Value)
+                        pr.TRACTO.TRAC_ID = Convert.ToInt32(data.SqlLectorDatos["TRAC_ID"]);
+                    if (data.SqlLectorDatos["TRAC_PLACA"] != DBNull.Value)
+                        pr.TRACTO.TRAC_PLACA = Convert.ToString(data.SqlLectorDatos["TRAC_PLACA"]);
+                }
+                return pr;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                data.LimpiarSqlParametros();
+                data.CerrarSqlConeccion();
+            }
+        }
+        internal string PreRuta_ObtenerUltimosProcesos()
+        {
+            try
+            {
+                data.CargarSqlComando("[dbo].[LISTAR_ULTIMOS_PROCESOS_PRE_RUTA]");
+                // data.AgregarSqlParametro("@ruta_id", ruta_id);
+                return data.EjecutaSqlScalar();
+                //return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                data.LimpiarSqlParametros();
+                data.CerrarSqlConeccion();
+            }
+        }
+        internal bool PreRuta_Guardar(int id_ruta, string id_destinos, string tiempos, string hora_salida, string trai_placa, string trac_placa)
         {
             try
             {
                 data.CargarSqlComando("[dbo].[GUARDAR_PUNTOS_PRE_RUTA]");
-                if (@id_ruta!=0) data.AgregarSqlParametro("@ID_RUTA", id_ruta);
+                if (@id_ruta != 0) data.AgregarSqlParametro("@ID_RUTA", id_ruta);
 
                 data.AgregarSqlParametro("@ID_DESTINOS", id_destinos);
                 data.AgregarSqlParametro("@id_tiempos", tiempos);
                 data.AgregarSqlParametro("@hora_salida", hora_salida);
+                if (!string.IsNullOrEmpty(trai_placa))
+                    data.AgregarSqlParametro("@trai_placa", trai_placa);
+                if (!string.IsNullOrEmpty(trac_placa))
+                    data.AgregarSqlParametro("@trac_placa", trac_placa);
                 data.EjecutarSqlEscritura();
                 return true;
             }
@@ -1183,8 +1239,26 @@ namespace Ruteador.App_Code
                 data.CerrarSqlConeccion();
             }
         }
-
-        internal DataTable Pre_ruta_IngresarExcel(DataTable dt, int usua_id)
+        internal bool PreRuta_Eliminar(long ruta_id)
+        {
+            try
+            {
+                data.CargarSqlComando("[dbo].[ELIMINAR_PRE_RUTA]");
+                data.AgregarSqlParametro("@ruta_id", ruta_id);
+                data.EjecutarSqlEscritura();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                data.LimpiarSqlParametros();
+                data.CerrarSqlConeccion();
+            }
+        }
+        internal DataTable PreRuta_IngresarExcel(DataTable dt, int usua_id)
         {
             try
             {
@@ -1203,7 +1277,7 @@ namespace Ruteador.App_Code
                 data.CerrarSqlConeccion();
             }
         }
-        internal DataTable Pre_ruta_ProcesarExcel(int usua_id)
+        internal DataTable PreRuta_ProcesarExcel(int usua_id)
         {
             DataTable dt;
             try
@@ -1224,7 +1298,362 @@ namespace Ruteador.App_Code
             }
             return dt;
         }
+        #endregion
+        #region Tracto
+        internal DataTable Tracto_ObtenerTodo(string trac_placa)
+        {
+            try
+            {
+                data.CargarSqlComando("[dbo].[LISTAR_TRACTO]");
+                if (!string.IsNullOrEmpty(trac_placa))
+                    data.AgregarSqlParametro("@trac_placa", trac_placa);
+                return data.EjecutarSqlquery2();
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+            finally
+            {
+                data.LimpiarSqlParametros();
+                data.CerrarSqlConeccion();
+            }
+        }
+        internal TractoBC Tracto_ObtenerXId(int trac_id)
+        {
+            try
+            {
+                TractoBC t = new TractoBC();
+                data.CargarSqlComando("[dbo].[LISTAR_TRACTO]");
+                data.AgregarSqlParametro("@trac_id", trac_id);
+                data.EjecutarSqlLector();
+                while (data.SqlLectorDatos.Read())
+                {
+                    if (data.SqlLectorDatos["TRAC_ID"] != DBNull.Value)
+                        t.TRAC_ID = Convert.ToInt32(data.SqlLectorDatos["TRAC_ID"]);
+                    if (data.SqlLectorDatos["TRAC_PLACA"] != DBNull.Value)
+                        t.TRAC_PLACA = Convert.ToString(data.SqlLectorDatos["TRAC_PLACA"]);
+                    if (data.SqlLectorDatos["TRAC_FH_CREACION"] != DBNull.Value)
+                        t.TRAC_FH_CREACION = Convert.ToDateTime(data.SqlLectorDatos["TRAC_FH_CREACION"]);
+                }
+                return t;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+            finally
+            {
+                data.LimpiarSqlParametros();
+                data.CerrarSqlConeccion();
+            }
+        }
+        internal TractoBC Tracto_ObtenerXPlaca(string trac_placa)
+        {
+            try
+            {
+                TractoBC t = new TractoBC();
+                data.CargarSqlComando("[dbo].[LISTAR_TRACTO_X_PLACA]");
+                data.AgregarSqlParametro("@trac_placa", trac_placa);
+                data.EjecutarSqlLector();
+                while (data.SqlLectorDatos.Read())
+                {
+                    if (data.SqlLectorDatos["TRAC_ID"] != DBNull.Value)
+                        t.TRAC_ID = Convert.ToInt32(data.SqlLectorDatos["TRAC_ID"]);
+                    if (data.SqlLectorDatos["TRAC_PLACA"] != DBNull.Value)
+                        t.TRAC_PLACA = Convert.ToString(data.SqlLectorDatos["TRAC_PLACA"]);
+                    if (data.SqlLectorDatos["TRAC_FH_CREACION"] != DBNull.Value)
+                        t.TRAC_FH_CREACION = Convert.ToDateTime(data.SqlLectorDatos["TRAC_FH_CREACION"]);
+                }
+                return t;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+            finally
+            {
+                data.LimpiarSqlParametros();
+                data.CerrarSqlConeccion();
+            }
+        }
+        internal bool Tracto_Guardar(TractoBC t)
+        {
+            try
+            {
+                data.CargarSqlComando("[dbo].[GUARDAR_TRACTO]");
+                if (t.TRAC_ID != 0)
+                    data.AgregarSqlParametro("@TRAC_ID", t.TRAC_ID);
+                data.AgregarSqlParametro("@TRAC_PLACA", t.TRAC_PLACA);
+                data.EjecutarSqlEscritura();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                data.LimpiarSqlParametros();
+                data.CerrarSqlConeccion();
+            }
+        }
+        internal bool Tracto_Eliminar(int trac_id)
+        {
+            try
+            {
+                data.CargarSqlComando("[dbo].[ELIMINAR_TRACTO]");
+                data.AgregarSqlParametro("@TRAC_ID", trac_id);
+                data.EjecutarSqlEscritura();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                data.LimpiarSqlParametros();
+                data.CerrarSqlConeccion();
+            }
+        }
+        #endregion
+        #region Trailer
+        internal DataTable Trailer_ObtenerTodo(string trai_numero, string trai_placa, int trti_id)
+        {
+            try
+            {
+                data.CargarSqlComando("[dbo].[LISTAR_TRAILER]");
+                if (!string.IsNullOrEmpty(trai_placa))
+                    data.AgregarSqlParametro("@trai_placa", trai_placa);
+                if (!string.IsNullOrEmpty(trai_numero))
+                    data.AgregarSqlParametro("@trai_numero", trai_numero);
+                if (trti_id != 0)
+                    data.AgregarSqlParametro("@trti_id", trti_id);
+                return data.EjecutarSqlquery2();
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+            finally
+            {
+                data.LimpiarSqlParametros();
+                data.CerrarSqlConeccion();
+            }
+        }
+        internal TrailerBC Trailer_ObtenerXId(int trai_id)
+        {
+            try
+            {
+                TrailerBC t = new TrailerBC();
+                data.CargarSqlComando("[dbo].[LISTAR_TRAILER]");
+                data.AgregarSqlParametro("@trai_id", trai_id);
+                data.EjecutarSqlLector();
+                while (data.SqlLectorDatos.Read())
+                {
+                    if (data.SqlLectorDatos["TRAI_ID"] != DBNull.Value)
+                        t.TRAI_ID = Convert.ToInt32(data.SqlLectorDatos["TRAI_ID"]);
+                    if (data.SqlLectorDatos["TRAI_COD"] != DBNull.Value)
+                        t.TRAI_COD = Convert.ToString(data.SqlLectorDatos["TRAI_COD"]);
+                    if (data.SqlLectorDatos["TRAI_NUMERO"] != DBNull.Value)
+                        t.TRAI_NUMERO = Convert.ToString(data.SqlLectorDatos["TRAI_NUMERO"]);
+                    if (data.SqlLectorDatos["TRAI_PLACA"] != DBNull.Value)
+                        t.TRAI_PLACA = Convert.ToString(data.SqlLectorDatos["TRAI_PLACA"]);
+                    if (data.SqlLectorDatos["TRTI_ID"] != DBNull.Value)
+                        t.TRAILER_TIPO.TRTI_ID = Convert.ToInt32(data.SqlLectorDatos["TRTI_ID"]);
+                    if (data.SqlLectorDatos["TRTI_DESC"] != DBNull.Value)
+                        t.TRAILER_TIPO.TRTI_DESC = Convert.ToString(data.SqlLectorDatos["TRTI_DESC"]);
+                    if (data.SqlLectorDatos["TRTI_COLOR"] != DBNull.Value)
+                        t.TRAILER_TIPO.TRTI_COLOR = Convert.ToString(data.SqlLectorDatos["TRTI_COLOR"]);
+                }
+                return t;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+            finally
+            {
+                data.LimpiarSqlParametros();
+                data.CerrarSqlConeccion();
+            }
+        }
+        internal TrailerBC Trailer_ObtenerXPlaca(string trai_numero, string trai_placa)
+        {
+            try
+            {
+                TrailerBC t = new TrailerBC();
+                data.CargarSqlComando("[dbo].[LISTAR_TRAILER_X_PLACA]");
+                if (!string.IsNullOrEmpty(trai_placa))
+                    data.AgregarSqlParametro("@trai_placa", trai_placa);
+                if (!string.IsNullOrEmpty(trai_numero))
+                    data.AgregarSqlParametro("@trai_numero", trai_numero);
+                data.EjecutarSqlLector();
+                while (data.SqlLectorDatos.Read())
+                {
+                    if (data.SqlLectorDatos["TRAI_ID"] != DBNull.Value)
+                        t.TRAI_ID = Convert.ToInt32(data.SqlLectorDatos["TRAI_ID"]);
+                    if (data.SqlLectorDatos["TRAI_COD"] != DBNull.Value)
+                        t.TRAI_COD = Convert.ToString(data.SqlLectorDatos["TRAI_COD"]);
+                    if (data.SqlLectorDatos["TRAI_NUMERO"] != DBNull.Value)
+                        t.TRAI_NUMERO = Convert.ToString(data.SqlLectorDatos["TRAI_NUMERO"]);
+                    if (data.SqlLectorDatos["TRAI_PLACA"] != DBNull.Value)
+                        t.TRAI_PLACA = Convert.ToString(data.SqlLectorDatos["TRAI_PLACA"]);
+                    if (data.SqlLectorDatos["TRTI_ID"] != DBNull.Value)
+                        t.TRAILER_TIPO.TRTI_ID = Convert.ToInt32(data.SqlLectorDatos["TRTI_ID"]);
+                    if (data.SqlLectorDatos["TRTI_DESC"] != DBNull.Value)
+                        t.TRAILER_TIPO.TRTI_DESC = Convert.ToString(data.SqlLectorDatos["TRTI_DESC"]);
+                    if (data.SqlLectorDatos["TRTI_COLOR"] != DBNull.Value)
+                        t.TRAILER_TIPO.TRTI_COLOR = Convert.ToString(data.SqlLectorDatos["TRTI_COLOR"]);
+                }
+                return t;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+            finally
+            {
+                data.LimpiarSqlParametros();
+                data.CerrarSqlConeccion();
+            }
+        }
+        internal bool Trailer_Guardar(TrailerBC t)
+        {
+            try
+            {
+                data.CargarSqlComando("[dbo].[GUARDAR_TRAILER]");
+                if (t.TRAI_ID != 0)
+                    data.AgregarSqlParametro("@TRAI_ID", t.TRAI_ID);
+                data.AgregarSqlParametro("@TRAI_COD", t.TRAI_COD);
+                data.AgregarSqlParametro("@TRAI_PLACA", t.TRAI_PLACA);
+                data.AgregarSqlParametro("@TRAI_NUMERO", t.TRAI_NUMERO);
+                data.AgregarSqlParametro("@TRTI_ID", t.TRAILER_TIPO.TRTI_ID);
 
+                data.EjecutarSqlEscritura();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                data.LimpiarSqlParametros();
+                data.CerrarSqlConeccion();
+            }
+        }
+        internal bool Trailer_Eliminar(int trai_id)
+        {
+            try
+            {
+                data.CargarSqlComando("[dbo].[ELIMINAR_TRAILER]");
+                data.AgregarSqlParametro("@trai_id", trai_id);
+                data.EjecutarSqlEscritura();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                data.LimpiarSqlParametros();
+                data.CerrarSqlConeccion();
+            }
+        }
+        #endregion
+        #region TrailerTipo
+        internal DataTable TrailerTipo_ObtenerTodo(string trti_desc)
+        {
+            try
+            {
+                data.CargarSqlComando("[dbo].[LISTAR_TRAILER_TIPO]");
+                if (!string.IsNullOrEmpty(trti_desc))
+                    data.AgregarSqlParametro("@trti_desc", trti_desc);
+                return data.EjecutarSqlquery2();
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+            finally
+            {
+                data.LimpiarSqlParametros();
+                data.CerrarSqlConeccion();
+            }
+        }
+        internal TrailerTipoBC TrailerTipo_ObtenerXId(int trti_id)
+        {
+            try
+            {
+                TrailerTipoBC t = new TrailerTipoBC();
+                data.CargarSqlComando("[dbo].[LISTAR_TRAILER_TIPO]");
+                data.AgregarSqlParametro("@trti_id", trti_id);
+                data.EjecutarSqlLector();
+                while (data.SqlLectorDatos.Read())
+                {
+                    if (data.SqlLectorDatos["TRTI_ID"] != DBNull.Value)
+                        t.TRTI_ID = Convert.ToInt32(data.SqlLectorDatos["TRTI_ID"]);
+                    if (data.SqlLectorDatos["TRTI_DESC"] != DBNull.Value)
+                        t.TRTI_DESC = Convert.ToString(data.SqlLectorDatos["TRTI_DESC"]);
+                    if (data.SqlLectorDatos["TRTI_COLOR"] != DBNull.Value)
+                        t.TRTI_COLOR = Convert.ToString(data.SqlLectorDatos["TRTI_COLOR"]);
+                }
+                return t;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+            finally
+            {
+                data.LimpiarSqlParametros();
+                data.CerrarSqlConeccion();
+            }
+        }  internal bool TrailerTipo_Guardar(TrailerTipoBC t)
+        {
+            try
+            {
+                data.CargarSqlComando("[dbo].[GUARDAR_TRAILER_TIPO]");
+                if (t.TRTI_ID != 0)
+                    data.AgregarSqlParametro("@TRTI_ID", t.TRTI_ID);
+                data.AgregarSqlParametro("@TRTI_DESC", t.TRTI_DESC);
+                data.AgregarSqlParametro("@TRTI_COLOR", t.TRTI_COLOR);
+
+                data.EjecutarSqlEscritura();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                data.LimpiarSqlParametros();
+                data.CerrarSqlConeccion();
+            }
+        }
+        internal bool TrailerTipo_Eliminar(int trti_id)
+        {
+            try
+            {
+                data.CargarSqlComando("[dbo].[ELIMINAR_TRAILER_TIPO]");
+                data.AgregarSqlParametro("@TRTI_ID", trti_id);
+                data.EjecutarSqlEscritura();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                data.LimpiarSqlParametros();
+                data.CerrarSqlConeccion();
+            }
+        }
         #endregion
         #region Usuario
         internal DataTable Usuario_ObtenerTodo(bool usua_activos, int usti_id, string usua_rut, string usua_username, string usua_nombre, string usua_apellido)
@@ -1603,9 +2032,7 @@ namespace Ruteador.App_Code
             }
         }
         #endregion
-
         #region envio
-
         internal DataTable envio_detalle(int id)
         {
             try
@@ -1640,7 +2067,6 @@ namespace Ruteador.App_Code
                 data.CerrarSqlConeccion();
             }
         }
-
         internal bool envio_Eliminar(long env_id)
         {
             try
@@ -1660,7 +2086,6 @@ namespace Ruteador.App_Code
                 data.CerrarSqlConeccion();
             }
         }
-
         internal DataTable Envio_ObtenerTodo() //(DateTime desde, DateTime hasta, int hora_id, int regi_id, int ciud_id, int comu_id, int usua_id, string peru_numero)
         {
             try
@@ -1695,10 +2120,6 @@ namespace Ruteador.App_Code
                 data.CerrarSqlConeccion();
             }
         }
-   
-
         #endregion 
-
-            
     }
 }

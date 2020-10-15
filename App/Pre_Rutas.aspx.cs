@@ -42,6 +42,9 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
             CargaDrops();
             txt_buscarHasta.Text = DateTime.Now.ToShortDateString();
             txt_buscarDesde.Text = DateTime.Now.AddDays(-1).ToShortDateString();
+            hf_trailer.Value = JsonConvert.SerializeObject(new TrailerBC().ObtenerTodo());
+            hf_tracto.Value = JsonConvert.SerializeObject(new TractoBC().ObtenerTodo());
+
 
             ObtenerRutas(true);
 
@@ -67,14 +70,13 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
     //void ICallbackEventHandler.RaiseCallbackEvent(string eventArgument)
     //{
     //    // PreRutaBC preruta = new PreRutaBC();
-        
+
     // //   callbackReturnValue = preruta.obtenerultimosprocesos();
     //    DataTable dt2 = JsonConvert.DeserializeObject<DataTable>(eventArgument);
     //    callbackReturnValue = eventArgument;
 
     //}
-
-
+    #region GridView
     protected void gv_listar_RowCreated(object sender, GridViewRowEventArgs e)
     {
         if (e.Row.RowType == DataControlRowType.Header)
@@ -90,114 +92,159 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
             e.Row.TableSection = TableRowSection.TableFooter;
         }
     }
-
-    protected void cambiaruta(object sender, EventArgs e)
+    protected void gv_listar_Sorting(object sender, GridViewSortEventArgs e)
     {
-        // utils.AbrirModal(this.Page, "modalPuntos");
-        hf_idRuta.Value = "";
-        hf_idPunto.Value = "";
-        hf_puntosruta.Value = "";
-        hf_origen.Value = "";
-        txt_puntoNombre.Text = "";
-
-        // gv_listar.SelectedIndex = Convert.ToInt32(e.CommandArgument);
-        int id_ruta = Convert.ToInt32(cambia_pre_ruta.SelectedValue);
-
-
-        //        int id_origen = Convert.ToInt32(gv_listar.SelectedDataKey.Values[1]);
-
-        hf_idRuta.Value = id_ruta.ToString();
-        OrigenBC o = new OrigenBC().ObtenerXIdruta(id_ruta);
-        hf_origen.Value = JsonConvert.SerializeObject(o);
-        ObtenerPuntosRuta(true);
-        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "map", "mapa();", true);
+        string direccion = utils.ConvertSortDirectionToSql((String)ViewState["sortOrder"]);
+        ViewState["sortOrder"] = direccion;
+        ViewState["sortExpresion"] = e.SortExpression + " " + direccion;
+        ObtenerRutas(false);
     }
-
     protected void gv_listar_RowCommand(object sender, GridViewCommandEventArgs e)
     {
-        Limpiar();
 
         if (e.CommandName == "PUNTOS")
         {
+            Limpiar();
             utils.AbrirModal(this.Page, "modalPuntos");
-
             gv_listar.SelectedIndex = Convert.ToInt32(e.CommandArgument);
-            int id_ruta = Convert.ToInt32(gv_listar.SelectedDataKey.Values[0]);
+            int id_preruta = Convert.ToInt32(gv_listar.SelectedDataKey.Values[0]);
             int id_origen = Convert.ToInt32(gv_listar.SelectedDataKey.Values[1]);
-            hf_idRuta.Value = id_ruta.ToString();
-            OrigenBC o = new OrigenBC().ObtenerXIdruta(id_ruta);
-            hf_origen.Value = JsonConvert.SerializeObject(o);
+            hf_idRuta.Value = id_preruta.ToString();
+            //OrigenBC o = new OrigenBC().ObtenerXIdruta(id_preruta);
+            PreRutaBC p = new PreRutaBC().ObtenerXId(id_preruta);
+            hf_origen.Value = JsonConvert.SerializeObject(p.ORIGEN);
+            txt_vehiculoTracto.Text = p.TRACTO.TRAC_PLACA;
+            txt_vehiculoTrailer.Text = p.TRAILER.TRAI_PLACA;
             ObtenerPuntosRuta(true);
-            cambia_pre_ruta.SelectedValue = id_ruta.ToString();
+            ddl_puntosCambiarPreruta.Visible = true;
+            ddl_puntosCambiarPreruta.SelectedValue = id_preruta.ToString();
             //    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "map", "mapa();", true);
         }
         if (e.CommandName == "ELIMINAR")
         {
             hf_idRuta.Value = e.CommandArgument.ToString();
-            lbl_confTitulo.Text = "Eliminar Pedido";
+            lbl_confTitulo.Text = "Eliminar Propuesta";
             lbl_confMensaje.Text = "Se eliminará la propuesta de ruta seleccionada ¿Desea continuar?";
             utils.AbrirModal(this, "modalConf");
         }
 
     }
-
-    protected void btn_confEliminar_Click(object sender, EventArgs e)
+    #endregion
+    #region utilsPagina
+    private static void PrepareControlForExport(Control control)
     {
-        try
+        for (int i = 0; i < control.Controls.Count; i++)
         {
-            int peru_id = Convert.ToInt32(hf_idRuta.Value);
-            if (new PreRutaBC().Eliminar(peru_id))
+            Control current = control.Controls[i];
+            if (current is LinkButton)
             {
-                utils.ShowMessage2(this, "eliminar", "success");
-                utils.CerrarModal(this, "modalConf");
+                control.Controls.Remove(current);
+                control.Controls.AddAt(i, new LiteralControl((current as LinkButton).Text));
             }
-            else
-                utils.ShowMessage2(this, "eliminar", "error");
-        }
-        catch (Exception ex)
-        {
-            utils.ShowMessage(this, ex.Message, "error", false);
-        }
-        finally
-        {
-            ObtenerRutas(true);
+            else if (current is ImageButton)
+            {
+                control.Controls.Remove(current);
+            }
+            else if (current is HyperLink)
+            {
+                control.Controls.Remove(current);
+            }
+            else if (current is DropDownList)
+            {
+                control.Controls.Remove(current);
+            }
+            else if (current is CheckBox)
+            {
+                control.Controls.Remove(current);
+            }
+            else if (current is HiddenField)
+            {
+                control.Controls.Remove(current);
+            }
+            if (current.HasControls())
+            {
+                PrepareControlForExport(current);
+            }
         }
     }
-
-    protected void btn_nuevo_Click(object sender, EventArgs e)
+    private void Limpiar()
     {
-        Limpiar();
-        utils.AbrirModal(this, "modalPuntos");
-        cambia_pre_ruta.Visible = false;
-        // ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "map", "mapa();", true);
-        OrigenBC o = new OrigenBC().ObtenerXId(1);
-        hf_origen.Value = JsonConvert.SerializeObject(o);
 
+        hf_idRuta.Value = "";
+        hf_idPunto.Value = "";
+        hf_puntosruta.Value = "";
+        hf_origen.Value = "";
+        txt_puntoNombre.Text = "";
+        txt_vehiculoTracto.Text = "";
+        txt_vehiculoTrailer.Text = "";
+    }
+    private void ObtenerRutas(bool forzarBD, bool refrescar_combo = true)
+    {
+        if (ViewState["listar"] == null || forzarBD)
+        {
+            DateTime desde = (string.IsNullOrEmpty(txt_buscarDesde.Text)) ? DateTime.MinValue : Convert.ToDateTime(txt_buscarDesde.Text);
+            DateTime hasta = (string.IsNullOrEmpty(txt_buscarHasta.Text)) ? DateTime.MinValue : Convert.ToDateTime(txt_buscarHasta.Text);
+            int regi_id = Convert.ToInt32(ddl_buscarRegion.SelectedValue);
+            int ciud_id = Convert.ToInt32(ddl_buscarCiudad.SelectedValue);
+            int comu_id = Convert.ToInt32(ddl_buscarComuna.SelectedValue);
+            int hora_id = Convert.ToInt32(ddl_buscarHorario.SelectedValue);
+            string envio = txt_buscaenvio.Text;
+            ViewState["listar"] = new RutaBC().ObtenerPre_RutasTodo(desde: desde
+                                        , hasta: hasta
+                                        , regi_id: regi_id
+                                        , ciud_id: ciud_id
+                                        , comu_id: comu_id
+                                        , usua_id: user.USUA_ID
+                                        , peru_numero: txt_buscarNro.Text
+                                        , hora_id: hora_id, envio: envio);
+        }
+        DataView dw = new DataView((DataTable)ViewState["listar"]);
+        if (ViewState["sortExpresion"] != null && ViewState["sortExpresion"].ToString() != "")
+        {
+            dw.Sort = (String)ViewState["sortExpresion"];
+        }
 
-        DataTable dt = new PreRutaBC().ObtenerPuntos(0);
+        if (refrescar_combo == true)
+        {
+            ddl_puntosCambiarPreruta.DataTextField = "NUMERO";
+            ddl_puntosCambiarPreruta.DataValueField = "ID";
+            ddl_puntosCambiarPreruta.DataSource = dw;
+            ddl_puntosCambiarPreruta.DataBind();
+        }
+
+        gv_listar.DataSource = dw;
+        gv_listar.DataBind();
+    }
+    private void ObtenerPuntosRuta(bool forzarBD)
+    {
+        int id_ruta = Convert.ToInt32(hf_idRuta.Value);
+        DataTable dt = new PreRutaBC().ObtenerPuntos(id_ruta);
         hf_puntosruta.Value = JsonConvert.SerializeObject(dt);
 
-        DataTable dt3 = new PedidoBC().ObtenerTodo(0, 0, 0, 0, 0, null, true);
-        //hf_todos.Value = JsonConvert.SerializeObject(dt3);
-
-        // DataTable dt2 = new PedidoBC().ObtenerTodo(0, 0, 0, 0, 0, null, false, id_ruta);
-
-        // dt2.Merge(dt3);
-
+        DataTable dt3 = new PedidoBC().ObtenerTodo(solo_sin_ruta: true
+                                                    , id_ruta: id_ruta);
         hf_todos.Value = JsonConvert.SerializeObject(dt3);
-        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "map_cargar", "mapanuevo();", true);
+        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "map_cargar", "mapa2();", true);
 
 
     }
-
-    protected void btnenviar_Click(object sender, EventArgs e)
+    private void CargaDrops()
     {
-        Label2.Text = "Marcar para archivar";
-        lbl_titulo_enviar.Text = "Archivar rutas y pedidos seleccionados?";
-        utils.AbrirModal(this, "modalenviar");
-
+        DataTable dt = new RegionBC().ObtenerTodo();
+        // utils.CargaDrop(ddl_editRegion, "REGI_ID", "REGI_NOMBRE", dt);
+        //  ddl_editRegion_SelectedIndexChanged(null, null);
+        utils.CargaDropTodos(ddl_buscarRegion, "REGI_ID", "REGI_NOMBRE", dt);
+        ddl_buscarRegion_SelectedIndexChanged(null, null);
+        dt = new HorarioBC().ObtenerTodo();
+        utils.CargaDropNormal(ddl_buscarHorario, "HORA_ID", "HORA_COD", dt);
+        // rb_editHorario.DataValueField = "HORA_ID";
+        //  rb_editHorario.DataTextField = "HORA_COD";
+        //  rb_editHorario.DataSource = dt;
+        //  rb_editHorario.DataBind();
     }
-    protected void envio_conf(object sender, EventArgs e)
+    #endregion
+    #region Buttons
+    protected void btn_confEnviar_Click(object sender, EventArgs e)
     {
         PreRutaBC gd = new PreRutaBC();
         try
@@ -213,16 +260,13 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
         }
         finally
         {
-            btnBuscar_Click(null, null);
+            ObtenerRutas(true);
         }
     }
-
-
-    protected void exportar_excel(object sender, EventArgs e)
+    protected void btn_exportarExcel_Click(object sender, EventArgs e)
     {
         DataView view = new DataView();
         view.Table = (DataTable)ViewState["lista"];
-        if (view.Count == 0) { utils.ShowMessage2(this, "exportar", "warn_sinFilas"); return; }
         GridView gv = new GridView();
 
         gv.DataSource = view;
@@ -277,125 +321,59 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
         }
 
     }
-
-    private static void PrepareControlForExport(Control control)
+    protected void btn_buscar_Click(object sender, EventArgs e)
     {
-        for (int i = 0; i < control.Controls.Count; i++)
+        ObtenerRutas(true);
+    }
+    protected void btn_confEliminar_Click(object sender, EventArgs e)
+    {
+        try
         {
-            Control current = control.Controls[i];
-            if (current is LinkButton)
+            int peru_id = Convert.ToInt32(hf_idRuta.Value);
+            if (new PreRutaBC().Eliminar(peru_id))
             {
-                control.Controls.Remove(current);
-                control.Controls.AddAt(i, new LiteralControl((current as LinkButton).Text));
+                utils.ShowMessage2(this, "eliminar", "success");
+                utils.CerrarModal(this, "modalConf");
             }
-            else if (current is ImageButton)
-            {
-                control.Controls.Remove(current);
-            }
-            else if (current is HyperLink)
-            {
-                control.Controls.Remove(current);
-            }
-            else if (current is DropDownList)
-            {
-                control.Controls.Remove(current);
-            }
-            else if (current is CheckBox)
-            {
-                control.Controls.Remove(current);
-            }
-            else if (current is HiddenField)
-            {
-                control.Controls.Remove(current);
-            }
-            if (current.HasControls())
-            {
-                PrepareControlForExport(current);
-            }
+            else
+                utils.ShowMessage2(this, "eliminar", "error");
+        }
+        catch (Exception ex)
+        {
+            utils.ShowMessage(this, ex.Message, "error", false);
+        }
+        finally
+        {
+            ObtenerRutas(true);
         }
     }
-
-    protected void Limpiar()
+    protected void btn_nuevo_Click(object sender, EventArgs e)
     {
-
-        hf_idRuta.Value = "";
-        hf_idPunto.Value = "";
-        hf_puntosruta.Value = "";
-        hf_origen.Value = "";
-        txt_puntoNombre.Text = "";
-        cambia_pre_ruta.Visible = true;
-
-    }
+        Limpiar();
+        utils.AbrirModal(this, "modalPuntos");
+        ddl_puntosCambiarPreruta.Visible = false;
+        OrigenBC o = new OrigenBC().ObtenerXId(1);
+        hf_origen.Value = JsonConvert.SerializeObject(o);
 
 
-    private void ObtenerRutas(bool forzarBD, bool refrescar_combo = true)
-    {
-        if (ViewState["listar"] == null || forzarBD)
-        {
-            DateTime desde = (string.IsNullOrEmpty(txt_buscarDesde.Text)) ? DateTime.MinValue : Convert.ToDateTime(txt_buscarDesde.Text);
-            DateTime hasta = (string.IsNullOrEmpty(txt_buscarHasta.Text)) ? DateTime.MinValue : Convert.ToDateTime(txt_buscarHasta.Text);
-            int regi_id = Convert.ToInt32(ddl_buscarRegion.SelectedValue);
-            int ciud_id = Convert.ToInt32(ddl_buscarCiudad.SelectedValue);
-            int comu_id = Convert.ToInt32(ddl_buscarComuna.SelectedValue);
-            int hora_id = Convert.ToInt32(ddl_buscarHorario.SelectedValue);
-            string envio = txt_buscaenvio.Text;
-            ViewState["listar"] = new RutaBC().ObtenerPre_RutasTodo(desde: desde
-                                        , hasta: hasta
-                                        , regi_id: regi_id
-                                        , ciud_id: ciud_id
-                                        , comu_id: comu_id
-                                        , usua_id: user.USUA_ID
-                                        , peru_numero: txt_buscarNro.Text
-                                        , hora_id: hora_id, envio: envio);
-        }
-        DataView dw = new DataView((DataTable)ViewState["listar"]);
-        if (ViewState["sortExpresion"] != null && ViewState["sortExpresion"].ToString() != "")
-        {
-            dw.Sort = (String)ViewState["sortExpresion"];
-        }
-
-
-        if (refrescar_combo == true)
-        {
-
-
-            cambia_pre_ruta.DataTextField = "NUMERO";
-            cambia_pre_ruta.DataValueField = "ID";
-            cambia_pre_ruta.DataSource = dw;
-            cambia_pre_ruta.DataBind();
-
-        }
-
-
-        gv_listar.DataSource = dw;
-        gv_listar.DataBind();
-    }
-    private void ObtenerPuntosRuta(bool forzarBD)
-    {
-        int id_ruta = Convert.ToInt32(hf_idRuta.Value);
-        DataTable dt = new PreRutaBC().ObtenerPuntos(id_ruta);
+        DataTable dt = new PreRutaBC().ObtenerPuntos();
         hf_puntosruta.Value = JsonConvert.SerializeObject(dt);
 
-        DataTable dt3 = new PedidoBC().ObtenerTodo(0, 0, 0, 0, 0, null, true, id_ruta);
-        //hf_todos.Value = JsonConvert.SerializeObject(dt3);
-
-        // DataTable dt2 = new PedidoBC().ObtenerTodo(0, 0, 0, 0, 0, null, false, id_ruta);
-
-        // dt2.Merge(dt3);
-
+        DataTable dt3 = new PedidoBC().ObtenerTodo(solo_sin_ruta: true);
         hf_todos.Value = JsonConvert.SerializeObject(dt3);
-        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "map_cargar", "mapa2();", true);
-
-
+        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "map_cargar", "mapanuevo();", true);
     }
-
+    protected void btn_enviar_Click(object sender, EventArgs e)
+    {
+        Label2.Text = "Marcar para archivar";
+        lbl_titulo_enviar.Text = "Archivar rutas y pedidos seleccionados?";
+        utils.AbrirModal(this, "modalenviar");
+    }
     protected void btn_guardar_Click(object sender, EventArgs e)
     {
         try
         {
             DataTable dt2 = JsonConvert.DeserializeObject<DataTable>(respuesta_direcction.Value);
-     
-
             DataTable dt = JsonConvert.DeserializeObject<DataTable>(hf_puntosruta.Value);
             StringBuilder sb = new StringBuilder();
             StringBuilder sb2 = new StringBuilder();
@@ -405,28 +383,22 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
                     sb.Append(",");
                 sb.Append(dr["PERU_ID"]);
             }
-
             foreach (DataRow dr2 in dt2.Rows)
             {
                 if (sb2.Length != 0)
                     sb2.Append(",");
                 sb2.Append(dr2["value"]);
             }
-
-
             if (hf_idRuta.Value == "")
             {
-
-                new PreRutaBC().Guardar(0, sb.ToString(), sb2.ToString(),ddl_buscarHorario.SelectedValue);
-                utils.ShowMessage(this, "Ruta Creada correctamente", "success", true);
-
+                new PreRutaBC().Guardar(0, sb.ToString(), sb2.ToString(),ddl_buscarHorario.SelectedValue, txt_vehiculoTrailer.Text, txt_vehiculoTracto.Text);
+                utils.ShowMessage2(this, "guardar", "success_nuevo");
             }
             else
             {
                 int id_ruta = Convert.ToInt32(hf_idRuta.Value);
-                new PreRutaBC().Guardar(id_ruta, sb.ToString(), sb2.ToString(), ddl_buscarHorario.SelectedItem.Text);
-                utils.ShowMessage(this, "Ruta modificada correctamente", "success", true);
-
+                new PreRutaBC().Guardar(id_ruta, sb.ToString(), sb2.ToString(), ddl_buscarHorario.SelectedItem.Text, txt_vehiculoTrailer.Text, txt_vehiculoTracto.Text);
+                utils.ShowMessage2(this, "guardar", "success_modificar");
             }
             ObtenerRutas(true, true);
         }
@@ -437,18 +409,25 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
         finally
         {
             ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "map", "mapa();", true);
+            utils.CerrarModal(this, "modalVehiculo");
             ObtenerRutas(true, false);
         }
     }
-
-    protected void gv_listar_Sorting(object sender, GridViewSortEventArgs e)
+    #endregion
+    #region DropDownList
+    protected void ddl_puntosCambiarPreruta_SelectedIndexChanged(object sender, EventArgs e)
     {
-        string direccion = utils.ConvertSortDirectionToSql((String)ViewState["sortOrder"]);
-        ViewState["sortOrder"] = direccion;
-        ViewState["sortExpresion"] = e.SortExpression + " " + direccion;
-        ObtenerRutas(false);
+        Limpiar();
+        int id_ruta = Convert.ToInt32(ddl_puntosCambiarPreruta.SelectedValue);
+        hf_idRuta.Value = id_ruta.ToString();
+        PreRutaBC p = new PreRutaBC().ObtenerXId(id_ruta);
+        //OrigenBC o = new OrigenBC().ObtenerXIdruta(id_ruta);
+        hf_origen.Value = JsonConvert.SerializeObject(p.ORIGEN);
+        txt_vehiculoTracto.Text = p.TRACTO.TRAC_PLACA;
+        txt_vehiculoTrailer.Text = p.TRAILER.TRAI_PLACA;
+        ObtenerPuntosRuta(true);
+        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "map", "mapa();", true);
     }
-
     protected void ddl_buscarRegion_SelectedIndexChanged(object sender, EventArgs e)
     {
         int regi_id = Convert.ToInt32(ddl_buscarRegion.SelectedValue);
@@ -463,29 +442,5 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
         DataTable dt = new ComunaBC().ObtenerTodo(regi_id, ciud_id);
         utils.CargaDropTodos(ddl_buscarComuna, "COMU_ID", "COMU_NOMBRE", dt);
     }
-
-    protected void btnBuscar_Click(object sender, EventArgs e)
-    {
-        ObtenerRutas(true);
-    }
-
-
-    private void CargaDrops()
-    {
-        DataTable dt = new RegionBC().ObtenerTodo();
-        // utils.CargaDrop(ddl_editRegion, "REGI_ID", "REGI_NOMBRE", dt);
-        //  ddl_editRegion_SelectedIndexChanged(null, null);
-        utils.CargaDropTodos(ddl_buscarRegion, "REGI_ID", "REGI_NOMBRE", dt);
-        ddl_buscarRegion_SelectedIndexChanged(null, null);
-        dt = new HorarioBC().ObtenerTodo();
-        utils.CargaDropNormal(ddl_buscarHorario, "HORA_ID", "HORA_COD", dt);
-        // rb_editHorario.DataValueField = "HORA_ID";
-        //  rb_editHorario.DataTextField = "HORA_COD";
-        //  rb_editHorario.DataSource = dt;
-        //  rb_editHorario.DataBind();
-    }
-
-
-
-
+    #endregion
 }

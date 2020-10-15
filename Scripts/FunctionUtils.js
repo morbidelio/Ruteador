@@ -99,14 +99,6 @@ function formatearRut(rut) {
 }
 
 function validaPatente(p) {
-    var rex1 = /[a-zA-Z]{4}[\d]{2}/g
-    var rex2 = /[a-zA-Z]{2}[\d]{4}/g
-    var ex = false;
-    if (rex1.test(p)) {
-        ex = true;
-    }
-    if (rex2.test(p)) {
-        ex = true;
-    }
-    return ex;
+    var rex = /[a-zA-Z]{4}[\d]{2}|[a-zA-Z]{2}[\d]{4}/g
+    return rex.test(p);
 }

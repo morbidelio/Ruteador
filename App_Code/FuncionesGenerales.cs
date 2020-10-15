@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 /// <summary>
 /// Descripción breve de FuncionesGenerales
 /// </summary>
 public class FuncionesGenerales
 {
-
     /// <summary>
     /// Genera Password Aleatoria
     /// </summary>
@@ -26,7 +26,6 @@ public class FuncionesGenerales
 
         return new string(chars);
     }
-
     public string Encriptar(string texto, string key)
     {
         //arreglo de bytes donde guardaremos la llave
@@ -72,8 +71,6 @@ public class FuncionesGenerales
         return Convert.ToBase64String(ArrayResultado,
                0, ArrayResultado.Length);
     }
-
-
     public string Desencriptar(string textoEncriptado, string key)
     {
         byte[] keyArray;
@@ -120,7 +117,6 @@ public class FuncionesGenerales
         //se regresa en forma de cadena
 
     }
-
     public bool ValidaRut(string rutCompleto)
     {
 
@@ -185,7 +181,14 @@ public class FuncionesGenerales
             }
         }
     }
-
+    public bool ValidaPlaca(string placa)
+    {
+        // Create a pattern for a word that starts with letter "M"  
+        string pattern = @"[a-zA-Z]{2}\d{4}|[a-zA-Z]{4}\d{2}";
+        // Create a Regex  
+        Regex rg = new Regex(pattern);
+        return rg.IsMatch(placa);
+    }
 }
 
 

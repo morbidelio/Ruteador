@@ -53,7 +53,7 @@ function getDestino() {
     return destino;
 }
 function cargamapa(zoom1, mapObj, lat, lon) {
-    var center = (lat == undefined || lon == undefined) ? new google.maps.LatLng(-33.45238466, -70.65735526) : new google.maps.LatLng(lat, lon);
+    var center = (!lat || !lon) ? new google.maps.LatLng(-33.45238466, -70.65735526) : new google.maps.LatLng(lat, lon);
     map = new google.maps.Map(mapObj, {
 
         center: center,
@@ -253,6 +253,8 @@ function refrescarPoligono() {
 }
 
 function refrescarRuta() {
+    if (!directionsRenderer) directionsRenderer = new google.maps.DirectionsRenderer();
+    if (!directionsService) directionsService = new google.maps.DirectionsService();
     directionsRenderer.setOptions({ preserveViewport: false });
     directionsRenderer.setDirections({ routes: [] });
     var wayway = Array.from(waypoints["WAYPOINTS"]);

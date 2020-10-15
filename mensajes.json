@@ -90,7 +90,8 @@
           "warn_nombreVacio": "Nombre obligatorio.",
           "warn_permisoVacio": "Nivel permisos obligatorio.",
           "warn_checksVacio": "Seleccione al menos un módulo.",
-          "error": "Ocurrió un error. Revise los datos."
+          "error_nuevo": "Error al crear perfil. Revise los datos.",
+          "error_modificar": "Error al modificar perfil. Revise los datos."
         },
         {
           "nombre": "eliminar",
@@ -99,17 +100,89 @@
         }
       ]
     },
-	{
-	 "name": "Pre_Rutas.aspx",
-	  "accion": [
+	  {
+	   "name": "Pre_Rutas.aspx",
+	    "accion": [
+        {
+          "nombre": "guardar",
+          "success_nuevo": "Propuesta ruta creada.",
+          "success_modificar": "Propuesta ruta modificada.",
+          "warn_trailerNoexiste": "Trailer no existe.",
+          "warn_tractoNoexiste": "Tracto no existe."
+        },
         {
           "nombre": "eliminar",
-          "success": "Pre Ruta eliminada.",
-          "error": "Error al eliminar la Pre Ruta."
+          "success": "Propuesta ruta eliminada.",
+          "error": "Error al eliminar la propuesta ruta."
+        },
+        {
+          "nombre": "enviar",
+          "warn_noSeleccionados": "Seleccione al menos un pedido."
         }
-		]
+		  ]
 	
-	},
+	  },
+    {
+      "name": "Tracto.aspx",
+      "accion": [
+        {
+          "nombre": "guardar",
+          "success_nuevo": "Tracto creado.",
+          "success_modificar": "Tracto modificado.",
+          "warn_placaVacio": "Placa obligatoria.",
+          "warn_placaExiste": "Tracto ya existe.",
+          "warn_placaInvalida": "Placa no válida.",
+          "error_nuevo": "Error al crear tracto. Revise los datos.",
+          "error_modificar": "Error al modificar tracto. Revise los datos."
+        },
+        {
+          "nombre": "eliminar",
+          "success": "Tracto eliminado.",
+          "error": "Error al eliminar tracto."
+        }
+      ]
+    },
+    {
+      "name": "Trailer.aspx",
+      "accion": [
+        {
+          "nombre": "guardar",
+          "success_nuevo": "Trailer creado.",
+          "success_modificar": "Trailer modificado.",
+          "warn_numeroVacio": "Número obligatorio.",
+          "warn_placaVacio": "Placa obligatoria.",
+          "warn_tipoVacio": "Tipo obligatorio.",
+          "warn_placaexiste": "Trailer ya existe.",
+          "warn_placaInvalida": "Placa no válida.",
+          "error_nuevo": "Error al crear trailer. Revise los datos.",
+          "error_modificar": "Error al modificar trailer. Revise los datos."
+        },
+        {
+          "nombre": "eliminar",
+          "success": "Trailer eliminado.",
+          "error": "Error al eliminar trailer."
+        }
+      ]
+    },
+    {
+      "name": "Tipo_Trailer.aspx",
+      "accion": [
+        {
+          "nombre": "guardar",
+          "success_nuevo": "Tipo Trailer creado.",
+          "success_modificar": "Tipo Trailer modificado.",
+          "warn_descVacio": "Descripción obligatoria.",
+          "warn_colorVacio": "Color obligatorio.",
+          "error_nuevo": "Error al crear tipo trailer. Revise los datos.",
+          "error_modificar": "Error al modificar tipo trailer. Revise los datos."
+        },
+        {
+          "nombre": "eliminar",
+          "success": "Tipo trailer eliminado.",
+          "error": "Error al eliminar tipo trailer."
+        }
+      ]
+    },
     {
       "name": "Usuario.aspx",
       "accion": [
@@ -124,7 +197,8 @@
           "warn_usernameVacio": "Username obligatorio.",
           "warn_passwordVacio": "Contraseña obligatoria.",
           "warn_tipoVacio": "Tipo usuario obligatorio.",
-          "error": "Ocurrió un error. Revise los datos."
+          "error_nuevo": "Error al crear usuario. Revise los datos.",
+          "error_modificar": "Error al modificar usuario. Revise los datos."
         },
         {
           "nombre": "eliminar",
@@ -136,7 +210,7 @@
           "success_existe": "Usuario ya existe. Se rellenaron los datos.",
           "warn_existe": "Usuario ya existe, pero no tiene permisos para modificarlo.",
           "warn_invalido": "Rut inválido.",
-          "error": "No se pudo comprobar si el rut existe."
+          "error": "No se pudo comprobar rut."
         }
       ]
     }
