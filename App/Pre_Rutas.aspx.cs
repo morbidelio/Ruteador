@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.IO;
+using Microsoft.Reporting.WebForms;
 
 public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandler
 {
@@ -44,6 +45,7 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
             txt_buscarDesde.Text = DateTime.Now.AddDays(-1).ToShortDateString();
             hf_trailer.Value = JsonConvert.SerializeObject(new TrailerBC().ObtenerTodo());
             hf_tracto.Value = JsonConvert.SerializeObject(new TractoBC().ObtenerTodo());
+            hf_conductor.Value = JsonConvert.SerializeObject(new ConductorBC().ObtenerTodo(cond_activo: true, cond_bloqueado: false));
 
 
             ObtenerRutas(true);
@@ -263,6 +265,61 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
             ObtenerRutas(true);
         }
     }
+
+    protected void btn_pdf_click(object sender, EventArgs e)
+    {
+        PreRutaBC gd = new PreRutaBC();
+        try
+        {
+            // DataTable excel = gd.CrearEnvio(hseleccionado.Value.ToString(), user.USUA_ID, chk_archivar.Checked);
+           // ViewState["lista"] = excel;
+            
+        //    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "exp", "exportar();", true);
+
+            this.pnlReport.Visible = true;
+            ReportBC report = new ReportBC();
+      //      VIAJEBC v = new VIAJEBC().ObtenerXID(int.Parse(this.tbidviajed.Text));
+            ReportDataSource dataSource = new ReportDataSource("Datos", report.obrenerReporteDespachoViaje(hseleccionado.Value.ToString()));
+
+            this.ReportViewer1.LocalReport.DataSources.Clear();
+            this.ReportViewer1.LocalReport.DataSources.Add(dataSource);
+            
+
+
+            Warning[] warnings;
+            string[] streamids;
+            string mimeType;
+            string encoding;
+            string extension;
+            //Word
+            byte[] bytes = this.ReportViewer1.LocalReport.Render(
+                "PDF", null, out mimeType, out encoding,
+                out extension,
+                out streamids, out warnings);
+            //byte[] renderedBytes = this.ReportViewer1.LocalReport.Render("PDF");
+            this.Response.Clear();
+
+            this.Response.ContentType = mimeType;
+
+            this.Response.AddHeader("content-disposition", string.Format("attachment; filename=Hoja_Ruta_{0}{1}{2}", 'a', '.', extension));
+
+            this.Response.BinaryWrite(bytes);
+
+            this.Response.End();
+
+
+
+        }
+        catch (Exception ex)
+        {
+            utils.ShowMessage(this, ex.Message, "error", false);
+        }
+        finally
+        {
+            ObtenerRutas(true);
+        }
+    }
+
     protected void btn_exportarExcel_Click(object sender, EventArgs e)
     {
         DataView view = new DataView();

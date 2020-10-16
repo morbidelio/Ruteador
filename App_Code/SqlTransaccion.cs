@@ -9,6 +9,219 @@ namespace Ruteador.App_Code
     public class SqlTransaccion
     {
         SqlAccesoDatos data = new SqlAccesoDatos("CsString");
+        #region Conductor
+        internal DataTable Conductor_ObtenerTodo(bool cond_activo, bool cond_bloqueado, string cond_rut, string cond_nombre)
+        {
+            try
+            {
+                data.CargarSqlComando("[dbo].[LISTAR_CONDUCTOR]");
+                data.AgregarSqlParametro("@cond_bloqueado", cond_bloqueado);
+                data.AgregarSqlParametro("@cond_activo", cond_activo);
+                if (!string.IsNullOrEmpty(cond_rut))
+                    data.AgregarSqlParametro("@cond_rut", cond_rut);
+                if (!string.IsNullOrEmpty(cond_nombre))
+                    data.AgregarSqlParametro("@cond_nombre", cond_nombre);
+                return data.EjecutarSqlquery2();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                data.LimpiarSqlParametros();
+                data.CerrarSqlConeccion();
+            }
+        }
+        internal DataTable Conductor_ObtenerTodo(string cond_rut, string cond_nombre)
+        {
+            try
+            {
+                data.CargarSqlComando("[dbo].[LISTAR_CONDUCTOR]");
+                if (!string.IsNullOrEmpty(cond_rut))
+                    data.AgregarSqlParametro("@cond_rut", cond_rut);
+                if (!string.IsNullOrEmpty(cond_nombre))
+                    data.AgregarSqlParametro("@cond_nombre", cond_nombre);
+                return data.EjecutarSqlquery2();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                data.LimpiarSqlParametros();
+                data.CerrarSqlConeccion();
+            }
+        }
+        internal ConductorBC Conductor_ObtenerXId(int cond_id)
+        {
+            try
+            {
+                ConductorBC c = new ConductorBC();
+                data.CargarSqlComando("[dbo].[LISTAR_USUARIO]");
+                data.AgregarSqlParametro("@cond_id", cond_id);
+                data.EjecutarSqlLector();
+                while (data.SqlLectorDatos.Read())
+                {
+                    if (data.SqlLectorDatos["COND_ID"] != DBNull.Value)
+                        c.COND_ID = Convert.ToInt32(data.SqlLectorDatos["COND_ID"]);
+                    if (data.SqlLectorDatos["COND_RUT"] != DBNull.Value)
+                        c.COND_RUT = Convert.ToString(data.SqlLectorDatos["COND_RUT"]);
+                    if (data.SqlLectorDatos["COND_IMAGEN"] != DBNull.Value)
+                        c.COND_IMAGEN = Convert.ToString(data.SqlLectorDatos["COND_IMAGEN"]);
+                    if (data.SqlLectorDatos["COND_NOMBRE"] != DBNull.Value)
+                        c.COND_NOMBRE = Convert.ToString(data.SqlLectorDatos["COND_NOMBRE"]);
+                    if (data.SqlLectorDatos["COND_ACTIVO"] != DBNull.Value)
+                        c.COND_ACTIVO = Convert.ToBoolean(data.SqlLectorDatos["COND_ACTIVO"]);
+                    if (data.SqlLectorDatos["COND_BLOQUEADO"] != DBNull.Value)
+                        c.COND_BLOQUEADO = Convert.ToBoolean(data.SqlLectorDatos["COND_BLOQUEADO"]);
+                    if (data.SqlLectorDatos["COND_TELEFONO"] != DBNull.Value)
+                        c.COND_TELEFONO = Convert.ToString(data.SqlLectorDatos["COND_TELEFONO"]);
+                    if (data.SqlLectorDatos["COND_MOTIVO_BLOQUEO"] != DBNull.Value)
+                        c.COND_MOTIVO_BLOQUEO = Convert.ToString(data.SqlLectorDatos["COND_MOTIVO_BLOQUEO"]);
+                    if (data.SqlLectorDatos["COND_EXTRANJERO"] != DBNull.Value)
+                        c.COND_EXTRANJERO = Convert.ToBoolean(data.SqlLectorDatos["COND_EXTRANJERO"]);
+                }
+                return c;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                data.LimpiarSqlParametros();
+                data.CerrarSqlConeccion();
+            }
+        }
+        internal ConductorBC Conductor_ObtenerXRut(string cond_rut)
+        {
+            try
+            {
+                ConductorBC u = new ConductorBC();
+                data.CargarSqlComando("[dbo].[LISTAR_CONDUCTOR_X_RUT]");
+                data.AgregarSqlParametro("@COND_RUT", cond_rut);
+                data.EjecutarSqlLector();
+                while (data.SqlLectorDatos.Read())
+                {
+                    if (data.SqlLectorDatos["COND_ID"] != DBNull.Value)
+                        u.COND_ID = Convert.ToInt32(data.SqlLectorDatos["COND_ID"]);
+                    if (data.SqlLectorDatos["COND_RUT"] != DBNull.Value)
+                        u.COND_RUT = Convert.ToString(data.SqlLectorDatos["COND_RUT"]);
+                    if (data.SqlLectorDatos["COND_IMAGEN"] != DBNull.Value)
+                        u.COND_IMAGEN = Convert.ToString(data.SqlLectorDatos["COND_IMAGEN"]);
+                    if (data.SqlLectorDatos["COND_NOMBRE"] != DBNull.Value)
+                        u.COND_NOMBRE = Convert.ToString(data.SqlLectorDatos["COND_NOMBRE"]);
+                    if (data.SqlLectorDatos["COND_ACTIVO"] != DBNull.Value)
+                        u.COND_ACTIVO = Convert.ToBoolean(data.SqlLectorDatos["COND_ACTIVO"]);
+                    if (data.SqlLectorDatos["COND_BLOQUEADO"] != DBNull.Value)
+                        u.COND_BLOQUEADO = Convert.ToBoolean(data.SqlLectorDatos["COND_BLOQUEADO"]);
+                    if (data.SqlLectorDatos["COND_TELEFONO"] != DBNull.Value)
+                        u.COND_TELEFONO = Convert.ToString(data.SqlLectorDatos["COND_TELEFONO"]);
+                    if (data.SqlLectorDatos["COND_MOTIVO_BLOQUEO"] != DBNull.Value)
+                        u.COND_MOTIVO_BLOQUEO = Convert.ToString(data.SqlLectorDatos["COND_MOTIVO_BLOQUEO"]);
+                    if (data.SqlLectorDatos["COND_EXTRANJERO"] != DBNull.Value)
+                        u.COND_EXTRANJERO = Convert.ToBoolean(data.SqlLectorDatos["COND_EXTRANJERO"]);
+                }
+                return u;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                data.LimpiarSqlParametros();
+                data.CerrarSqlConeccion();
+            }
+        }
+        internal bool Conductor_Guardar(ConductorBC c)
+        {
+            try
+            {
+                data.CargarSqlComando("[dbo].[GUARDAR_CONDUCTOR]");
+                if (c.COND_ID != 0)
+                    data.AgregarSqlParametro("@COND_ID", c.COND_ID);
+                else
+                    data.AgregarSqlParametro("@COND_RUT", c.COND_RUT);
+                data.AgregarSqlParametro("@COND_IMAGEN", c.COND_IMAGEN);
+                data.AgregarSqlParametro("@COND_NOMBRE", c.COND_NOMBRE);
+                data.AgregarSqlParametro("@COND_TELEFONO", c.COND_TELEFONO);
+                data.AgregarSqlParametro("@COND_EXTRANJERO", c.COND_EXTRANJERO);
+                data.EjecutarSqlEscritura();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                data.LimpiarSqlParametros();
+                data.CerrarSqlConeccion();
+            }
+        }
+        internal bool Conductor_Eliminar(int cond_id)
+        {
+            try
+            {
+                data.CargarSqlComando("[dbo].[ELIMINAR_CONDUCTOR]");
+                data.AgregarSqlParametro("@COND_ID", cond_id);
+                data.EjecutarSqlEscritura();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                data.LimpiarSqlParametros();
+                data.CerrarSqlConeccion();
+            }
+        }
+        internal bool Conductor_Activar(int cond_id)
+        {
+            try
+            {
+                data.CargarSqlComando("[dbo].[ACTIVAR_CONDUCTOR]");
+                data.AgregarSqlParametro("@COND_ID", cond_id);
+                data.EjecutarSqlEscritura();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                data.LimpiarSqlParametros();
+                data.CerrarSqlConeccion();
+            }
+        }
+        internal bool Conductor_Bloquear(int cond_id, string cond_motivo_bloqueo)
+        {
+            try
+            {
+                data.CargarSqlComando("[dbo].[BLOQUEAR_CONDUCTOR]");
+                data.AgregarSqlParametro("@COND_ID", cond_id);
+                if (!string.IsNullOrEmpty(cond_motivo_bloqueo))
+                    data.AgregarSqlParametro("@cond_motivo_bloqueo", cond_motivo_bloqueo);
+                data.EjecutarSqlEscritura();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                data.LimpiarSqlParametros();
+                data.CerrarSqlConeccion();
+            }
+        }
+        #endregion
         #region Horario
         internal DataTable Horario_ObtenerTodo()
         {
@@ -1113,8 +1326,6 @@ namespace Ruteador.App_Code
                         pr.NUMERO = Convert.ToString(data.SqlLectorDatos["NUMERO"]);
                     if (data.SqlLectorDatos["FH_VIAJE"] != DBNull.Value)
                         pr.FH_VIAJE = Convert.ToDateTime(data.SqlLectorDatos["FH_VIAJE"]);
-                    if (data.SqlLectorDatos["ID_CONDUCTOR"] != DBNull.Value)
-                        pr.ID_CONDUCTOR = Convert.ToInt32(data.SqlLectorDatos["ID_CONDUCTOR"]);
                     if (data.SqlLectorDatos["ID_MOVIL"] != DBNull.Value)
                         pr.ID_MOVIL = Convert.ToInt32(data.SqlLectorDatos["ID_MOVIL"]);
                     if (data.SqlLectorDatos["ID_ESTADO"] != DBNull.Value)
@@ -1153,6 +1364,13 @@ namespace Ruteador.App_Code
                         pr.FECHA_INICIOEXP = Convert.ToDateTime(data.SqlLectorDatos["FECHA_INICIOEXP"]);
                     if (data.SqlLectorDatos["FECHA_FINEXP"] != DBNull.Value)
                         pr.FECHA_FINEXP = Convert.ToDateTime(data.SqlLectorDatos["FECHA_FINEXP"]);
+                    // Conductor
+                    if (data.SqlLectorDatos["ID_CONDUCTOR"] != DBNull.Value)
+                        pr.CONDUCTOR.COND_ID = Convert.ToInt32(data.SqlLectorDatos["ID_CONDUCTOR"]);
+                    if (data.SqlLectorDatos["COND_RUT"] != DBNull.Value)
+                        pr.CONDUCTOR.COND_RUT = Convert.ToString(data.SqlLectorDatos["COND_RUT"]);
+                    if (data.SqlLectorDatos["COND_NOMBRE"] != DBNull.Value)
+                        pr.CONDUCTOR.COND_NOMBRE = Convert.ToString(data.SqlLectorDatos["COND_NOMBRE"]);
                     // Origen
                     if (data.SqlLectorDatos["ID_ORIGEN"] != DBNull.Value)
                         pr.ORIGEN.ID = Convert.ToInt32(data.SqlLectorDatos["ID_ORIGEN"]);
@@ -2121,5 +2339,48 @@ namespace Ruteador.App_Code
             }
         }
         #endregion 
+        #region reporte
+        public DataTable obrenerReporteDespachoViaje(string ids)
+        {
+            try
+            {
+                data.CargarSqlComando("[dbo].[LISTAR_PRERUTA_DETALLE]");
+                //if (desde != DateTime.MinValue && hasta != DateTime.MinValue)
+                //{
+                //    data.AgregarSqlParametro("@fh_desde", desde);
+                //    data.AgregarSqlParametro("@fh_hasta", hasta);
+                //}
+                //if (usua_id != 0)
+                //    data.AgregarSqlParametro("@id_usuario", usua_id);
+                //if (regi_id != 0)
+                //    data.AgregarSqlParametro("@regi_id", regi_id);
+                //if (ciud_id != 0)
+                //    data.AgregarSqlParametro("@ciud_id", ciud_id);
+                //if (comu_id != 0)
+                //    data.AgregarSqlParametro("@comu_id", comu_id);
+                if (ids != "")
+                    data.AgregarSqlParametro("@ID_PRERUTA", ids);
+                //if (!string.IsNullOrEmpty(peru_numero))
+                //    data.AgregarSqlParametro("@peru_numero", peru_numero);
+                return data.EjecutarSqlquery2();
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+            finally
+            {
+                data.LimpiarSqlParametros();
+                data.CerrarSqlConeccion();
+            }
+
+
+        }
+
+
+
+
+        #endregion
+
     }
 }

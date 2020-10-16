@@ -87,7 +87,7 @@ public partial class EnvioBC:Envio
         StringBuilder sb = new StringBuilder();
 
         DataView view = new DataView(dt);
-        DataTable distinctValues = view.ToTable(false, "NumeroPedido", "Rut", "FECHA_INTEGRA", "Class", "Set", "envio");
+        DataTable distinctValues = view.ToTable(false, "NumeroPedido", "Rut", "FECHA_INTEGRAV2", "Class", "Set", "envio");
 
         IEnumerable<string> columnNames = distinctValues.Columns.Cast<DataColumn>().
                                           Select(column => column.ColumnName);

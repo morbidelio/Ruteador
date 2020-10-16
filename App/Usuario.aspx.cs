@@ -101,27 +101,39 @@ public partial class App_Usuario : System.Web.UI.Page
             utils.AbrirModal(this, "modalConf");
         }
     }
+    protected void gv_listar_Sorting(object sender, GridViewSortEventArgs e)
+    {
+        string direccion = utils.ConvertSortDirectionToSql((String)ViewState["sortOrder"]);
+        ViewState["sortOrder"] = direccion;
+        ViewState["sortExpresion"] = e.SortExpression + " " + direccion;
+        ObtenerUsuarios(false);
+    }
     #endregion
     #region TextBox
     protected void txt_editRut_TextChanged(object sender, EventArgs e)
     {
         if (!funciones.ValidaRut(txt_editRut.Text))
         {
-            utils.ShowMessage2(this, "rut", "warn_invalido");
+            utils.ShowMessage2(this, "guardar", "warn_rutInvalido");
             txt_editRut.Text = "";
+            txt_editRut.Focus();
             return;
+        }
+        else
+        {
+            txt_editCorreo.Focus();
         }
         UsuarioBC u = new UsuarioBC().ObtenerXRut(txt_editRut.Text);
         if (u.USUA_ID != 0)
         {
             if (u.USUARIO_TIPO.USTI_NIVEL_PERMISOS < user.USUARIO_TIPO.USTI_NIVEL_PERMISOS)
             {
-                utils.ShowMessage2(this, "rut", "warn_existe");
+                utils.ShowMessage2(this, "guardar", "warn_rutExiste");
                 Limpiar();
             }
             else
             {
-                utils.ShowMessage2(this, "rut", "success_existe");
+                utils.ShowMessage2(this, "guardar", "success_rutExiste");
                 LlenarDatos(u);
                 txt_editRut.Enabled = false;
             }
@@ -309,11 +321,4 @@ public partial class App_Usuario : System.Web.UI.Page
     }
     #endregion
 
-    protected void gv_listar_Sorting(object sender, GridViewSortEventArgs e)
-    {
-        string direccion = utils.ConvertSortDirectionToSql((String)ViewState["sortOrder"]);
-        ViewState["sortOrder"] = direccion;
-        ViewState["sortExpresion"] = e.SortExpression + " " + direccion;
-        ObtenerUsuarios(false);
-    }
 }

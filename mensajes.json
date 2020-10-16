@@ -1,6 +1,41 @@
 {
   "page": [
     {
+      "name": "Conductor.aspx",
+      "accion": [
+        {
+          "nombre": "guardar",
+          "success_nuevo": "Conductor creado.",
+          "success_modificar": "Conductor modificado.",
+          "warn_nombreVacio": "Nombre obligatorio.",
+          "warn_rutVacio": "Rut obligatorio.",
+          "success_rutExiste": "Conductor ya existe. Se rellenaron los datos.",
+          "warn_rutInvalido": "Rut inválido.",
+          "error_nuevo": "Error al crear conductor. Revise los datos.",
+          "error_modificar": "Error al modificar conductor. Revise los datos."
+        },
+        {
+          "nombre": "activar",
+          "success_activar": "Conductor activado.",
+          "success_desactivar": "Conductor desactivado.",
+          "error_activar": "Error al activar conductor.",
+          "error_desactivar": "Error al desactivar conductor."
+        },
+        {
+          "nombre": "bloquear",
+          "success_bloquear": "Conductor bloqueado.",
+          "success_desbloquear": "Conductor desbloqueado.",
+          "error_bloquear": "Error al bloquear conductor.",
+          "error_desbloquear": "Error al desbloquear conductor."
+        },
+        {
+          "nombre": "eliminar",
+          "success": "Conductor eliminado.",
+          "error": "Error al eliminar conductor."
+        }
+      ]
+    },
+    {
       "name": "Origen.aspx",
       "accion": [
         {
@@ -108,7 +143,8 @@
           "success_nuevo": "Propuesta ruta creada.",
           "success_modificar": "Propuesta ruta modificada.",
           "warn_trailerNoexiste": "Trailer no existe.",
-          "warn_tractoNoexiste": "Tracto no existe."
+          "warn_tractoNoexiste": "Tracto no existe.",
+          "warn_conductorNoexiste": "Conductor no existe."
         },
         {
           "nombre": "eliminar",
@@ -197,6 +233,9 @@
           "warn_usernameVacio": "Username obligatorio.",
           "warn_passwordVacio": "Contraseña obligatoria.",
           "warn_tipoVacio": "Tipo usuario obligatorio.",
+          "success_rutExiste": "Usuario ya existe. Se rellenaron los datos.",
+          "warn_rutExiste": "Usuario ya existe, pero no tiene permisos para modificarlo.",
+          "warn_rutInvalido": "Rut inválido.",
           "error_nuevo": "Error al crear usuario. Revise los datos.",
           "error_modificar": "Error al modificar usuario. Revise los datos."
         },
@@ -206,11 +245,11 @@
           "error": "Error al eliminar usuario."
         },
         {
-          "nombre": "rut",
-          "success_existe": "Usuario ya existe. Se rellenaron los datos.",
-          "warn_existe": "Usuario ya existe, pero no tiene permisos para modificarlo.",
-          "warn_invalido": "Rut inválido.",
-          "error": "No se pudo comprobar rut."
+          "nombre": "activar",
+          "success_activar": "Usuario activado.",
+          "success_desactivar": "Usuario desactivado.",
+          "error_activar": "Error al activar usuario.",
+          "error_desactivar": "Error al desactivar usuario."
         }
       ]
     }

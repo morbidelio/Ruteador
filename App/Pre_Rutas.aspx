@@ -1,5 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Master/MasterPage.Master" AutoEventWireup="true" CodeFile="Pre_Rutas.aspx.cs" Inherits="App_Pre_Rutas" %>
-
+<%@ Register Assembly="Microsoft.ReportViewer.WebForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
+    Namespace="Microsoft.Reporting.WebForms" TagPrefix="rsweb" %>
 <asp:Content ID="Content2" ContentPlaceHolderID="titulo" runat="server">
     <div class="col-xs-12 separador"></div>
     <h2>PROPUESTA RUTAS</h2>
@@ -82,14 +83,17 @@
                 <asp:LinkButton ID="btn_nuevo" runat="server" CssClass="btn btn-success" OnClick="btn_nuevo_Click" ToolTip="Nuevo">
       <span class="glyphicon glyphicon-plus" />
                 </asp:LinkButton>
-                <asp:LinkButton ID="btn_enviar" runat="server" CssClass="btn btn-info" OnClick="btn_enviar_Click" ToolTip="Enviar pedidos">
-            <span class="glyphicon glyphicon-send" />
+                <asp:LinkButton ID="btn_enviar" runat="server" CssClass="btn btn-info" OnClick="btn_enviar_Click" ToolTip="Enviar rutas">
+            <span class="glyphicon glyphicon-send" /> </asp:LinkButton>
+                <asp:LinkButton ID="btn_pdf" runat="server" CssClass="btn btn-info" OnClick="btn_pdf_click" ToolTip="pdf rutas">
+            <span class="glyphicon glyphicon-send" /></asp:LinkButton>
                 </asp:LinkButton>
             </div>
         </ContentTemplate>
         <Triggers>
             <asp:AsyncPostBackTrigger ControlID="ddl_buscarRegion" />
             <asp:AsyncPostBackTrigger ControlID="ddl_buscarCiudad" />
+            <asp:PostBackTrigger ControlID="btn_pdf" />
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
@@ -137,6 +141,17 @@
     </asp:UpdatePanel>
 </asp:Content>
 <asp:Content ID="Content5" ContentPlaceHolderID="Modals" runat="server">
+    <div style="display: none">
+        <asp:Panel ID="pnlReport" runat="server" Visible="false">
+            <rsweb:ReportViewer ID="ReportViewer1" runat="server" Font-Names="BarCode 128" Font-Size="8pt"
+                InteractiveDeviceInfos="(Colección)" WaitMessageFont-Names="BarCode 128" WaitMessageFont-Size="14pt">
+                <LocalReport ReportPath="Reporte\Pre_Rutas.rdlc" EnableExternalImages="True">
+                </LocalReport>
+            </rsweb:ReportViewer>
+        </asp:Panel>
+    </div>
+
+
     <div class="modal fade" id="modalPuntos" data-backdrop="static" role="dialog">
         <div class="modal-dialog" style="width: 90%">
             <div class="modal-content">
@@ -208,15 +223,20 @@
                             </h4>
                         </div>
                         <div class="modal-body" style="height:auto;overflow-y:auto;">
-                            <div class="col-xs-6">
+                            <div class="col-xs-4">
                                 Tracto
                                 <br />
                                 <asp:TextBox ID="txt_vehiculoTracto" CssClass="form-control input-mayus" runat="server" />
                             </div>
-                            <div class="col-xs-6">
+                            <div class="col-xs-4">
                                 Trailer
                                 <br />
                                 <asp:TextBox ID="txt_vehiculoTrailer" CssClass="form-control input-mayus" runat="server" />
+                            </div>
+                            <div class="col-xs-4">
+                                Conductor
+                                <br />
+                                <asp:TextBox ID="txt_vehiculoConductor" CssClass="form-control input-mayus" runat="server" />
                             </div>
                             <div class="col-xs-12 separador"></div>
                             <div class="col-xs-12 text-center">
@@ -297,6 +317,7 @@
         <ContentTemplate>
             <asp:HiddenField ID="hf_trailer" runat="server" />
             <asp:HiddenField ID="hf_tracto" runat="server" />
+            <asp:HiddenField ID="hf_conductor" runat="server" />
             <asp:HiddenField ID="hf_todos" runat="server" />
             <asp:HiddenField ID="hf_origenes" runat="server" />
             <asp:HiddenField ID="hf_puntosruta" runat="server" />
@@ -344,13 +365,18 @@
             setTimeout(tabla2, 100);
             var jsonTracto = JSON.parse($('#<%=hf_tracto.ClientID%>').val());
             var jsonTrailer = JSON.parse($('#<%=hf_trailer.ClientID%>').val());
+            var jsonConductores = JSON.parse($('#<%=hf_conductor.ClientID%>').val());
             var tractos = [];
             var trailers = [];
+            var conductores = [];
             jsonTracto.map((o) => {
                 tractos.push(o.TRAC_PLACA)
             });
             jsonTrailer.map((o) => {
                 trailers.push(o.TRAI_PLACA)
+            });
+            jsonConductores.map((o) => {
+                conductores.push(o.COND_RUT);
             });
             $("#<%=txt_vehiculoTracto.ClientID%>").autocomplete({
                 source: tractos,
@@ -368,6 +394,15 @@
                 if (!trailers.find((o) => o === this.value)) {
                     showAlertClass('guardar', 'warn_trailerNoexiste');
                     $("#<%=txt_vehiculoTrailer.ClientID%>").val('');
+                }
+            });
+            $("#<%=txt_vehiculoConductor.ClientID%>").autocomplete({
+                source: conductores,
+            });
+            $("#<%=txt_vehiculoConductor.ClientID%>").change(function () {
+                if (!conductores.find((o) => o === this.value)) {
+                    showAlertClass('guardar', 'warn_conductorNoexiste');
+                    $("#<%=txt_vehiculoConductor.ClientID%>").val('');
                 }
             });
 <%--            $("#<%=btn_guardar.ClientID%>").click(function () {

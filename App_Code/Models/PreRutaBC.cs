@@ -14,6 +14,7 @@ namespace Ruteador.App_Code.Models
         SqlTransaccion tran = new SqlTransaccion();
         public PreRutaBC()
         {
+            CONDUCTOR = new ConductorBC();
             ENVIO = new EnvioBC();
             OPERACION = new OperacionBC();
             ORIGEN = new OrigenBC();
@@ -61,7 +62,6 @@ namespace Ruteador.App_Code.Models
         public int ID_MOVIL { get; set; }
         public int ID_ESTADO { get; set; }
         public int ID_CLIENTE_GPS { get; set; }
-        public int ID_CONDUCTOR { get; set; }
         public int ID_TIPOVIAJE { get; set; }
         public DateTime FH_SALIDA { get; set; }
         public DateTime FH_RETORNO { get; set; }
@@ -79,6 +79,7 @@ namespace Ruteador.App_Code.Models
         public DateTime FECHA_DESPACHOEXP { get; set; }
         public DateTime FECHA_INICIOEXP { get; set; }
         public DateTime FECHA_FINEXP { get; set; }
+        public ConductorBC CONDUCTOR { get; set; }
         public EnvioBC ENVIO { get; set; }
         public OperacionBC OPERACION { get; set; }
         public OrigenBC ORIGEN { get; set; }
