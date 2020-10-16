@@ -59,7 +59,7 @@ namespace Ruteador.App_Code
             try
             {
                 ConductorBC c = new ConductorBC();
-                data.CargarSqlComando("[dbo].[LISTAR_USUARIO]");
+                data.CargarSqlComando("[dbo].[LISTAR_CONDUCTOR]");
                 data.AgregarSqlParametro("@cond_id", cond_id);
                 data.EjecutarSqlLector();
                 while (data.SqlLectorDatos.Read())

@@ -83,8 +83,8 @@ public partial class App_Conductor : System.Web.UI.Page
             gv_listar.SelectedIndex = Convert.ToInt32(e.CommandArgument);
             int cond_id = Convert.ToInt32(gv_listar.SelectedDataKey.Values["COND_ID"]);
             bool cond_activo = Convert.ToBoolean(gv_listar.SelectedDataKey.Values["COND_ACTIVO"]);
-            lbl_confTitulo.Text = (!cond_activo) ? "Desactivar conductor" : "Activar conductor";
-            lbl_confMensaje.Text = (!cond_activo) ? "Se desactivará el conductor seleccionado ¿Está seguro?" : "Se activará el conductor seleccionado ¿Está seguro?";
+            lbl_confTitulo.Text = (cond_activo) ? "Desactivar conductor" : "Activar conductor";
+            lbl_confMensaje.Text = (cond_activo) ? "Se desactivará el conductor seleccionado ¿Está seguro?" : "Se activará el conductor seleccionado ¿Está seguro?";
             btn_confActivar.Visible = true;
             btn_confBloquear.Visible = false;
             btn_confEliminar.Visible = false;

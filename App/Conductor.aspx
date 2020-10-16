@@ -137,10 +137,10 @@
                                 <asp:Label id="lbl_confTitulo" runat="server" />
                             </h4>
                         </div>
-                        <div class="modal-body">
+                        <div class="modal-body" style="height:auto; overflow-y:auto;">
                             <asp:Label id="lbl_confMensaje" runat="server" />
-                            <div class="col-xs-12 separador"></div>
-                            <div id="dv_bloquear" class="col-xs-12" runat="server">
+                            <br />
+                            <div id="dv_bloquear" class="col-xs-6" style="margin-top:10px;" runat="server">
                                 Motivo bloqueo
                                 <br />
                                 <asp:TextBox ID="txt_confBloquear" CssClass="form-control" runat="server" />
