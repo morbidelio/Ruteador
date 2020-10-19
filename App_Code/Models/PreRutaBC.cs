@@ -29,13 +29,13 @@ namespace Ruteador.App_Code.Models
         {
             return tran.PreRuta_ObtenerXId(id_preruta);
         }
-        public bool GuardarPuntos(int id_ruta, string id_destinos, string tiempos, string hora_salida)
+        public bool GuardarPuntos(PreRutaBC p, string id_destinos, string tiempos, string hora_salida)
         {
-            return tran.PreRuta_GuardarPuntos(id_ruta, id_destinos, tiempos, hora_salida);
+            return tran.PreRuta_GuardarPuntos(p, id_destinos, tiempos, hora_salida);
         }
         public bool GuardarPuntos(string id_destinos, string tiempos, string hora_salida)
         {
-            return tran.PreRuta_GuardarPuntos(this.ID, id_destinos, tiempos, hora_salida);
+            return tran.PreRuta_GuardarPuntos(this, id_destinos, tiempos, hora_salida);
         }
         public bool GuardarDetalle()
         {

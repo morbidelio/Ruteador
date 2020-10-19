@@ -241,16 +241,19 @@
                                 <telerik:RadComboBox ID="ddl_vehiculoConductor" AllowCustomText="true" MarkFirstMatch="true" runat="server">
                                 </telerik:RadComboBox>
                             </div>
-                            <div class="col-xs-12 separador"></div>
-                            <div class="col-xs-12 text-center">
-                                <asp:LinkButton ID="btn_vehiculoGuardar" OnClick="btn_vehiculoGuardar_Click" CssClass="btn btn-success" runat="server">
-                                    <span class="glyphicon glyphicon-floppy-disk" />
-                                </asp:LinkButton>
+                            <div id="dv_detalle" runat="server">
+                                <div class="col-xs-12 separador"></div>
+                                <div class="col-xs-12 text-center">
+
+                                    <asp:LinkButton ID="btn_vehiculoGuardar" OnClick="btn_vehiculoGuardar_Click" CssClass="btn btn-success" runat="server">
+                                        <span class="glyphicon glyphicon-floppy-disk" />
+                                    </asp:LinkButton>
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">
-                                <span class="glyphicon glyphicon-remove" />
+                            <button type="button" class="btn <%=(string.IsNullOrEmpty(hf_idRuta.Value)) ? "btn-success" : "btn-danger"%>" data-dismiss="modal">
+                                <span class="glyphicon <%=(string.IsNullOrEmpty(hf_idRuta.Value)) ? "glyphicon-ok" : "glyphicon-remove"%>" />
                             </button>
                         </div>
                     </div>

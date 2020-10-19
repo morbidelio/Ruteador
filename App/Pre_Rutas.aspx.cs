@@ -23,12 +23,12 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
         if (Page.IsCallback)
             return;
 
-        
-      //  string callBackClientID = Page.ClientScript.GetCallbackEventReference(this, "arg", "rutaCallback", "context", "rutaCallbackError", true);
 
-      //  string clientIDfunction = "function GetRuta(arg,context) { " + callBackClientID + "; }";
+        //  string callBackClientID = Page.ClientScript.GetCallbackEventReference(this, "arg", "rutaCallback", "context", "rutaCallbackError", true);
 
-     //   Page.ClientScript.RegisterClientScriptBlock(this.GetType(), "GetRuta", clientIDfunction, true);
+        //  string clientIDfunction = "function GetRuta(arg,context) { " + callBackClientID + "; }";
+
+        //   Page.ClientScript.RegisterClientScriptBlock(this.GetType(), "GetRuta", clientIDfunction, true);
 
 
         if (Session["Usuario"] == null)
@@ -104,6 +104,7 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
         if (e.CommandName == "PUNTOS")
         {
             Limpiar();
+            dv_detalle.Visible = false;
             utils.AbrirModal(this.Page, "modalPuntos");
             gv_listar.SelectedIndex = Convert.ToInt32(e.CommandArgument);
             int id_preruta = Convert.ToInt32(gv_listar.SelectedDataKey.Values[0]);
@@ -126,6 +127,7 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
             ddl_vehiculoTracto.SelectedValue = p.TRACTO.TRAC_ID.ToString();
             ddl_vehiculoTrailer.SelectedValue = p.TRAILER.TRAI_ID.ToString();
             ddl_vehiculoConductor.SelectedValue = p.CONDUCTOR.COND_ID.ToString();
+            dv_detalle.Visible = true;
             utils.AbrirModal(this.Page, "modalVehiculo");
         }
         if (e.CommandName == "ELIMINAR")
@@ -247,7 +249,7 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
         dt = new TrailerBC().ObtenerTodo();
         utils.CargaDropNormal(ddl_vehiculoTrailer, "TRAI_ID", "TRAI_PLACA", dt);
         ddl_vehiculoTrailer.Items.Insert(0, new RadComboBoxItem("Sin Trailer", "0"));
-        
+
         dt = new TractoBC().ObtenerTodo();
         utils.CargaDropNormal(ddl_vehiculoTracto, "TRAC_ID", "TRAC_PLACA", dt);
         ddl_vehiculoTracto.Items.Insert(0, new RadComboBoxItem("Sin Tracto", "0"));
@@ -284,18 +286,18 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
         try
         {
             // DataTable excel = gd.CrearEnvio(hseleccionado.Value.ToString(), user.USUA_ID, chk_archivar.Checked);
-           // ViewState["lista"] = excel;
-            
-        //    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "exp", "exportar();", true);
+            // ViewState["lista"] = excel;
+
+            //    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "exp", "exportar();", true);
 
             this.pnlReport.Visible = true;
             ReportBC report = new ReportBC();
-      //      VIAJEBC v = new VIAJEBC().ObtenerXID(int.Parse(this.tbidviajed.Text));
+            //      VIAJEBC v = new VIAJEBC().ObtenerXID(int.Parse(this.tbidviajed.Text));
             ReportDataSource dataSource = new ReportDataSource("Datos", report.obrenerReporteDespachoViaje(hseleccionado.Value.ToString()));
 
             this.ReportViewer1.LocalReport.DataSources.Clear();
             this.ReportViewer1.LocalReport.DataSources.Add(dataSource);
-            
+
 
 
             Warning[] warnings;
@@ -419,6 +421,7 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
     protected void btn_nuevo_Click(object sender, EventArgs e)
     {
         Limpiar();
+        dv_detalle.Visible = false;
         utils.AbrirModal(this, "modalPuntos");
         ddl_puntosCambiarPreruta.Visible = false;
         OrigenBC o = new OrigenBC().ObtenerXId(1);
@@ -447,6 +450,9 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
             DataTable dt = JsonConvert.DeserializeObject<DataTable>(hf_puntosruta.Value);
             StringBuilder sb = new StringBuilder();
             StringBuilder sb2 = new StringBuilder();
+            p.TRAILER.TRAI_ID = Convert.ToInt32(ddl_vehiculoTrailer.SelectedValue);
+            p.TRACTO.TRAC_ID = Convert.ToInt32(ddl_vehiculoTracto.SelectedValue);
+            p.CONDUCTOR.COND_ID = Convert.ToInt32(ddl_vehiculoConductor.SelectedValue);
             foreach (DataRow dr in dt.Rows)
             {
                 if (sb.Length != 0)
@@ -482,6 +488,29 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
             ObtenerRutas(true, false);
         }
     }
+    protected void btn_vehiculoGuardar_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            PreRutaBC p = new PreRutaBC();
+            p.ID = Convert.ToInt32(hf_idRuta.Value);
+            p.TRAILER.TRAI_ID = Convert.ToInt32(ddl_vehiculoTrailer.SelectedValue);
+            p.TRACTO.TRAC_ID = Convert.ToInt32(ddl_vehiculoTracto.SelectedValue);
+            p.CONDUCTOR.COND_ID = Convert.ToInt32(ddl_vehiculoConductor.SelectedValue);
+            p.GuardarDetalle();
+            utils.ShowMessage2(this, "guardar", "success_modificar");
+        }
+        catch (Exception ex)
+        {
+            utils.ShowMessage(this, ex.Message, "error", false);
+        }
+        finally
+        {
+            utils.CerrarModal(this, "modalVehiculo");
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "map", "mapa();", true);
+            ObtenerRutas(true, false);
+        }
+    }
     #endregion
     #region DropDownList
     protected void ddl_puntosCambiarPreruta_SelectedIndexChanged(object sender, EventArgs e)
@@ -513,27 +542,4 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
     }
     #endregion
 
-    protected void btn_vehiculoGuardar_Click(object sender, EventArgs e)
-    {
-        try
-        {
-            PreRutaBC p = new PreRutaBC();
-            p.ID = Convert.ToInt32(hf_idRuta.Value);
-            p.TRAILER.TRAI_ID = Convert.ToInt32(ddl_vehiculoTrailer.SelectedValue);
-            p.TRACTO.TRAC_ID = Convert.ToInt32(ddl_vehiculoTracto.SelectedValue);
-            p.CONDUCTOR.COND_ID = Convert.ToInt32(ddl_vehiculoConductor.SelectedValue);
-            p.GuardarDetalle();
-            utils.ShowMessage2(this, "guardar", "success_modificar");
-        }
-        catch (Exception ex)
-        {
-            utils.ShowMessage(this, ex.Message, "error", false);
-        }
-        finally
-        {
-            utils.CerrarModal(this, "modalVehiculo");
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "map", "mapa();", true);
-            ObtenerRutas(true, false);
-        }
-    }
 }
