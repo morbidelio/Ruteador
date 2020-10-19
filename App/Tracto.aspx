@@ -7,10 +7,10 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="Filtro" runat="Server">
     <div class="col-lg-12 separador"></div>
-    <div class="col-lg-1">
+    <div class="col-lg-1 text-right">
         Placa
     </div>
-    <div class="col-lg-1">
+    <div class="col-lg-2">
         <asp:TextBox ID="txt_buscarPlaca" CssClass="form-control" runat="server" />
     </div>
     <div class="col-lg-1">

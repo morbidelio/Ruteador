@@ -33,6 +33,24 @@
 <asp:Content ID="Content3" ContentPlaceHolderID="Contenedor" runat="Server">
     <asp:UpdatePanel runat="server">
         <ContentTemplate>
+            <div id="dv_ejemplo" runat="server">
+                <h4>Formato Ejemplo</h4>
+                <table class="table table-bordered table-hover tablita">
+                    <tr>
+                        <th>NumeroPedido</th>
+                        <th>CODIGOCLIENTE</th>
+                        <th>Fecha</th>
+                        <th>Peso</th>
+                        <th>TEntrega</th>
+                        <th>Direccion</th>
+                        <th>Comuna</th>
+                        <th>lat</th>
+                        <th>lon</th>
+                        <th>Hora de Salida</th>
+                        <th>NOMBRECLIENTE</th>
+                    </tr>
+                </table>
+            </div>
             <asp:GridView ID="gv_listar" CssClass="table table-bordered table-hover tablita tab-principal" AutoGenerateColumns="false" Width="100%" runat="server"
                 OnRowCreated="gv_listar_RowCreated">
                 <Columns>

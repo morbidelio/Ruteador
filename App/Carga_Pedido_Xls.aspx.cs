@@ -28,6 +28,10 @@ public partial class App_Carga_Pedido_Xls : System.Web.UI.Page
             btn_procesar.Enabled = false;
         }
     }
+    protected void Page_LoadComplete(object sender, EventArgs e)
+    {
+        dv_ejemplo.Visible = (gv_listar.Rows.Count == 0);
+    }
     #region Buttons
     protected void UploadBtn_Click(object sender, EventArgs e)
     {

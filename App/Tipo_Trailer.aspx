@@ -1,21 +1,21 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Master/MasterPage.master" AutoEventWireup="true" CodeFile="Tipo_Trailer.aspx.cs" Inherits="App_Tipo_Trailer" %>
 
 <asp:Content ID="Titulo" ContentPlaceHolderID="titulo" runat="Server">
-    <div class="col-xs-12 separador">
-    </div>
+    <div class="col-xs-12 separador"></div>
     <h2>Maestro Tipo Trailer
     </h2>
 </asp:Content>
 <asp:Content ID="Filtro" ContentPlaceHolderID="Filtro" runat="Server">
+    <div class="col-xs-12 separador"></div>
     <asp:UpdatePanel runat="server">
         <ContentTemplate>
-            <div class="col-xs-2">
+            <div class="col-xs-1 text-right">
                 Descripción
-            <br />
+            </div>
+            <div class="col-xs-2">
                 <asp:TextBox ID="txt_buscarNombre" runat="server" CssClass="form-control" />
             </div>
             <div class="col-xs-2">
-                <br />
                 <asp:LinkButton ID="btn_buscar" OnClick="btn_buscar_Click" CssClass="btn btn-primary" ToolTip="Buscar" runat="server">
                 <span class="glyphicon glyphicon-search" />
                 </asp:LinkButton>

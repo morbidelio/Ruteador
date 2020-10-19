@@ -8,6 +8,7 @@ using System.Web.UI.WebControls;
 using System.Xml;
 using System.IO.Packaging;
 using System.Data.SqlClient;
+using Telerik.Web.UI;
 
 /// <summary>
 /// Descripción breve de UtilsWeb
@@ -33,7 +34,7 @@ public class UtilsWeb
 
     public void ShowMessage(Page p, string msj, string clase, bool hide)
     {
-        string script = string.Format("msj(\"{0}\",\"{1}\",{2});", msj.Replace("\"", "'").Replace("\r\n","</br>"), clase, hide.ToString().ToLower());
+        string script = string.Format("msj(\"{0}\",\"{1}\",{2});", msj.Replace("\"", "'").Replace("\r\n", "</br>"), clase, hide.ToString().ToLower());
         ScriptManager.RegisterStartupScript(p, p.GetType(), "msj", script, true);
     }
     public void ShowMessage2(Page p, string accion, string clase)
@@ -114,35 +115,27 @@ public class UtilsWeb
     }
     public void CargaDrop(object nombreDrop, string value, string text, DataTable dt, string[] atributos = null)
     {
-        DropDownList drop = (DropDownList)nombreDrop;
-        drop.DataSource = null;
-        drop.SelectedIndex = -1;
-        drop.ClearSelection();
-        drop.SelectedValue = null;
-        drop.DataBind();
-        drop.Items.Clear();
-        ListItem li = new ListItem("Seleccione...", "0");
-        drop.Items.Add(li);
-        for (int i = 0; i < dt.Rows.Count; i++)
+        if (nombreDrop.GetType() == typeof(DropDownList))
         {
-            ListItem l2 = new ListItem();
-            l2.Value = dt.Rows[i][value].ToString();
-            l2.Text = dt.Rows[i][text].ToString().ToUpper();
-            drop.Items.Add(l2);
-            if (atributos != null)
-                for (int j = 0; j < atributos.Length; j++)
-                {
-                    l2.Attributes.Add(atributos[j], dt.Rows[i][atributos[j]].ToString());
-                }
-
-
+            DropDownList drop = (DropDownList)nombreDrop;
+            drop.DataSource = dt;
+            drop.DataValueField = value;
+            drop.DataTextField = text;
+            drop.DataBind();
+            ListItem li = new ListItem("Seleccione...", "0");
+            drop.Items.Insert(0, li);
+            drop.ClearSelection();
         }
-        drop.SelectedIndex = 0;
-
-
-        if (drop.Items.Count == 2)
+        if (nombreDrop.GetType() == typeof(RadComboBox))
         {
-            drop.SelectedIndex = 1;
+            RadComboBox drop = (RadComboBox)nombreDrop;
+            drop.DataSource = dt;
+            drop.DataValueField = value;
+            drop.DataTextField = text;
+            drop.DataBind();
+            RadComboBoxItem li = new RadComboBoxItem("Seleccione...", "0");
+            drop.Items.Insert(0, li);
+            drop.ClearSelection();
         }
     }
     public void CargaDrop_patentes(object nombreDrop, string value, string text, DataTable dt, string[] atributos = null, string campo_marca = null, string valor_marca = null)
@@ -218,38 +211,49 @@ public class UtilsWeb
     }
     public void CargaDropNormal(object nombreDrop, string value, string text, DataTable dt)
     {
-        DropDownList drop = (DropDownList)nombreDrop;
-        drop.DataSource = null;
-        drop.DataBind();
-        //drop.SelectedIndex = 0;
-        drop.Items.Clear();
-
-        for (int i = 0; i < dt.Rows.Count; i++)
+        if (nombreDrop.GetType() == typeof(DropDownList))
         {
-            ListItem l2 = new ListItem();
-            l2.Value = dt.Rows[i][value].ToString();
-            l2.Text = dt.Rows[i][text].ToString().ToUpper();
-            drop.Items.Add(l2);
+            DropDownList drop = (DropDownList)nombreDrop;
+            drop.DataSource = dt;
+            drop.DataValueField = value;
+            drop.DataTextField = text;
+            drop.DataBind();
+            drop.ClearSelection();
         }
-        drop.SelectedIndex = 0;
+        if (nombreDrop.GetType() == typeof(RadComboBox))
+        {
+            RadComboBox drop = (RadComboBox)nombreDrop;
+            drop.DataSource = dt;
+            drop.DataValueField = value;
+            drop.DataTextField = text;
+            drop.DataBind();
+            drop.ClearSelection();
+        }
     }
     public void CargaDropTodos(object nombreDrop, string value, string text, DataTable dt)
     {
-        DropDownList drop = (DropDownList)nombreDrop;
-        drop.DataSource = null;
-        drop.DataBind();
-        //drop.SelectedIndex = 0;
-        drop.Items.Clear();
-        ListItem li = new ListItem("Todos...", "0");
-        drop.Items.Add(li);
-        for (int i = 0; i < dt.Rows.Count; i++)
+        if (nombreDrop.GetType() == typeof(DropDownList))
         {
-            ListItem l2 = new ListItem();
-            l2.Value = dt.Rows[i][value].ToString();
-            l2.Text = dt.Rows[i][text].ToString().ToUpper();
-            drop.Items.Add(l2);
+            DropDownList drop = (DropDownList)nombreDrop;
+            drop.DataSource = dt;
+            drop.DataValueField = value;
+            drop.DataTextField = text;
+            drop.DataBind();
+            ListItem li = new ListItem("Todos...", "0");
+            drop.Items.Insert(0, li);
+            drop.ClearSelection();
         }
-        drop.SelectedIndex = 0;
+        if (nombreDrop.GetType() == typeof(RadComboBox))
+        {
+            RadComboBox drop = (RadComboBox)nombreDrop;
+            drop.DataSource = dt;
+            drop.DataValueField = value;
+            drop.DataTextField = text;
+            drop.DataBind();
+            RadComboBoxItem li = new RadComboBoxItem("Todos...", "0");
+            drop.Items.Insert(0, li);
+            drop.ClearSelection();
+        }
     }
     public void LimpiarDrop(object nombreDrop)
     {
@@ -290,7 +294,7 @@ public class UtilsWeb
             data.AgregarSqlParametro("@SP", "REFERENCIAR_ORIGEN");
             data.AgregarSqlParametro("@DLL", "");
             data.EjecutarSqlEscritura();
-            
+
             //while (data.SqlLectorDatos.Read())
             //{
             //    l = Convert.ToString(data.SqlLectorDatos["DATO"]);

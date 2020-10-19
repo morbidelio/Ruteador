@@ -2,34 +2,36 @@
     CodeFile="Trailer.aspx.cs" Inherits="App_Trailer" %>
 
 <asp:Content ID="Titulo" ContentPlaceHolderID="titulo" runat="Server">
-    <div class="col-lg-12 separador">
+    <div class="col-xs-12 separador">
     </div>
     <h2>Maestro Trailer
     </h2>
 </asp:Content>
 <asp:Content ID="Filtro" ContentPlaceHolderID="Filtro" runat="Server">
-    <div class="col-lg-12 separador">
+    <div class="col-xs-12 separador">
     </div>
     <asp:UpdatePanel runat="server">
         <ContentTemplate>
-            <div class="col-lg-2">
+            <div class="col-xs-2 text-right">
                 Tipo Transporte
-    <br />
+            </div>
+            <div class="col-xs-2">
                 <asp:DropDownList ID="ddl_buscarTipo" CssClass="form-control" runat="server">
                 </asp:DropDownList>
             </div>
-            <div class="col-lg-1">
-                N° Flota
-    <br />
+            <div class="col-xs-1 text-right">
+                N° 
+            </div>
+            <div class="col-xs-1">
                 <asp:TextBox ID="txt_buscarNro" runat="server" CssClass="form-control" />
             </div>
-            <div class="col-lg-2">
+            <div class="col-xs-1 text-right">
                 Placa
-    <br />
+            </div>
+            <div class="col-xs-2">
                 <asp:TextBox ID="txt_buscarPlaca" runat="server" CssClass="form-control" />
             </div>
-            <div class="col-lg-2">
-                <br />
+            <div class="col-xs-2">
                 <asp:LinkButton ID="btn_buscarTrailer" OnClick="btn_buscar_Click" CssClass="btn btn-primary" ToolTip="Buscar Trailer" runat="server">
       <span class="glyphicon glyphicon-search" />
                 </asp:LinkButton>
@@ -43,7 +45,7 @@
 <asp:Content ID="Contenido" ContentPlaceHolderID="Contenedor" runat="Server">
     <asp:UpdatePanel ID="UpdatePanel1" runat="server">
         <ContentTemplate>
-            <div class="col-lg-12" style="text-align: center">
+            <div class="col-xs-8 col-xs-push-2">
                 <asp:GridView ID="gv_listar" AutoGenerateColumns="False" AllowSorting="true" Width="100%" CssClass="table table-bordered table-hover tablita tab-pag" runat="server"
                     EmptyDataText="No hay registros" OnRowCreated="gv_listar_RowCreated" OnRowCommand="gv_listar_RowCommand" OnSorting="gv_listar_Sorting">
                     <Columns>
@@ -82,25 +84,25 @@
                             </h4>
                         </div>
                         <div class="modal-body" style="height: auto; overflow: auto">
-                            <div class="col-lg-4">
+                            <div class="col-xs-4">
                                 Placa
                 <br />
                                 <asp:TextBox ID="txt_editPlaca" OnTextChanged="txt_editPlaca_TextChanged" AutoPostBack="true" CssClass="form-control input-mayus" runat="server" />
                             </div>
-                            <div class="col-lg-4">
+                            <div class="col-xs-4">
                                 N° Flota
                 <br />
                                 <asp:TextBox ID="txt_editNumero" OnTextChanged="txt_editNumero_TextChanged" AutoPostBack="true" CssClass="form-control input-number" runat="server" />
                             </div>
-                            <div class="col-lg-4">
+                            <div class="col-xs-4">
                                 Tipo
                 <br />
                                 <asp:DropDownList ID="ddl_editTipo" CssClass="form-control" runat="server">
                                 </asp:DropDownList>
                             </div>
-                            <div class="col-lg-12 separador">
+                            <div class="col-xs-12 separador">
                             </div>
-                            <div class="col-lg-12" style="text-align: center;">
+                            <div class="col-xs-12" style="text-align: center;">
                                 <asp:LinkButton ID="btn_editGuardar" OnClick="btn_editGuardar_Click" CssClass="btn btn-success" runat="server">
                     <span class="glyphicon glyphicon-floppy-disk" />
                                 </asp:LinkButton>

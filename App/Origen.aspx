@@ -1,44 +1,44 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Master/MasterPage.master" AutoEventWireup="true" CodeFile="Origen.aspx.cs" Inherits="App_Origen" %>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="titulo" runat="server">
-    <div class="col-lg-12 separador"></div>
+    <div class="col-xs-12 separador"></div>
     <h2>Maestro Origen</h2>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="Filtro" runat="server">
-    <div class="col-lg-12 separador"></div>
+    <div class="col-xs-12 separador"></div>
     <asp:UpdatePanel runat="server">
         <ContentTemplate>
-            <div class="col-lg-1">
+            <div class="col-xs-1 text-right">
                 Nombre
             </div>
-            <div class="col-lg-1">
+            <div class="col-xs-1">
                 <asp:TextBox ID="txt_buscarNombre" CssClass="form-control" runat="server" />
             </div>
-            <div class="col-lg-1">
+            <div class="col-xs-1 text-right">
                 Region
             </div>
-            <div class="col-lg-1">
+            <div class="col-xs-1">
                 <asp:DropDownList ID="ddl_buscarRegion" OnSelectedIndexChanged="ddl_buscarRegion_SelectedIndexChanged" AutoPostBack="true" CssClass="form-control" runat="server">
                     <asp:ListItem Value="0">Todos...</asp:ListItem>
                 </asp:DropDownList>
             </div>
-            <div class="col-lg-1">
+            <div class="col-xs-1 text-right">
                 Ciudad
             </div>
-            <div class="col-lg-1">
+            <div class="col-xs-1">
                 <asp:DropDownList ID="ddl_buscarCiudad" OnSelectedIndexChanged="ddl_buscarCiudad_SelectedIndexChanged" AutoPostBack="true" CssClass="form-control" runat="server">
                     <asp:ListItem Value="0">Todos...</asp:ListItem>
                 </asp:DropDownList>
             </div>
-            <div class="col-lg-1">
+            <div class="col-xs-1 text-right">
                 Comuna
             </div>
-            <div class="col-lg-1">
+            <div class="col-xs-1">
                 <asp:DropDownList ID="ddl_buscarComuna" CssClass="form-control" runat="server">
                     <asp:ListItem Value="0">Todos...</asp:ListItem>
                 </asp:DropDownList>
             </div>
-            <div class="col-lg-1">
+            <div class="col-xs-1">
                 <asp:LinkButton ID="btn_buscar" OnClick="btn_buscar_Click" CssClass="btn btn-primary" runat="server">
                     <span class="glyphicon glyphicon-search" />
                 </asp:LinkButton>
@@ -52,7 +52,7 @@
 <asp:Content ID="Content4" ContentPlaceHolderID="Contenedor" runat="server">
     <asp:UpdatePanel runat="server">
         <ContentTemplate>
-            <div class="col-lg-12">
+            <div class="col-xs-12">
                 <asp:GridView ID="gv_listar" AutoGenerateColumns="False" AllowSorting="true" Width="100%" CssClass="table table-bordered table-hover tablita tab-pag" runat="server"
                     EmptyDataText="No hay registros" OnRowCreated="gv_listar_RowCreated" OnRowCommand="gv_listar_RowCommand" OnSorting="gv_listar_Sorting">
                     <Columns>
@@ -70,18 +70,18 @@
                                 </asp:LinkButton>
                             </ItemTemplate>
                         </asp:TemplateField>
-                        <asp:BoundField DataField="ID_PE" SortExpression="ID_PE" HeaderText="ID_PE" />
-                        <asp:BoundField DataField="NOMBRE_PE" SortExpression="NOMBRE_PE" HeaderText="NOMBRE_PE" />
-                        <asp:BoundField DataField="DIRECCION_PE" SortExpression="DIRECCION_PE" HeaderText="DIRECCION_PE" />
-                        <asp:BoundField DataField="COMU_NOMBRE" SortExpression="COMU_NOMBRE" HeaderText="COMU_NOMBRE" />
-                        <asp:BoundField DataField="CIUD_NOMBRE" SortExpression="CIUD_NOMBRE" HeaderText="CIUD_NOMBRE" />
-                        <asp:BoundField DataField="REGI_NOMBRE" SortExpression="REGI_NOMBRE" HeaderText="REGI_NOMBRE" />
-                        <asp:BoundField DataField="LAT_PE" SortExpression="LAT_PE" HeaderText="LAT_PE" />
-                        <asp:BoundField DataField="LON_PE" SortExpression="LON_PE" HeaderText="LON_PE" />
-                        <asp:BoundField DataField="RADIO_PE" SortExpression="RADIO_PE" HeaderText="RADIO_PE" />
-                        <asp:BoundField DataField="IS_POLIGONO" SortExpression="IS_POLIGONO" HeaderText="IS_POLIGONO" />
-                        <asp:BoundField DataField="FH_CREA" SortExpression="FH_CREA" HeaderText="FH_CREA" />
-                        <asp:BoundField DataField="FH_UPDATE" SortExpression="FH_UPDATE" HeaderText="FH_UPDATE" />
+                        <asp:BoundField DataField="ID_PE" SortExpression="ID_PE" HeaderText="Id_pe" />
+                        <asp:BoundField DataField="NOMBRE_PE" SortExpression="NOMBRE_PE" HeaderText="Nombre" />
+                        <asp:BoundField DataField="DIRECCION_PE" SortExpression="DIRECCION_PE" HeaderText="Dirección" />
+                        <asp:BoundField DataField="COMU_NOMBRE" SortExpression="COMU_NOMBRE" HeaderText="Comuna" />
+                        <asp:BoundField DataField="CIUD_NOMBRE" SortExpression="CIUD_NOMBRE" HeaderText="Ciudad" />
+                        <asp:BoundField DataField="REGI_NOMBRE" SortExpression="REGI_NOMBRE" HeaderText="Región" />
+                        <asp:BoundField DataField="LAT_PE" SortExpression="LAT_PE" HeaderText="Latitud" />
+                        <asp:BoundField DataField="LON_PE" SortExpression="LON_PE" HeaderText="Longitud" />
+                        <asp:BoundField DataField="RADIO_PE" SortExpression="RADIO_PE" HeaderText="Radio_pe" />
+                        <asp:BoundField DataField="IS_POLIGONO" SortExpression="IS_POLIGONO" HeaderText="Is_poligono" />
+                        <asp:BoundField DataField="FH_CREA" SortExpression="FH_CREA" HeaderText="FH Creación" />
+                        <asp:BoundField DataField="FH_UPDATE" SortExpression="FH_UPDATE" HeaderText="FH Ult Modificación" />
                     </Columns>
                 </asp:GridView>
             </div>
@@ -101,80 +101,80 @@
                         <div class="modal-body" style="height: auto; overflow: auto">
                             <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDjAnu30d80TbLCujKOmvnMKcEj2GI5H3o&sensor=false&lenguage=es&v=3.20"></script>
                             <script src="../Scripts/origen.js" type="text/javascript"></script>
-                            <div class="col-lg-8">
-                                <div class="col-lg-2">
+                            <div class="col-xs-8">
+                                <div class="col-xs-2">
                                     Id Pe
                                     <br />
                                     <asp:TextBox ID="txt_editIdPe" CssClass="form-control" runat="server" />
                                 </div>
-                                <div class="col-lg-4">
+                                <div class="col-xs-4">
                                     Nombre
                                     <br />
                                     <asp:TextBox ID="txt_editNombre" CssClass="form-control" runat="server" />
                                 </div>
-                                <div class="col-lg-2">
+                                <div class="col-xs-2">
                                     Radio
                                     <br />
                                     <asp:TextBox ID="txt_editRadio" CssClass="form-control input-number" runat="server" />
                                 </div>
-                                <div class="col-lg-2">
+                                <div class="col-xs-2">
                                     Poligono
                                     <br />
                                     <asp:CheckBox ID="chk_editPoligono" runat="server" />
                                 </div>
-                                <div class="col-lg-2">
+                                <div class="col-xs-2">
                                     Operación
                                     <br />
                                     <asp:DropDownList ID="ddl_editOpe" CssClass="form-control" runat="server" />
                                 </div>
-                                <div class="col-lg-4">
+                                <div class="col-xs-4">
                                     Región
                                     <br />
                                     <asp:DropDownList ID="ddl_editRegion" OnSelectedIndexChanged="ddl_editRegion_SelectedIndexChanged" AutoPostBack="true" CssClass="form-control" runat="server">
                                         <asp:ListItem Value="0">Seleccione...</asp:ListItem>
                                     </asp:DropDownList>
                                 </div>
-                                <div class="col-lg-4">
+                                <div class="col-xs-4">
                                     Ciudad
                                     <br />
                                     <asp:DropDownList ID="ddl_editCiudad" OnSelectedIndexChanged="ddl_editCiudad_SelectedIndexChanged" AutoPostBack="true" CssClass="form-control" runat="server">
                                         <asp:ListItem Value="0">Seleccione...</asp:ListItem>
                                     </asp:DropDownList>
                                 </div>
-                                <div class="col-lg-4">
+                                <div class="col-xs-4">
                                     Comuna
                                     <br />
                                     <asp:DropDownList ID="ddl_editComu" CssClass="form-control" runat="server">
                                         <asp:ListItem Value="0">Seleccione...</asp:ListItem>
                                     </asp:DropDownList>
                                 </div>
-                                <div class="col-lg-12 separador"></div>
-                                <div class="col-lg-6">
+                                <div class="col-xs-12 separador"></div>
+                                <div class="col-xs-6">
                                     Direccion
                                     <br />
                                     <asp:TextBox ID="txt_editDireccion" CssClass="form-control" runat="server" />
                                 </div>
-                                <div class="col-lg-2">
+                                <div class="col-xs-2">
                                     <br />
                                     <asp:LinkButton ID="btn_editLatLon" CssClass="btn btn-info" OnClick="btn_editLatLon_Click" runat="server">
                                         <span class="glyphicon glyphicon-map-marker" />
                                     </asp:LinkButton>
                                 </div>
-                                <div class="col-lg-2">
+                                <div class="col-xs-2">
                                     Latitud
                                     <br />
                                     <asp:TextBox ID="txt_editLat" ClientIDMode="Static" Enabled="false" CssClass="form-control" runat="server" />
                                 </div>
-                                <div class="col-lg-2">
+                                <div class="col-xs-2">
                                     Longitud
                                     <br />
                                     <asp:TextBox ID="txt_editLon" ClientIDMode="Static" Enabled="false" CssClass="form-control" runat="server" />
                                 </div>
                             </div>
-                            <div class="col-lg-4" style="height: 65vh" id="map">
+                            <div class="col-xs-4" style="height: 65vh" id="map">
                             </div>
-                            <div class="col-lg-12 separador"></div>
-                            <div class="col-lg-12" style="text-align: center">
+                            <div class="col-xs-12 separador"></div>
+                            <div class="col-xs-12" style="text-align: center">
                                 <asp:LinkButton ID="btn_editGuardar" OnClick="btn_editGuardar_Click" CssClass="btn btn-primary" runat="server">
                                     <span class="glyphicon glyphicon-floppy-disk" />
                                 </asp:LinkButton>

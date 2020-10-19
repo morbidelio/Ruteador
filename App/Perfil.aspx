@@ -1,20 +1,20 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Master/MasterPage.master" AutoEventWireup="true" CodeFile="Perfil.aspx.cs" Inherits="App_Perfil" %>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="titulo" runat="server">
-    <div class="col-lg-12 separador"></div>
+    <div class="col-xs-12 separador"></div>
     <h2>Maestro perfil</h2>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="Filtro" runat="server">
-    <div class="col-lg-12 separador"></div>
+    <div class="col-xs-12 separador"></div>
     <asp:UpdatePanel runat="server">
         <ContentTemplate>
-            <div class="col-lg-1">
+            <div class="col-xs-1 text-right">
                 Nombre
             </div>
-            <div class="col-lg-1">
+            <div class="col-xs-2">
                 <asp:TextBox ID="txt_buscarNombre" CssClass="form-control" runat="server" />
             </div>
-            <div class="col-lg-1">
+            <div class="col-xs-1">
                 <asp:LinkButton ID="btn_buscar" OnClick="btn_buscar_Click" CssClass="btn btn-primary" runat="server">
                     <span class="glyphicon glyphicon-search" />
                 </asp:LinkButton>
@@ -28,7 +28,7 @@
 <asp:Content ID="Content4" ContentPlaceHolderID="Contenedor" runat="server">
     <asp:UpdatePanel runat="server">
         <ContentTemplate>
-            <div class="col-lg-push-2 col-lg-8">
+            <div class="col-xs-push-2 col-xs-8">
                 <asp:GridView ID="gv_listar" AutoGenerateColumns="False" AllowSorting="true" Width="100%" CssClass="table table-bordered table-hover tablita tab-nopag" runat="server"
                     EmptyDataText="No hay registros" OnRowCreated="gv_listar_RowCreated" OnRowCommand="gv_listar_RowCommand" OnSorting="gv_listar_Sorting">
                     <Columns>
@@ -67,26 +67,26 @@
                             </h4>
                         </div>
                         <div class="modal-body" style="height: auto; overflow: auto">
-                            <div class="col-lg-2">
+                            <div class="col-xs-2">
                                 Nombre
                                 <br />
                                 <asp:TextBox id="txt_editNombre" CssClass="form-control" runat="server" />
                             </div>
-                            <div class="col-lg-4">
+                            <div class="col-xs-4">
                                 Descripción
                                 <br />
                                 <asp:TextBox id="txt_editDescripcion" CssClass="form-control" runat="server" />
                             </div>
-                            <div class="col-lg-2">
+                            <div class="col-xs-2">
                                 Nivel permisos
                                 <br />
                                 <asp:TextBox id="txt_editPermisos" CssClass="form-control input-number" runat="server" />
                             </div>
-                            <div class="col-lg-12 separador"></div>
-                            <div id="dv_editMenu" class="col-lg-12">
+                            <div class="col-xs-12 separador"></div>
+                            <div id="dv_editMenu" class="col-xs-12">
                             </div>
-                            <div class="col-lg-12 separador"></div>
-                            <div class="col-lg-12" style="text-align:center">
+                            <div class="col-xs-12 separador"></div>
+                            <div class="col-xs-12" style="text-align:center">
                                 <asp:LinkButton id="btn_editGuardar" OnClick="btn_editGuardar_Click" CssClass="btn btn-primary" runat="server">
                                     <span class="glyphicon glyphicon-floppy-disk" />
                                 </asp:LinkButton>

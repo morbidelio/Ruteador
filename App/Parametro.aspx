@@ -1,26 +1,26 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Master/MasterPage.Master" AutoEventWireup="true" CodeFile="Parametro.aspx.cs" Inherits="App_Parametro" %>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="titulo" runat="server">
-    <div class="col-lg-12 separador"></div>
+    <div class="col-xs-12 separador"></div>
     <h2>Maestro parámetros</h2>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="Filtro" runat="server">
-    <div class="col-lg-12 separador"></div>
+    <div class="col-xs-12 separador"></div>
     <asp:UpdatePanel runat="server">
         <ContentTemplate>
-            <div class="col-lg-1">
+            <div class="col-xs-1 text-right">
                 Nombre
             </div>
-            <div class="col-lg-2">
+            <div class="col-xs-2">
                 <asp:TextBox ID="txt_buscarNombre" CssClass="form-control" runat="server" />
             </div>
-            <div class="col-lg-1">
+            <div class="col-xs-1 text-right">
                 Descripción
             </div>
-            <div class="col-lg-2">
+            <div class="col-xs-2">
                 <asp:TextBox ID="txt_buscarDescripcion" CssClass="form-control" runat="server" />
             </div>
-            <div class="col-lg-1">
+            <div class="col-xs-1">
                 <asp:LinkButton ID="btn_buscar" OnClick="btn_buscar_Click" CssClass="btn btn-primary" runat="server">
                     <span class="glyphicon glyphicon-search" />
                 </asp:LinkButton>
@@ -34,7 +34,7 @@
 <asp:Content ID="Content4" ContentPlaceHolderID="Contenedor" runat="server">
     <asp:UpdatePanel runat="server">
         <ContentTemplate>
-            <div class="col-lg-12">
+            <div class="col-xs-12">
                 <asp:GridView ID="gv_listar" AutoGenerateColumns="False" AllowSorting="true" Width="100%" CssClass="table table-bordered table-hover tablita tab-pag" runat="server"
                     EmptyDataText="No hay registros" OnRowCreated="gv_listar_RowCreated" OnRowCommand="gv_listar_RowCommand" OnSorting="gv_listar_Sorting">
                     <Columns>
@@ -77,23 +77,23 @@
                             </h4>
                         </div>
                         <div class="modal-body" style="height: auto; overflow: auto">
-                            <div class="col-lg-4">
+                            <div class="col-xs-4">
                                 Nombre 
                                 <br />
                                 <asp:TextBox ID="txt_editNombre" cssClass="form-control" runat="server" />
                             </div>
-                            <div class="col-lg-4">
+                            <div class="col-xs-4">
                                 Observación 
                                 <br />
                                 <asp:TextBox ID="txt_editObs" cssClass="form-control" runat="server" />
                             </div>
-                            <div class="col-lg-4">
+                            <div class="col-xs-4">
                                 Valor 
                                 <br />
                                 <asp:TextBox ID="txt_editValor" cssClass="form-control" runat="server" />
                             </div>
-                            <div class="col-lg-12 separador"></div>
-                            <div class="col-lg-12" style="text-align:center">
+                            <div class="col-xs-12 separador"></div>
+                            <div class="col-xs-12" style="text-align:center">
                                 <asp:LinkButton id="btn_editGuardar" OnClick="btn_editGuardar_Click" CssClass="btn btn-primary" runat="server">
                                     <span class="glyphicon glyphicon-floppy-disk" />
                                 </asp:LinkButton>

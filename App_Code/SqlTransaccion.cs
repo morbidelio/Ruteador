@@ -1430,20 +1430,41 @@ namespace Ruteador.App_Code
                 data.CerrarSqlConeccion();
             }
         }
-        internal bool PreRuta_Guardar(int id_ruta, string id_destinos, string tiempos, string hora_salida, string trai_placa, string trac_placa)
+        internal bool PreRuta_GuardarPuntos(int id_preruta, string id_destinos, string tiempos, string hora_salida)
         {
             try
             {
                 data.CargarSqlComando("[dbo].[GUARDAR_PUNTOS_PRE_RUTA]");
-                if (@id_ruta != 0) data.AgregarSqlParametro("@ID_RUTA", id_ruta);
-
+                if (id_preruta != 0) 
+                    data.AgregarSqlParametro("@ID_RUTA", id_preruta);
                 data.AgregarSqlParametro("@ID_DESTINOS", id_destinos);
                 data.AgregarSqlParametro("@id_tiempos", tiempos);
                 data.AgregarSqlParametro("@hora_salida", hora_salida);
-                if (!string.IsNullOrEmpty(trai_placa))
-                    data.AgregarSqlParametro("@trai_placa", trai_placa);
-                if (!string.IsNullOrEmpty(trac_placa))
-                    data.AgregarSqlParametro("@trac_placa", trac_placa);
+                data.EjecutarSqlEscritura();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                data.LimpiarSqlParametros();
+                data.CerrarSqlConeccion();
+            }
+        }
+        internal bool PreRuta_GuardarDetalle(PreRutaBC p)
+        {
+            try
+            {
+                data.CargarSqlComando("[dbo].[GUARDAR_PRE_RUTA]");
+                data.AgregarSqlParametro("@ID_PRERUTA", p.ID);
+                if (p.TRAILER.TRAI_ID != 0) 
+                    data.AgregarSqlParametro("@TRAI_ID", p.TRAILER.TRAI_ID);
+                if (p.TRACTO.TRAC_ID != 0) 
+                    data.AgregarSqlParametro("@TRAC_ID", p.TRACTO.TRAC_ID);
+                if (p.CONDUCTOR.COND_ID != 0) 
+                    data.AgregarSqlParametro("@COND_ID", p.CONDUCTOR.COND_ID);
                 data.EjecutarSqlEscritura();
                 return true;
             }

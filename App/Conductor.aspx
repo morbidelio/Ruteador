@@ -2,25 +2,25 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="titulo" runat="server">
     <div class="col-lg-12 separador"></div>
-    <h2>Maestro Usuario</h2>
+    <h2>Maestro Conductor</h2>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="Filtro" runat="server">
     <div class="col-lg-12 separador"></div>
     <asp:UpdatePanel runat="server">
         <ContentTemplate>
-            <div class="col-lg-1">
+            <div class="col-lg-1 text-right">
                 Rut
             </div>
-            <div class="col-lg-2">
+            <div class="col-lg-1">
                 <asp:TextBox ID="txt_buscarRut" CssClass="form-control" runat="server" />
             </div>
-            <div class="col-lg-1">
+            <div class="col-lg-1 text-right">
                 Nombre
             </div>
             <div class="col-lg-2">
                 <asp:TextBox ID="txt_buscarNombre" CssClass="form-control" runat="server" />
             </div>
-            <div class="col-lg-1 col-lg-push-4">
+            <div class="col-lg-1">
                 <asp:LinkButton ID="btn_buscar" OnClick="btn_buscar_Click" CssClass="btn btn-primary" runat="server">
                     <span class="glyphicon glyphicon-search" />
                 </asp:LinkButton>

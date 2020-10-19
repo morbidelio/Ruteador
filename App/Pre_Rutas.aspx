@@ -1,6 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Master/MasterPage.Master" AutoEventWireup="true" CodeFile="Pre_Rutas.aspx.cs" Inherits="App_Pre_Rutas" %>
-<%@ Register Assembly="Microsoft.ReportViewer.WebForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
-    Namespace="Microsoft.Reporting.WebForms" TagPrefix="rsweb" %>
+<%@ Register Assembly="Microsoft.ReportViewer.WebForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" Namespace="Microsoft.Reporting.WebForms" TagPrefix="rsweb" %>
+<%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
+
 <asp:Content ID="Content2" ContentPlaceHolderID="titulo" runat="server">
     <div class="col-xs-12 separador"></div>
     <h2>PROPUESTA RUTAS</h2>
@@ -39,42 +40,37 @@
                 <asp:Label ID="lbl_reload" runat="server" />
             </div>
             <div class="col-xs-12 separador"></div>
-            <div class="col-xs-2">
+            <div class="col-xs-1 text-right">
                 Fecha Desde
             </div>
-            <div class="col-xs-2">
+            <div class="col-xs-1">
                 <asp:TextBox ID="txt_buscarDesde" runat="server" CssClass="form-control input-fecha" />
             </div>
-            <div class="col-xs-2">
+            <div class="col-xs-1 text-right">
                 Fecha Hasta
             </div>
-            <div class="col-xs-2">
+            <div class="col-xs-1">
                 <asp:TextBox ID="txt_buscarHasta" runat="server" CssClass="form-control input-fecha" />
             </div>
-            <div class="col-xs-2">
+            <div class="col-xs-1 text-right">
                 Hora Salida
             </div>
-            <div class="col-xs-2">
+            <div class="col-xs-1">
                 <asp:DropDownList ID="ddl_buscarHorario" CssClass="form-control" runat="server" ClientIDMode="Static">
                     <asp:ListItem Value="0">Todos...</asp:ListItem>
                 </asp:DropDownList>
             </div>
-            <div class="col-xs-12 separador"></div>
-            <div class="col-xs-2">
+            <div class="col-xs-1 text-right">
                 N° Ruta
             </div>
-            <div class="col-xs-2">
+            <div class="col-xs-1">
                 <asp:TextBox ID="txt_buscarNro" runat="server" AutoCompleteType="Search" CssClass="form-control" />
             </div>
-            <div class="col-xs-2">
+            <div class="col-xs-1 text-right">
                 N° envío
             </div>
-            <div class="col-xs-2">
+            <div class="col-xs-1">
                 <asp:TextBox ID="txt_buscaenvio" runat="server" AutoCompleteType="Search" CssClass="form-control" />
-            </div>
-            <div class="col-xs-2">
-                Seleccionadas:
-            <asp:Label ID="lblgds" runat="server" Text="0" CssClass="tituloCh" />
             </div>
             <div class="col-xs-2">
                 <asp:LinkButton ID="btn_buscar" runat="server" CssClass="btn btn-primary" OnClick="btn_buscar_Click" ToolTip="Buscar">
@@ -84,10 +80,16 @@
       <span class="glyphicon glyphicon-plus" />
                 </asp:LinkButton>
                 <asp:LinkButton ID="btn_enviar" runat="server" CssClass="btn btn-info" OnClick="btn_enviar_Click" ToolTip="Enviar rutas">
-            <span class="glyphicon glyphicon-send" /> </asp:LinkButton>
-                <asp:LinkButton ID="btn_pdf" runat="server" CssClass="btn btn-info" OnClick="btn_pdf_click" ToolTip="pdf rutas">
-            <span class="glyphicon glyphicon-send" /></asp:LinkButton>
+            <span class="glyphicon glyphicon-send" /> 
                 </asp:LinkButton>
+                <asp:LinkButton ID="btn_pdf" runat="server" CssClass="btn btn-info" OnClick="btn_pdf_click" ToolTip="pdf rutas">
+            <span class="glyphicon glyphicon-send" />
+                </asp:LinkButton>
+            </div>
+            <div class="col-xs-12 separador"></div>
+            <div class="col-xs-push-10 col-xs-2">
+                Seleccionadas:
+            <asp:Label ID="lblgds" runat="server" Text="0" CssClass="tituloCh" />
             </div>
         </ContentTemplate>
         <Triggers>
@@ -111,18 +113,23 @@
                             <input type="checkbox" data-id='<%#Eval("ID")%>' class="gridCB chk" onclick="checkIndividual(this);" runat="server" id="check" />
                         </ItemTemplate>
                     </asp:TemplateField>
-
                     <asp:TemplateField>
                         <ItemTemplate>
-                            <asp:LinkButton ID="btn_puntos" CssClass="btn btn-xs btn-info" CommandArgument='<%#Container.DataItemIndex%>' CommandName="PUNTOS" runat="server">
+                            <asp:LinkButton ID="btn_puntos" CssClass="btn btn-xs btn-primary" CommandArgument='<%#Container.DataItemIndex%>' CommandName="PUNTOS" runat="server">
                                 <span class="glyphicon glyphicon-map-marker" />
                             </asp:LinkButton>
                         </ItemTemplate>
                     </asp:TemplateField>
-
                     <asp:TemplateField>
                         <ItemTemplate>
-                            <asp:LinkButton ID="btn_eliminar" CssClass="btn btn-danger btn-xs" CommandArgument='<%#Eval("ID")%>' CommandName="ELIMINAR" runat="server">
+                            <asp:LinkButton ID="btn_detalle" CssClass="btn btn-xs btn-info" CommandArgument='<%#Eval("ID")%>' CommandName="DETALLE" runat="server">
+                                <span class="glyphicon glyphicon-list" />
+                            </asp:LinkButton>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField>
+                        <ItemTemplate>
+                            <asp:LinkButton ID="btn_eliminar" CssClass="btn btn-xs btn-danger" CommandArgument='<%#Eval("ID")%>' CommandName="ELIMINAR" runat="server">
                                 <span class="glyphicon glyphicon-remove" />
                             </asp:LinkButton>
                         </ItemTemplate>
@@ -150,8 +157,6 @@
             </rsweb:ReportViewer>
         </asp:Panel>
     </div>
-
-
     <div class="modal fade" id="modalPuntos" data-backdrop="static" role="dialog">
         <div class="modal-dialog" style="width: 90%">
             <div class="modal-content">
@@ -166,7 +171,6 @@
                                 <asp:UpdatePanel runat="server" ID="act_cambia">
                                     <ContentTemplate>
                                         <asp:DropDownList ID="ddl_puntosCambiarPreruta" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddl_puntosCambiarPreruta_SelectedIndexChanged" ForeColor="Blue"></asp:DropDownList>
-
                                     </ContentTemplate>
                                 </asp:UpdatePanel>
                             </div>
@@ -177,13 +181,6 @@
                             <div class="col-xs-7" style="height: 65vh" id="map">
                             </div>
                             <div class="col-xs-5">
-                                <%--<asp:GridView ID="gv_puntos" CssClass="table table-bordered table-hover tablita" AutoGenerateColumns="false" runat="server"
-                                    onrowcommand="gv_puntos_RowCommand">
-                                    <Columns>
-                                        <asp:BoundField DataField="PERU_CODIGO" HeaderText="Punto entrega" />
-                                        <asp:BoundField DataField="PERU_DIRECCION" HeaderText="Dirección" />
-                                    </Columns>
-                                </asp:GridView>--%>
                                 <div class="col-xs-6">
                                     Punto seleccionado
                                 </div>
@@ -193,10 +190,13 @@
                                 <div class="col-xs-12 separador"></div>
                                 <div id="tbl_puntos"></div>
                                 <div class="col-xs-12 separador"></div>
-                                <div class="col-xs-12" style="text-align: center">
+                                <div class="col-xs-12 text-center" style="text-align: center">
                                     <asp:Label ID="txt_cant_punt" ClientIDMode="Static" runat="server" Text="Cant Puntos" Style="float: left"> </asp:Label>
-                                    <button id="btn_puntosGuardar" type="button" class="btn btn-success" data-toggle="modal" data-target="#modalVehiculo">
+                                    <asp:LinkButton ID="btn_puntosGuardar" OnClick="btn_puntosGuardar_Click" CssClass="btn btn-success" runat="server">
                                         <span class="glyphicon glyphicon-floppy-disk" />
+                                    </asp:LinkButton>
+                                    <button id="btn_puntosVehiculo" type="button" class="btn btn-info" data-toggle="modal" data-target="#modalVehiculo">
+                                        <span class="glyphicon glyphicon-list" />
                                     </button>
                                     <a href="#" onclick="javascript:cambia_direccion()" style="float: right">Mostrar/Ocultar Letras</a>
                                 </div>
@@ -226,21 +226,24 @@
                             <div class="col-xs-4">
                                 Tracto
                                 <br />
-                                <asp:TextBox ID="txt_vehiculoTracto" CssClass="form-control input-mayus" runat="server" />
+                                <telerik:RadComboBox ID="ddl_vehiculoTracto" AllowCustomText="true" MarkFirstMatch="true" runat="server">
+                                </telerik:RadComboBox>
                             </div>
                             <div class="col-xs-4">
                                 Trailer
                                 <br />
-                                <asp:TextBox ID="txt_vehiculoTrailer" CssClass="form-control input-mayus" runat="server" />
+                                <telerik:RadComboBox ID="ddl_vehiculoTrailer" AllowCustomText="true" MarkFirstMatch="true" runat="server">
+                                </telerik:RadComboBox>
                             </div>
                             <div class="col-xs-4">
                                 Conductor
                                 <br />
-                                <asp:TextBox ID="txt_vehiculoConductor" CssClass="form-control input-mayus" runat="server" />
+                                <telerik:RadComboBox ID="ddl_vehiculoConductor" AllowCustomText="true" MarkFirstMatch="true" runat="server">
+                                </telerik:RadComboBox>
                             </div>
                             <div class="col-xs-12 separador"></div>
                             <div class="col-xs-12 text-center">
-                                <asp:LinkButton ID="btn_guardar" OnClick="btn_guardar_Click" CssClass="btn btn-success" runat="server">
+                                <asp:LinkButton ID="btn_vehiculoGuardar" OnClick="btn_vehiculoGuardar_Click" CssClass="btn btn-success" runat="server">
                                     <span class="glyphicon glyphicon-floppy-disk" />
                                 </asp:LinkButton>
                             </div>
@@ -315,9 +318,6 @@
 <asp:Content ID="Content6" ContentPlaceHolderID="ocultos" runat="server">
     <asp:UpdatePanel runat="server">
         <ContentTemplate>
-            <asp:HiddenField ID="hf_trailer" runat="server" />
-            <asp:HiddenField ID="hf_tracto" runat="server" />
-            <asp:HiddenField ID="hf_conductor" runat="server" />
             <asp:HiddenField ID="hf_todos" runat="server" />
             <asp:HiddenField ID="hf_origenes" runat="server" />
             <asp:HiddenField ID="hf_puntosruta" runat="server" />
@@ -335,9 +335,6 @@
 </asp:Content>
 <asp:Content ID="Content7" ContentPlaceHolderID="scripts" runat="server">
     <style>
-        .ui-front {
-            z-index: 9999999 !important;
-        }
         .sel-between > td {
             height: 0px;
             border: 0px;
@@ -363,58 +360,6 @@
         var puntosOrigenes;
         function EndRequestHandler1(sender, args) {
             setTimeout(tabla2, 100);
-            var jsonTracto = JSON.parse($('#<%=hf_tracto.ClientID%>').val());
-            var jsonTrailer = JSON.parse($('#<%=hf_trailer.ClientID%>').val());
-            var jsonConductores = JSON.parse($('#<%=hf_conductor.ClientID%>').val());
-            var tractos = [];
-            var trailers = [];
-            var conductores = [];
-            jsonTracto.map((o) => {
-                tractos.push(o.TRAC_PLACA)
-            });
-            jsonTrailer.map((o) => {
-                trailers.push(o.TRAI_PLACA)
-            });
-            jsonConductores.map((o) => {
-                conductores.push(o.COND_RUT);
-            });
-            $("#<%=txt_vehiculoTracto.ClientID%>").autocomplete({
-                source: tractos,
-            });
-            $("#<%=txt_vehiculoTracto.ClientID%>").change(function () {
-                if (!tractos.find((o) => o === this.value)) {
-                    showAlertClass('guardar', 'warn_tractoNoexiste');
-                    $("#<%=txt_vehiculoTracto.ClientID%>").val('');
-                }
-            });
-            $("#<%=txt_vehiculoTrailer.ClientID%>").autocomplete({
-                source: trailers,
-            });
-            $("#<%=txt_vehiculoTrailer.ClientID%>").change(function () {
-                if (!trailers.find((o) => o === this.value)) {
-                    showAlertClass('guardar', 'warn_trailerNoexiste');
-                    $("#<%=txt_vehiculoTrailer.ClientID%>").val('');
-                }
-            });
-            $("#<%=txt_vehiculoConductor.ClientID%>").autocomplete({
-                source: conductores,
-            });
-            $("#<%=txt_vehiculoConductor.ClientID%>").change(function () {
-                if (!conductores.find((o) => o === this.value)) {
-                    showAlertClass('guardar', 'warn_conductorNoexiste');
-                    $("#<%=txt_vehiculoConductor.ClientID%>").val('');
-                }
-            });
-<%--            $("#<%=btn_guardar.ClientID%>").click(function () {
-                if ($("#<%=txt_vehiculoTrailer.ClientID%>").val() == '' ||
-                    !$("#<%=txt_vehiculoTrailer.ClientID%>").val()) {
-                    return false;
-                }
-                if ($("#<%=txt_vehiculoTracto.ClientID%>").val() == '' ||
-                    !$("#<%=txt_vehiculoTracto.ClientID%>").val()) {
-                    return false;
-                }
-            });--%>
             $('#<%= btn_enviar.ClientID%>').click(function () {
                 $("#<%= hseleccionado.ClientID %>").val(ids.toString());
                 if ($("#<%=hseleccionado.ClientID %>").val() == '') {
