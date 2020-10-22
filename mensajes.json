@@ -142,6 +142,7 @@
           "nombre": "guardar",
           "success_nuevo": "Propuesta ruta creada.",
           "success_modificar": "Propuesta ruta modificada.",
+          "warn_pedidoNoexiste": "Pedido no existe.",
           "warn_trailerNoexiste": "Trailer no existe.",
           "warn_tractoNoexiste": "Tracto no existe.",
           "warn_conductorNoexiste": "Conductor no existe."

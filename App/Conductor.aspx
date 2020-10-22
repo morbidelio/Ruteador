@@ -52,9 +52,9 @@
                                 </asp:LinkButton>
                             </ItemTemplate>
                         </asp:TemplateField>
-                        <asp:TemplateField>
+                        <asp:TemplateField Visible="false">
                             <ItemTemplate>
-                                <asp:LinkButton ID="btn_activar" CommandArgument='<%#Container.DataItemIndex%>' CommandName="ACTIVAR" runat="server">
+                                <asp:LinkButton ID="btn_activar" CommandArgument='<%#Container.DataItemIndex%>' CommandName="ACTIVAR" runat="server" Visible="false">
                                     <span class="glyphicon glyphicon-off" />
                                 </asp:LinkButton>
                             </ItemTemplate>

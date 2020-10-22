@@ -1382,6 +1382,8 @@ namespace Ruteador.App_Code
                         pr.ORIGEN.LAT_PE = Convert.ToDecimal(data.SqlLectorDatos["ORIGEN_LAT"]);
                     if (data.SqlLectorDatos["ORIGEN_LON"] != DBNull.Value)
                         pr.ORIGEN.LON_PE = Convert.ToDecimal(data.SqlLectorDatos["ORIGEN_LON"]);
+                    if (data.SqlLectorDatos["HORARIO"] != DBNull.Value)
+                        pr.ORIGEN.PERU_LLEGADA = data.SqlLectorDatos["HORARIO"].ToString();
                     // Operacion
                     if (data.SqlLectorDatos["ID_OPE"] != DBNull.Value)
                         pr.OPERACION.OPER_ID = Convert.ToInt32(data.SqlLectorDatos["ID_OPE"]);

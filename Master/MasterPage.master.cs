@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Data;
 
 public partial class Master_MasterPage : System.Web.UI.MasterPage, ICallbackEventHandler
 {
@@ -36,6 +37,27 @@ public partial class Master_MasterPage : System.Web.UI.MasterPage, ICallbackEven
         //}
 
      //   txtClientID.Attributes.Add("onchange", "GetClientNameById('id|' + this.value, 'id');");
+
+
+        if (IsPostBack == false)
+        {
+            ParametroBC param = new ParametroBC();
+            DataTable datos = param.ObtenerTodo();
+            Session["parametros"] = datos;
+            int contador = 0;
+            while (contador < datos.Rows.Count)
+            {
+
+                HiddenField hf = new HiddenField();
+                hf.ID = "param_" + datos.Rows[contador]["para_nombre"].ToString();
+                hf.Value = datos.Rows[contador]["para_valor"].ToString();
+
+                this.parametros.Controls.Add(hf);
+
+                contador = contador + 1;
+            }
+
+        }
 
         string callBackClientID = Page.ClientScript.GetCallbackEventReference(this, "arg", "ClientNameCallback", "context", "ClientNameCallbackError", true);
 

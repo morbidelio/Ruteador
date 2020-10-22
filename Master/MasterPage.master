@@ -22,9 +22,8 @@
     <script src="../Scripts/DataTables/extensions/RowReorder/js/dataTables.rowReorder.min.js"></script>
     <%--<script src="../Scripts/moment.min.js"></script>--%>
     <script src="../Scripts/moment-with-locales.min.js"></script>
+    <script src="../Scripts/moment-duration-format.js" type="text/javascript"></script>
     <script src="../Scripts/build/jquery.datetimepicker.full.min.js" type="text/javascript"></script>
-    <script src="../Scripts/jquery.sumoselect.min.js"></script>
-    <link href="../CSS/sumoselect.css" rel="stylesheet" />
     <script src="../Scripts/notify.js"></script>
 
 </head>
@@ -250,7 +249,11 @@
                 </div>
             </ProgressTemplate>
         </asp:UpdateProgress>
-
+        <asp:UpdatePanel runat="server" ID="parametros">
+        <ContentTemplate>
+        
+        </ContentTemplate>
+        </asp:UpdatePanel>
         <!--////////////////////////////Finaliza progress bar////////////////////////////-->
     </form>
 </body>

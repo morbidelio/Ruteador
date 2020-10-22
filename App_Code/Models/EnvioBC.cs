@@ -69,7 +69,7 @@ public partial class EnvioBC:Envio
             sb.AppendLine(string.Join(",", fields));
         }
 
-        File.WriteAllText("c:\\ViewState\\cliente.txt", sb.ToString());
+      //  File.WriteAllText("c:\\ViewState\\cliente.txt", sb.ToString());
 
         this.str_cabecera = sb.ToString();
 
@@ -99,7 +99,7 @@ public partial class EnvioBC:Envio
             sb.AppendLine(string.Join(",", fields));
         }
 
-        File.WriteAllText("c:\\ViewState\\pedido.txt", sb.ToString());
+     //   File.WriteAllText("c:\\ViewState\\pedido.txt", sb.ToString());
 
         //tran.Pedido_CrearArchivo_integracion(1, "detalle_" + DateTime.Now.ToString().Replace(" ","").Replace(":","_") + ".txt", sb.ToString());
         //  tran.Pedido_CrearArchivo_integracion(2, "ped_qruta.txt", sb.ToString(), "CommQruta07");

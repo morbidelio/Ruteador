@@ -48,7 +48,7 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
 
             ObtenerRutas(true);
 
-            DataTable dt = new PedidoBC().ObtenerTodo(0, 0, 0, 0, 0, null, true);
+            DataTable dt = new PedidoBC().ObtenerTodo(solo_sin_ruta: true);
             hf_todos.Value = JsonConvert.SerializeObject(dt);
 
 
@@ -56,26 +56,7 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
             hf_origenes.Value = JsonConvert.SerializeObject(dt2);
 
         }
-
-        // DataTable dt = new PedidoBC().ObtenerTodo(0,0,0,0,0,null,true);
-        // hf_todos.Value = JsonConvert.SerializeObject(dt);
     }
-
-    //string ICallbackEventHandler.GetCallbackResult()
-    //{
-
-    //    return ""; //callbackReturnValue;
-    //}
-
-    //void ICallbackEventHandler.RaiseCallbackEvent(string eventArgument)
-    //{
-    //    // PreRutaBC preruta = new PreRutaBC();
-
-    // //   callbackReturnValue = preruta.obtenerultimosprocesos();
-    //    DataTable dt2 = JsonConvert.DeserializeObject<DataTable>(eventArgument);
-    //    callbackReturnValue = eventArgument;
-
-    //}
     #region GridView
     protected void gv_listar_RowCreated(object sender, GridViewRowEventArgs e)
     {
@@ -118,6 +99,10 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
             ObtenerPuntosRuta(true);
             ddl_puntosCambiarPreruta.Visible = true;
             ddl_puntosCambiarPreruta.SelectedValue = id_preruta.ToString();
+            lbl_puntoTracto.Text =  (string.IsNullOrEmpty(p.TRACTO.TRAC_PLACA)) ? "Sin tracto" : "Tracto: " + p.TRACTO.TRAC_PLACA;
+            lbl_puntoTrailer.Text = (string.IsNullOrEmpty(p.TRAILER.TRAI_PLACA)) ? "Sin trailer" : "Trailer: " + p.TRAILER.TRAI_PLACA;
+            lbl_puntoConductor.Text = (string.IsNullOrEmpty(p.CONDUCTOR.COND_NOMBRE)) ? "Sin conductor" : "Conductor: " + p.CONDUCTOR.COND_NOMBRE;
+            lbl_puntoSalida.Text = "Tiempo de viaje: ";
         }
         if (e.CommandName == "DETALLE")
         {
@@ -183,7 +168,7 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
         hf_idPunto.Value = "";
         hf_puntosruta.Value = "";
         hf_origen.Value = "";
-        txt_puntoNombre.Text = "";
+        ddl_puntoNombre.ClearSelection();
         ddl_vehiculoTracto.ClearSelection();
         ddl_vehiculoTrailer.ClearSelection();
         ddl_vehiculoConductor.ClearSelection();
@@ -217,7 +202,7 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
 
         if (refrescar_combo == true)
         {
-            utils.CargaDropNormal(ddl_puntosCambiarPreruta, "NUMERO", "ID", dw.ToTable());
+            utils.CargaDropNormal(ddl_puntosCambiarPreruta, "ID", "NUMERO", dw.ToTable());
         }
 
         gv_listar.DataSource = dw;
@@ -232,6 +217,7 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
         DataTable dt3 = new PedidoBC().ObtenerTodo(solo_sin_ruta: true
                                                     , id_ruta: id_ruta);
         hf_todos.Value = JsonConvert.SerializeObject(dt3);
+        utils.CargaDrop(ddl_puntoNombre, "PERU_ID", "PERU_NUMERODROP", dt3);
         ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "map_cargar", "mapa2();", true);
 
 
@@ -280,9 +266,18 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
         }
     }
 
+    protected void btn_pre_pdf_click(object sender, EventArgs e)
+    {
+
+        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "exp", "exportarpdf();", true);
+
+    }
+
     protected void btn_pdf_click(object sender, EventArgs e)
     {
         PreRutaBC gd = new PreRutaBC();
+        String mimeType = "";
+
         try
         {
             // DataTable excel = gd.CrearEnvio(hseleccionado.Value.ToString(), user.USUA_ID, chk_archivar.Checked);
@@ -290,37 +285,125 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
 
             //    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "exp", "exportar();", true);
 
+
+            if (hseleccionado.Value == "")
+            {
+                utils.ShowMessage(this, "Seleccione al menos un viaje", "error", false);
+                return;
+
+            }
+
+
             this.pnlReport.Visible = true;
             ReportBC report = new ReportBC();
             //      VIAJEBC v = new VIAJEBC().ObtenerXID(int.Parse(this.tbidviajed.Text));
-            ReportDataSource dataSource = new ReportDataSource("Datos", report.obrenerReporteDespachoViaje(hseleccionado.Value.ToString()));
 
-            this.ReportViewer1.LocalReport.DataSources.Clear();
-            this.ReportViewer1.LocalReport.DataSources.Add(dataSource);
+            List<int> ids = hseleccionado.Value.ToString().Split(',').Select(int.Parse).ToList();
+            string zip = GenerateFileNamezipPDF("hr_", ".zip");
+            int contador = 0;
+
+
+            if (ids.Count == 1)
+            {
+                try
+                {
+                    // DataTable excel = gd.CrearEnvio(hseleccionado.Value.ToString(), user.USUA_ID, chk_archivar.Checked);
+                    // ViewState["lista"] = excel;
+
+                    //    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "exp", "exportar();", true);
+
+                    this.pnlReport.Visible = true;
+                    DataTable datos = report.obrenerReporteDespachoViaje(ids[0].ToString());
+                    ReportDataSource dataSource = new ReportDataSource("Datos", datos);
+
+                    this.ReportViewer1.LocalReport.DataSources.Clear();
+                    this.ReportViewer1.LocalReport.DataSources.Add(dataSource);
 
 
 
-            Warning[] warnings;
-            string[] streamids;
-            string mimeType;
-            string encoding;
-            string extension;
-            //Word
-            byte[] bytes = this.ReportViewer1.LocalReport.Render(
-                "PDF", null, out mimeType, out encoding,
-                out extension,
-                out streamids, out warnings);
-            //byte[] renderedBytes = this.ReportViewer1.LocalReport.Render("PDF");
-            this.Response.Clear();
+                    Warning[] warnings;
+                    string[] streamids;
 
-            this.Response.ContentType = mimeType;
+                    string encoding;
+                    string extension;
+                    //Word
+                    byte[] bytes = this.ReportViewer1.LocalReport.Render(
+                        "PDF", null, out mimeType, out encoding,
+                        out extension,
+                        out streamids, out warnings);
+                    //byte[] renderedBytes = this.ReportViewer1.LocalReport.Render("PDF");
+                    this.Response.Clear();
 
-            this.Response.AddHeader("content-disposition", string.Format("attachment; filename=Hoja_Ruta_{0}{1}{2}", 'a', '.', extension));
+                    this.Response.ContentType = mimeType;
 
-            this.Response.BinaryWrite(bytes);
+                    this.Response.AddHeader("content-disposition", string.Format("attachment; filename={0}{1}{2}", datos.Rows[0]["numero"].ToString(), '.', extension));
 
-            this.Response.End();
+                    this.Response.BinaryWrite(bytes);
 
+                    this.Response.End();
+
+
+
+                }
+                catch (Exception ex)
+                {
+                    utils.ShowMessage(this, ex.Message, "error", false);
+                }
+                finally
+                {
+                    ObtenerRutas(true);
+                }
+
+
+            }
+            else
+            {
+                while (contador < ids.Count)
+                {
+
+                    DataTable datos = report.obrenerReporteDespachoViaje(ids[contador].ToString());
+                    ReportDataSource dataSource = new ReportDataSource("Datos", datos);
+
+                    this.ReportViewer1.LocalReport.DataSources.Clear();
+                    this.ReportViewer1.LocalReport.DataSources.Add(dataSource);
+                    Warning[] warnings;
+                    string[] streamids;
+                    string encoding;
+                    string extension;
+                    //Word
+                    byte[] bytes = this.ReportViewer1.LocalReport.Render(
+                        "PDF", null, out mimeType, out encoding,
+                        out extension,
+                        out streamids, out warnings);
+                    //byte[] renderedBytes = this.ReportViewer1.LocalReport.Render("PDF");
+
+                    Stream stream = new MemoryStream(bytes);
+
+
+                    UtilsWeb.AddStreamToZip(zip, stream, GenerateFileNamezipPDF("hr_" + datos.Rows[0]["numero"].ToString(), ".pdf"));
+                    contador = contador + 1;
+
+                }
+
+
+
+
+                //this.Response.Clear();
+                //this.Response.ContentType = mimeType;
+                //this.Response.AddHeader("content-disposition", string.Format("attachment; filename=Hoja_Ruta_{0}{1}{2}", 'a', '.', extension));
+                //this.Response.BinaryWrite(bytes);
+                //this.Response.End();
+
+
+                Response.Clear();
+                Response.ContentType = mimeType;
+                Response.AddHeader("content-disposition", "attachment; filename=" + "descarga_multiple.zip");
+                Response.BinaryWrite(File.ReadAllBytes(zip));
+                //   File.Delete(Server.MapPath("./cargadefotos/Output.zip"));
+                File.Delete(zip);
+
+                Response.End();
+            }
 
 
         }
@@ -433,6 +516,7 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
 
         DataTable dt3 = new PedidoBC().ObtenerTodo(solo_sin_ruta: true);
         hf_todos.Value = JsonConvert.SerializeObject(dt3);
+        utils.CargaDrop(ddl_puntoNombre, "PERU_ID", "PERU_CODIGO", dt3);
         ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "map_cargar", "mapanuevo();", true);
     }
     protected void btn_enviar_Click(object sender, EventArgs e)
@@ -484,7 +568,7 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
         }
         finally
         {
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "map", "mapa();", true);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "map", "mapa2();", true);
             ObtenerRutas(true, false);
         }
     }
@@ -507,7 +591,7 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
         finally
         {
             utils.CerrarModal(this, "modalVehiculo");
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "map", "mapa();", true);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "map", "mapa2();", true);
             ObtenerRutas(true, false);
         }
     }
@@ -521,10 +605,13 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
         PreRutaBC p = new PreRutaBC().ObtenerXId(id_ruta);
         //OrigenBC o = new OrigenBC().ObtenerXIdruta(id_ruta);
         hf_origen.Value = JsonConvert.SerializeObject(p.ORIGEN);
-        ddl_vehiculoTracto.Text = p.TRACTO.TRAC_PLACA;
-        ddl_vehiculoTrailer.Text = p.TRAILER.TRAI_PLACA;
+
+        ddl_vehiculoTracto.SelectedValue = p.TRACTO.TRAC_ID.ToString();
+        ddl_vehiculoTrailer.SelectedValue = p.TRAILER.TRAI_ID.ToString();
+        ddl_vehiculoConductor.SelectedValue = p.CONDUCTOR.COND_ID.ToString();
+
         ObtenerPuntosRuta(true);
-        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "map", "mapa();", true);
+        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "map", "mapa2();", true);
     }
     protected void ddl_buscarRegion_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -542,4 +629,28 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
     }
     #endregion
 
+
+    private string GenerateFileNamePDF(string prefijo = "", string extension = ".txt")
+    {
+        //   string pageName = prefijo; // +Path.GetFileNameWithoutExtension(this.Page.AppRelativeVirtualPath);
+
+        string file = string.Format("{0}", extension);
+
+        //       file = Path.Combine(Server.MapPath("~/ViewStateFiles") + "/" + file);  
+        file = string.Format("{0}\\{1}", this.utils.pathviewstate(), file);
+
+        return file;
+    }
+
+    private string GenerateFileNamezipPDF(string prefijo = "", string extension = ".txt")
+    {
+        //    string pageName = prefijo + Path.GetFileNameWithoutExtension(this.Page.AppRelativeVirtualPath);
+
+        string file = string.Format("{0}{1}", prefijo, extension);
+
+        //       file = Path.Combine(Server.MapPath("~/ViewStateFiles") + "/" + file);  
+        file = string.Format("{0}\\{1}", this.utils.pathviewstate(), file);
+
+        return file;
+    }
 }

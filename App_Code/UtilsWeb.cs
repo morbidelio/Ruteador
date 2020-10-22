@@ -413,4 +413,53 @@ public class UtilsWeb
                 break;
         }
     }
+
+
+    public static void AddStreamToZip(string zipFilename, System.IO.Stream contenido, string filename)
+    {
+        using (Package zip = System.IO.Packaging.Package.Open(zipFilename, FileMode.OpenOrCreate))
+        {
+            string destFilename = @".\" + Path.GetFileName(filename);
+            Uri uri = PackUriHelper.CreatePartUri(new Uri(destFilename, UriKind.Relative));
+
+            if (zip.PartExists(uri))
+                zip.DeletePart(uri);
+
+            PackagePart part = zip.CreatePart(uri, "", CompressionOption.Normal);
+
+            using (contenido)
+            {
+                using (Stream dest = part.GetStream())
+                {
+                    CopyMemoryStream(contenido as MemoryStream, dest);
+                }
+            }
+        }
+    }
+
+    private static void CopyMemoryStream(System.IO.MemoryStream inputStream, System.IO.Stream outputStream)
+    {
+
+        // Dim bufferSize As Long = If(inputStream.Length < BUFFER_SIZE, inputStream.Length, BUFFER_SIZE)
+        // Dim buffer As Byte() = New Byte(bufferSize - 1) {}
+        // '  Dim bytesRead As Integer = 0
+        // Dim bytesWritten As Long = 0
+
+        byte[] bytes = new byte[inputStream.Length - 1 + 1];
+        int numBytesToRead = System.Convert.ToInt32(inputStream.Length);
+        int numBytesRead = 0;
+
+        while (numBytesToRead > 0)
+        {
+            int n = inputStream.Read(bytes, numBytesRead, numBytesToRead);
+
+
+            numBytesRead += n;
+            numBytesToRead -= n;
+            outputStream.Write(bytes, 0, numBytesRead);
+            if (n == 0)
+                break;
+        }
+    }
+
 }

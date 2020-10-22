@@ -1412,7 +1412,7 @@
         </ReportItems>
         <KeepTogether>true</KeepTogether>
         <Left>0.68969cm</Left>
-        <Height>15.25886cm</Height>
+        <Height>14.86198cm</Height>
         <Width>19.93853cm</Width>
         <Style>
           <Border>
@@ -1421,10 +1421,10 @@
         </Style>
       </Rectangle>
     </ReportItems>
-    <Height>6.17in</Height>
+    <Height>5.87833in</Height>
     <Style />
   </Body>
-  <Width>8.31927in</Width>
+  <Width>8.12135in</Width>
   <Page>
     <PageHeader>
       <Height>1.00542cm</Height>
