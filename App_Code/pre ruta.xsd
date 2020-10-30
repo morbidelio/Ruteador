@@ -73,8 +73,12 @@
               <Mapping SourceColumn="COMU_NOMBRE" DataSetColumn="COMU_NOMBRE" />
               <Mapping SourceColumn="PERU_DIRECCION" DataSetColumn="PERU_DIRECCION" />
               <Mapping SourceColumn="SECUENCIA" DataSetColumn="SECUENCIA" />
-              <Mapping SourceColumn="FH_LLEGADA" DataSetColumn="FH_LLEGADA" />
               <Mapping SourceColumn="FH_SALIDA1" DataSetColumn="FH_SALIDA1" />
+              <Mapping SourceColumn="FH_LLEGADA" DataSetColumn="FH_LLEGADA1" />
+              <Mapping SourceColumn="fh_salida1" DataSetColumn="fh_salida1" />
+              <Mapping SourceColumn="conductor" DataSetColumn="conductor" />
+              <Mapping SourceColumn="TIVI_NOMBRE" DataSetColumn="TIVI_NOMBRE" />
+              <Mapping SourceColumn="fh_despacho" DataSetColumn="fh_despacho" />
             </Mappings>
             <Sources />
           </TableAdapter>
@@ -86,7 +90,7 @@
   <xs:element name="pre_ruta" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:Generator_DataSetName="pre_ruta" msprop:Generator_UserDSName="pre_ruta">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="LISTAR_PRERUTA_DETALLE" msprop:Generator_TableClassName="LISTAR_PRERUTA_DETALLEDataTable" msprop:Generator_TableVarName="tableLISTAR_PRERUTA_DETALLE" msprop:Generator_TablePropName="LISTAR_PRERUTA_DETALLE" msprop:Generator_RowDeletingName="LISTAR_PRERUTA_DETALLERowDeleting" msprop:Generator_RowChangingName="LISTAR_PRERUTA_DETALLERowChanging" msprop:Generator_RowEvHandlerName="LISTAR_PRERUTA_DETALLERowChangeEventHandler" msprop:Generator_RowDeletedName="LISTAR_PRERUTA_DETALLERowDeleted" msprop:Generator_UserTableName="LISTAR_PRERUTA_DETALLE" msprop:Generator_RowChangedName="LISTAR_PRERUTA_DETALLERowChanged" msprop:Generator_RowEvArgName="LISTAR_PRERUTA_DETALLERowChangeEvent" msprop:Generator_RowClassName="LISTAR_PRERUTA_DETALLERow">
+        <xs:element name="LISTAR_PRERUTA_DETALLE" msprop:Generator_TableClassName="LISTAR_PRERUTA_DETALLEDataTable" msprop:Generator_TableVarName="tableLISTAR_PRERUTA_DETALLE" msprop:Generator_RowChangedName="LISTAR_PRERUTA_DETALLERowChanged" msprop:Generator_TablePropName="LISTAR_PRERUTA_DETALLE" msprop:Generator_RowDeletingName="LISTAR_PRERUTA_DETALLERowDeleting" msprop:Generator_RowChangingName="LISTAR_PRERUTA_DETALLERowChanging" msprop:Generator_RowEvHandlerName="LISTAR_PRERUTA_DETALLERowChangeEventHandler" msprop:Generator_RowDeletedName="LISTAR_PRERUTA_DETALLERowDeleted" msprop:Generator_RowClassName="LISTAR_PRERUTA_DETALLERow" msprop:Generator_UserTableName="LISTAR_PRERUTA_DETALLE" msprop:Generator_RowEvArgName="LISTAR_PRERUTA_DETALLERowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="ID" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnID" msprop:Generator_ColumnPropNameInRow="ID" msprop:Generator_ColumnPropNameInTable="IDColumn" msprop:Generator_UserColumnName="ID" type="xs:int" />
@@ -217,6 +221,23 @@
               <xs:element name="SECUENCIA" msprop:Generator_ColumnVarNameInTable="columnSECUENCIA" msprop:Generator_ColumnPropNameInRow="SECUENCIA" msprop:Generator_ColumnPropNameInTable="SECUENCIAColumn" msprop:Generator_UserColumnName="SECUENCIA" type="xs:int" minOccurs="0" />
               <xs:element name="FH_LLEGADA" msprop:Generator_ColumnVarNameInTable="columnFH_LLEGADA" msprop:Generator_ColumnPropNameInRow="FH_LLEGADA" msprop:Generator_ColumnPropNameInTable="FH_LLEGADAColumn" msprop:Generator_UserColumnName="FH_LLEGADA" type="xs:dateTime" minOccurs="0" />
               <xs:element name="FH_SALIDA1" msprop:Generator_ColumnVarNameInTable="columnFH_SALIDA1" msprop:Generator_ColumnPropNameInRow="FH_SALIDA1" msprop:Generator_ColumnPropNameInTable="FH_SALIDA1Column" msprop:Generator_UserColumnName="FH_SALIDA1" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="FH_LLEGADA1" msdata:ReadOnly="true" msdata:Caption="FH_LLEGADA" msprop:Generator_ColumnVarNameInTable="columnFH_LLEGADA1" msprop:Generator_ColumnPropNameInRow="FH_LLEGADA1" msprop:Generator_ColumnPropNameInTable="FH_LLEGADA1Column" msprop:Generator_UserColumnName="FH_LLEGADA1" type="xs:duration" minOccurs="0" />
+              <xs:element name="fh_salida1" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnfh_salida1" msprop:Generator_ColumnPropNameInRow="fh_salida1" msprop:Generator_ColumnPropNameInTable="fh_salida1Column" msprop:Generator_UserColumnName="fh_salida1" type="xs:duration" minOccurs="0" />
+              <xs:element name="conductor" msprop:Generator_ColumnVarNameInTable="columnconductor" msprop:Generator_ColumnPropNameInRow="conductor" msprop:Generator_ColumnPropNameInTable="conductorColumn" msprop:Generator_UserColumnName="conductor" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="100" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="TIVI_NOMBRE" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnTIVI_NOMBRE" msprop:Generator_ColumnPropNameInRow="TIVI_NOMBRE" msprop:Generator_ColumnPropNameInTable="TIVI_NOMBREColumn" msprop:Generator_UserColumnName="TIVI_NOMBRE" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="6" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="fh_despacho" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnfh_despacho" msprop:Generator_ColumnPropNameInRow="fh_despacho" msprop:Generator_ColumnPropNameInTable="fh_despachoColumn" msprop:Generator_UserColumnName="fh_despacho" type="xs:dateTime" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

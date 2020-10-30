@@ -188,6 +188,26 @@
           <DataField>FH_SALIDA1</DataField>
           <rd:TypeName>System.DateTime</rd:TypeName>
         </Field>
+        <Field Name="FH_LLEGADA1">
+          <DataField>FH_LLEGADA</DataField>
+          <rd:TypeName>System.TimeSpan</rd:TypeName>
+        </Field>
+        <Field Name="fh_salida1">
+          <DataField>fh_salida1</DataField>
+          <rd:TypeName>System.TimeSpan</rd:TypeName>
+        </Field>
+        <Field Name="conductor">
+          <DataField>conductor</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TIVI_NOMBRE">
+          <DataField>TIVI_NOMBRE</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="fh_despacho">
+          <DataField>fh_despacho</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
       </Fields>
       <Query>
         <DataSourceName>pre_ruta</DataSourceName>
@@ -195,7 +215,7 @@
       </Query>
       <rd:DataSetInfo>
         <rd:DataSetName>pre_ruta</rd:DataSetName>
-        <rd:SchemaPath>C:\web service\Ruteador\V8\App_Code\pre ruta.xsd</rd:SchemaPath>
+        <rd:SchemaPath>C:\inetpub\wwwroot\Ruteador\V8\App_Code\pre ruta.xsd</rd:SchemaPath>
         <rd:TableName>LISTAR_PRERUTA_DETALLE</rd:TableName>
         <rd:TableAdapterFillMethod>Fill</rd:TableAdapterFillMethod>
         <rd:TableAdapterGetDataMethod>GetData</rd:TableAdapterGetDataMethod>
@@ -326,7 +346,16 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=First(Fields!FH_SALIDA.Value, "Datos")</Value>
+                    <Value>=
+Iif(
+	string.IsNullOrEmpty(
+		First(
+			Fields!fh_despacho.Value, "Datos")),
+	"Sin fecha",
+	CDate(
+		First(
+			Fields!fh_despacho.Value, "Datos")).
+	ToShortDateString())</Value>
                     <Style>
                       <Color>#3596fd</Color>
                     </Style>
@@ -385,7 +414,9 @@
                 <TextRuns>
                   <TextRun>
                     <Value>Conductor</Value>
-                    <Style />
+                    <Style>
+                      <FontSize>9pt</FontSize>
+                    </Style>
                   </TextRun>
                 </TextRuns>
                 <Style />
@@ -395,7 +426,7 @@
             <Top>3.86884cm</Top>
             <Left>0.4106cm</Left>
             <Height>0.6cm</Height>
-            <Width>1.82091cm</Width>
+            <Width>2.35745cm</Width>
             <ZIndex>7</ZIndex>
             <Style>
               <Border>
@@ -923,7 +954,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox8</rd:DefaultName>
-            <Top>1.42656cm</Top>
+            <Top>1.4351cm</Top>
             <Left>12.9985cm</Left>
             <Height>0.6cm</Height>
             <Width>4.75857cm</Width>
@@ -1226,7 +1257,7 @@
                   <TextRun>
                     <Value>=First(Fields!TRAC_PLACA.Value, "Datos")</Value>
                     <Style>
-                      <FontSize>8pt</FontSize>
+                      <FontSize>9pt</FontSize>
                       <Color>#3596fd</Color>
                     </Style>
                   </TextRun>
@@ -1236,7 +1267,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox2</rd:DefaultName>
             <Top>3.86884cm</Top>
-            <Left>10.36498cm</Left>
+            <Left>12.06459cm</Left>
             <Height>0.6cm</Height>
             <Width>1.93077cm</Width>
             <ZIndex>12</ZIndex>
@@ -1259,7 +1290,7 @@
                   <TextRun>
                     <Value>Camión</Value>
                     <Style>
-                      <FontSize>8pt</FontSize>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -1268,7 +1299,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox2</rd:DefaultName>
             <Top>3.86884cm</Top>
-            <Left>8.91791cm</Left>
+            <Left>8.93911cm</Left>
             <Height>0.6cm</Height>
             <Width>1.34124cm</Width>
             <ZIndex>13</ZIndex>
@@ -1291,7 +1322,7 @@
                   <TextRun>
                     <Value>=First(Fields!TRAI_PLACA.Value, "Datos")</Value>
                     <Style>
-                      <FontSize>8pt</FontSize>
+                      <FontSize>9pt</FontSize>
                       <Color>#3596fd</Color>
                     </Style>
                   </TextRun>
@@ -1301,7 +1332,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox2</rd:DefaultName>
             <Top>4.98917cm</Top>
-            <Left>13.71087cm</Left>
+            <Left>17.41217cm</Left>
             <Height>0.6cm</Height>
             <Width>1.62974cm</Width>
             <ZIndex>14</ZIndex>
@@ -1324,7 +1355,7 @@
                   <TextRun>
                     <Value>Tipo Rampla</Value>
                     <Style>
-                      <FontSize>8pt</FontSize>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -1333,9 +1364,9 @@
             </Paragraphs>
             <rd:DefaultName>Textbox2</rd:DefaultName>
             <Top>4.98917cm</Top>
-            <Left>8.91791cm</Left>
+            <Left>8.93911cm</Left>
             <Height>0.6cm</Height>
-            <Width>1.70625cm</Width>
+            <Width>2.42063cm</Width>
             <ZIndex>15</ZIndex>
             <Style>
               <Border>
@@ -1356,7 +1387,7 @@
                   <TextRun>
                     <Value>Rampla</Value>
                     <Style>
-                      <FontSize>8pt</FontSize>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -1365,9 +1396,9 @@
             </Paragraphs>
             <rd:DefaultName>Textbox2</rd:DefaultName>
             <Top>4.98917cm</Top>
-            <Left>12.43519cm</Left>
+            <Left>15.02593cm</Left>
             <Height>0.6cm</Height>
-            <Width>1.13457cm</Width>
+            <Width>1.8754cm</Width>
             <ZIndex>16</ZIndex>
             <Style>
               <Border>
@@ -1387,7 +1418,9 @@
                 <TextRuns>
                   <TextRun>
                     <Value>Tipo de Viaje</Value>
-                    <Style />
+                    <Style>
+                      <FontSize>9pt</FontSize>
+                    </Style>
                   </TextRun>
                 </TextRuns>
                 <Style />
@@ -1399,6 +1432,74 @@
             <Height>0.6cm</Height>
             <Width>2.35745cm</Width>
             <ZIndex>17</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="conductor">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Iif(string.IsNullOrEmpty(Fields!conductor.Value),"Sin Conductor",Fields!conductor.Value), "Datos")</Value>
+                    <Style>
+                      <Color>#3596fd</Color>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>conductor</rd:DefaultName>
+            <Top>3.86884cm</Top>
+            <Left>3.24413cm</Left>
+            <Height>0.6cm</Height>
+            <Width>5.27813cm</Width>
+            <ZIndex>18</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="TIVI_NOMBRE">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Iif(
+	string.IsNullOrEmpty(
+		First(Fields!TIVI_NOMBRE.Value, "Datos")),
+	"Ruteador",
+	First(Fields!TIVI_NOMBRE.Value, "Datos"))</Value>
+                    <Style>
+                      <Color>#3596fd</Color>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>TIVI_NOMBRE</rd:DefaultName>
+            <Top>4.98917cm</Top>
+            <Left>3.24413cm</Left>
+            <Height>0.6cm</Height>
+            <Width>5.27813cm</Width>
+            <ZIndex>19</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>

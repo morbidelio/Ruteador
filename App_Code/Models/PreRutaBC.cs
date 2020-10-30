@@ -91,6 +91,7 @@ namespace Ruteador.App_Code.Models
         public DateTime FECHA_DESPACHOEXP { get; set; }
         public DateTime FECHA_INICIOEXP { get; set; }
         public DateTime FECHA_FINEXP { get; set; }
+        public string RUTA_COLOR { get; set; }
         public ConductorBC CONDUCTOR { get; set; }
         public EnvioBC ENVIO { get; set; }
         public OperacionBC OPERACION { get; set; }

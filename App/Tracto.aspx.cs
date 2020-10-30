@@ -98,6 +98,7 @@ public partial class App_Tracto : System.Web.UI.Page
                 if (t.Guardar())
                 {
                     utils.ShowMessage2(this, "guardar", "success_modificar");
+                    utils.CerrarModal(this, "modalEdit");
                 }
                 else
                 {

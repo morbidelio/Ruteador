@@ -175,7 +175,10 @@ public partial class App_Conductor : System.Web.UI.Page
             {
                 u.COND_ID = Convert.ToInt32(hf_id.Value);
                 if (u.Guardar())
+                {
                     utils.ShowMessage2(this, "guardar", "success_modificar");
+                    utils.CerrarModal(this, "modalEdit");
+                }
                 else
                     utils.ShowMessage2(this, "guardar", "error");
             }

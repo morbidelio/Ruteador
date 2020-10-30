@@ -51,8 +51,7 @@ public partial class Master_MasterPage : System.Web.UI.MasterPage, ICallbackEven
                 HiddenField hf = new HiddenField();
                 hf.ID = "param_" + datos.Rows[contador]["para_nombre"].ToString();
                 hf.Value = datos.Rows[contador]["para_valor"].ToString();
-
-                this.parametros.Controls.Add(hf);
+                this.parametros.ContentTemplateContainer.Controls.Add(hf);
 
                 contador = contador + 1;
             }

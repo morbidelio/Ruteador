@@ -52,7 +52,6 @@ namespace Ruteador.App_Code.Models
         public string TRAI_NUMERO { get; set; }
         public string TRAI_PLACA { get; set; }
         public TrailerTipoBC TRAILER_TIPO { get; set; }
-
     }
     public class TrailerTipoBC : TrailerTipo
     {

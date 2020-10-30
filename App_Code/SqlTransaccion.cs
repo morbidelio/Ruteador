@@ -1322,6 +1322,8 @@ namespace Ruteador.App_Code
                 data.EjecutarSqlLector();
                 while (data.SqlLectorDatos.Read())
                 {
+                    if (data.SqlLectorDatos["ID"] != DBNull.Value)
+                        pr.ID = Convert.ToInt32(data.SqlLectorDatos["ID"]);
                     if (data.SqlLectorDatos["NUMERO"] != DBNull.Value)
                         pr.NUMERO = Convert.ToString(data.SqlLectorDatos["NUMERO"]);
                     if (data.SqlLectorDatos["FH_VIAJE"] != DBNull.Value)
@@ -1364,6 +1366,8 @@ namespace Ruteador.App_Code
                         pr.FECHA_INICIOEXP = Convert.ToDateTime(data.SqlLectorDatos["FECHA_INICIOEXP"]);
                     if (data.SqlLectorDatos["FECHA_FINEXP"] != DBNull.Value)
                         pr.FECHA_FINEXP = Convert.ToDateTime(data.SqlLectorDatos["FECHA_FINEXP"]);
+                    if (data.SqlLectorDatos["RUTA_COLOR"] != DBNull.Value)
+                        pr.RUTA_COLOR = Convert.ToString(data.SqlLectorDatos["RUTA_COLOR"]);
                     // Conductor
                     if (data.SqlLectorDatos["ID_CONDUCTOR"] != DBNull.Value)
                         pr.CONDUCTOR.COND_ID = Convert.ToInt32(data.SqlLectorDatos["ID_CONDUCTOR"]);
@@ -1395,11 +1399,17 @@ namespace Ruteador.App_Code
                         pr.TRAILER.TRAI_ID = Convert.ToInt32(data.SqlLectorDatos["TRAI_ID"]);
                     if (data.SqlLectorDatos["TRAI_PLACA"] != DBNull.Value)
                         pr.TRAILER.TRAI_PLACA = Convert.ToString(data.SqlLectorDatos["TRAI_PLACA"]);
+                    // Trailer Tipo
+                    if (data.SqlLectorDatos["TRTI_ID"] != DBNull.Value)
+                        pr.TRAILER.TRAILER_TIPO.TRTI_ID = Convert.ToInt32(data.SqlLectorDatos["TRTI_ID"]);
+                    if (data.SqlLectorDatos["TIPO_VEHICULO"] != DBNull.Value)
+                        pr.TRAILER.TRAILER_TIPO.TRTI_DESC = Convert.ToString(data.SqlLectorDatos["TIPO_VEHICULO"]);
                     // Tracto
                     if (data.SqlLectorDatos["TRAC_ID"] != DBNull.Value)
                         pr.TRACTO.TRAC_ID = Convert.ToInt32(data.SqlLectorDatos["TRAC_ID"]);
                     if (data.SqlLectorDatos["TRAC_PLACA"] != DBNull.Value)
                         pr.TRACTO.TRAC_PLACA = Convert.ToString(data.SqlLectorDatos["TRAC_PLACA"]);
+
                 }
                 return pr;
             }
@@ -1467,12 +1477,14 @@ namespace Ruteador.App_Code
             {
                 data.CargarSqlComando("[dbo].[GUARDAR_PRE_RUTA]");
                 data.AgregarSqlParametro("@ID_PRERUTA", p.ID);
-                if (p.TRAILER.TRAI_ID != 0) 
+                if (p.TRAILER.TRAI_ID != 0)
                     data.AgregarSqlParametro("@TRAI_ID", p.TRAILER.TRAI_ID);
-                if (p.TRACTO.TRAC_ID != 0) 
+                if (p.TRACTO.TRAC_ID != 0)
                     data.AgregarSqlParametro("@TRAC_ID", p.TRACTO.TRAC_ID);
-                if (p.CONDUCTOR.COND_ID != 0) 
+                if (p.CONDUCTOR.COND_ID != 0)
                     data.AgregarSqlParametro("@COND_ID", p.CONDUCTOR.COND_ID);
+                if (!string.IsNullOrEmpty(p.RUTA_COLOR))
+                    data.AgregarSqlParametro("@RUTA_COLOR", p.RUTA_COLOR);
                 data.EjecutarSqlEscritura();
                 return true;
             }

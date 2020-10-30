@@ -4,7 +4,7 @@
 <asp:Content ID="Titulo" ContentPlaceHolderID="titulo" runat="Server">
     <div class="col-xs-12 separador">
     </div>
-    <h2>Maestro Trailer
+    <h2>Maestro Vehículo
     </h2>
 </asp:Content>
 <asp:Content ID="Filtro" ContentPlaceHolderID="Filtro" runat="Server">
