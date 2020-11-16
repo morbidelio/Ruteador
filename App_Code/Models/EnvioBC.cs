@@ -54,10 +54,19 @@ public partial class EnvioBC:Envio
     public void archivo(DataTable dt)
     {
 
+        int cliente_id;
+        cliente_id = int.Parse(new UtilsWeb().id_cliente_roadshow());
+
         StringBuilder sb = new StringBuilder();
 
         DataView view = new DataView(dt);
-        DataTable distinctValues = view.ToTable(true, "rut", "nombre", "direccion", "comuna", "lat", "lon", "tEntrega", "Hora_cod_integra");
+
+        string[] campos_cabecera;
+        campos_cabecera = tran.Pedido_campos_cabecera(cliente_id);
+
+//        DataTable distinctValues = view.ToTable(true, "rut", "nombre", "direccion", "comuna", "lat", "lon", "tEntrega", "Hora_cod_integra","param1","camion");
+
+        DataTable distinctValues = view.ToTable(true, campos_cabecera);
 
         IEnumerable<string> columnNames = distinctValues.Columns.Cast<DataColumn>().
                                           Select(column => column.ColumnName);
@@ -84,10 +93,19 @@ public partial class EnvioBC:Envio
     public void archivo2(DataTable dt, int env_id)
     {
 
+        int cliente_id;
+        cliente_id = int.Parse(new UtilsWeb().id_cliente_roadshow());
+
+
         StringBuilder sb = new StringBuilder();
 
         DataView view = new DataView(dt);
-        DataTable distinctValues = view.ToTable(false, "NumeroPedido", "Rut", "FECHA_INTEGRAV2", "Class", "Set", "envio");
+     //   DataTable distinctValues = view.ToTable(false, "NumeroPedido", "Rut", "FECHA_INTEGRAV2", "Class", "Set", "envio");
+
+        string[] campos_detalle;
+        campos_detalle = tran.Pedido_campos_detalle(cliente_id);
+
+        DataTable distinctValues = view.ToTable(false, campos_detalle);
 
         IEnumerable<string> columnNames = distinctValues.Columns.Cast<DataColumn>().
                                           Select(column => column.ColumnName);
@@ -108,9 +126,11 @@ public partial class EnvioBC:Envio
 
         DataView view3 = new DataView(dt);
         DataTable distinctValues3 = view3.ToTable(true, "COMANDO");
-        
+      
 
-        tran.Pedido_CrearArchivo_integracion_v2(2, this.str_cabecera, this.str_detalle,distinctValues3.Rows[0]["COMANDO"].ToString(), env_id);
+            
+
+        tran.Pedido_CrearArchivo_integracion_v2(cliente_id, this.str_cabecera, this.str_detalle,distinctValues3.Rows[0]["COMANDO"].ToString(), env_id);
     }
    
 }

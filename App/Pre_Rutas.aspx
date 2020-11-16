@@ -99,7 +99,7 @@
     <asp:UpdatePanel runat="server">
         <ContentTemplate>
             <asp:GridView ID="gv_listar" AutoGenerateColumns="false" AllowSorting="true" Width="100%" CssClass="table table-bordered table-hover tablita tab-nopag" runat="server"
-                EmptyDataText="No hay registros" OnRowCreated="gv_listar_RowCreated" OnRowCommand="gv_listar_RowCommand" OnSorting="gv_listar_Sorting" DataKeyNames="ID,ID_ORIGEN">
+                EmptyDataText="No hay registros" OnRowCreated="gv_listar_RowCreated" OnRowCommand="gv_listar_RowCommand" OnSorting="gv_listar_Sorting" OnRowDataBound="gv_listar_RowDataBound" DataKeyNames="ID,ID_ORIGEN">
                 <Columns>
                     <asp:TemplateField HeaderText="Todas" ShowHeader="False" ItemStyle-Width="1%">
                         <HeaderTemplate>
@@ -118,7 +118,7 @@
                     </asp:TemplateField>
                     <asp:TemplateField>
                         <ItemTemplate>
-                            <asp:LinkButton ID="btn_color" CssClass="btn btn-xs btn-warning" CommandArgument='<%#Eval("ID")%>' CommandName="COLOR" runat="server">
+                            <asp:LinkButton ID="btn_color" CssClass="btn btn-xs" CommandArgument='<%#Eval("ID")%>' CommandName="COLOR" runat="server">
                                 <span class="glyphicon glyphicon-tint" />
                             </asp:LinkButton>
                         </ItemTemplate>
@@ -202,32 +202,49 @@
                             <div class="col-xs-7" style="height: 65vh" id="map">
                             </div>
                             <div class="col-xs-5">
-                                <div class="col-xs-6">
+                                <div class="col-xs-4">
                                     Punto seleccionado
                                 </div>
-                                <div class="col-xs-3">
-                                    <%--<asp:DropDownList ID="ddl_puntoNombre" ClientIDMode="Static" runat="server" />--%>
-                                    <%--<telerik:RadComboBox ID="ddl_puntoNombre" OnClientSelectedIndexChanged="ddl_puntoNombre_SelectedIndexChanged" ClientIDMode="Static" AllowCustomText="true" MarkFirstMatch="true" runat="server" />--%>
-
+                                <div class="col-xs-5">
                                     <asp:UpdatePanel UpdateMode="Always" runat="server" ID="UpdatePanel2">
                                         <ContentTemplate>
                                             <telerik:RadComboBox ID="ddl_puntoNombre" OnClientSelectedIndexChanged="ddl_puntoNombre_SelectedIndexChanged" ClientIDMode="Static" AllowCustomText="true" MarkFirstMatch="true" runat="server" />
                                         </ContentTemplate>
                                     </asp:UpdatePanel>
                                 </div>
+                                <div class="col-xs-2">
+                                    <button onclick="limpiarPuntos();return false;" class="btn btn-danger">
+                                        <span class='glyphicon glyphicon-erase' />
+                                    </button>
+                                </div>
                                 <div class="col-xs-12 separador"></div>
                                 <div id="tbl_puntos"></div>
                                 <div class="col-xs-12 separador"></div>
-                                <div class="col-xs-12 text-center" style="text-align: center">
+                                <div class="col-xs-3">
                                     <asp:Label ID="txt_cant_punt" ClientIDMode="Static" runat="server" Text="Cant Puntos" Style="float: left"></asp:Label>
+                                </div>
+                                <div class="col-xs-3">
                                     <asp:LinkButton ID="btn_puntosGuardar" OnClick="btn_puntosGuardar_Click" CssClass="btn btn-success" runat="server">
                                         <span class="glyphicon glyphicon-floppy-disk" />
                                     </asp:LinkButton>
                                     <button id="btn_puntosVehiculo" type="button" class="btn btn-info" data-toggle="modal" data-target="#modalVehiculo">
                                         <span class="glyphicon glyphicon-list" />
                                     </button>
-                                    <a href="#" onclick="javascript:mostrarRuta()" style="float: right">Mostrar/Ocultar Ruta</a>
-                                    <a href="#" onclick="javascript:mostrarPoligono()" style="float: right">Mostrar/Ocultar Polígono</a>
+                                </div>
+                                <div class="col-xs-2">
+                                    <input type="radio" id="rb_ruta" name="rb_mostrar" />
+                                    <br />
+                                    <label for="rb_ruta">Ruta</label>
+                                </div>
+                                <div class="col-xs-2">
+                                    <input type="radio" id="rb_poligono" name="rb_mostrar" />
+                                    <br />
+                                    <label for="rb_ruta">Polígono</label>
+                                </div>
+                                <div class="col-xs-2">
+                                    <input type="radio" id="rb_ambos" name="rb_mostrar" />
+                                    <br />
+                                    <label for="rb_ruta">Ambos</label>
                                 </div>
                             </div>
                         </div>
@@ -393,6 +410,7 @@
             <asp:HiddenField ID="hf_idRuta" runat="server" />
             <asp:HiddenField ID="hf_idPunto" ClientIDMode="Static" runat="server" />
             <asp:HiddenField ID="hf_origen" ClientIDMode="Static" runat="server" />
+            <asp:HiddenField ID="hf_circular" ClientIDMode="Static" runat="server" />
             <asp:HiddenField ID="hseleccionado" runat="server" />
             <asp:HiddenField ID="respuesta_direcction" ClientIDMode="Static" runat="server" />
             <asp:Button ID="btn_exportarExcel" runat="server" OnClick="btn_exportarExcel_Click" />
@@ -429,7 +447,7 @@
         var puntosTodos;
         var puntosRuta;
         var puntosOrigenes;
-
+        const retorno_ruta = <%=ConfigurationManager.AppSettings["retorno_ruta"] %>;
         // DropDownList
         function ddl_vehiculoConductor_SelectedIndexChanged(sender, args) {
             if (!args.get_item()) {
@@ -478,6 +496,19 @@
         function EndRequestHandler1(sender, args) {
             setTimeout(tabla2, 100);
             $('#colorpicker').farbtastic('#<%=txt_editColor.ClientID%>');
+            $('[name=rb_mostrar').click(function () {
+                switch ($(this).attr('id')) {
+                    case 'rb_ruta':
+                        mostrar(true, false);
+                        break;
+                    case 'rb_poligono':
+                        mostrar(false, true);
+                        break;
+                    case 'rb_ambos':
+                        mostrar(true, true);
+                        break;
+                }
+            });
             $('#<%=btn_colorGuardar.ClientID%>').click(function () {
                 if ($('#<%=txt_editColor.ClientID%>').val() == '' ||
                     !$('#<%=txt_editColor.ClientID%>').val()) {
@@ -500,17 +531,12 @@
                     return false;
                 }
             });
-            //$('#ddl_puntoNombre').change(function (e) {
-            //    debugger;
-            //});
-
         }
 
         var calcDataTableHeight = function () {
             return $(window).height() - $("#scrolls").offset().top - 100;
         };
         function reOffset1() {
-
             $('div.dataTables_scrollBody').height(calcDataTableHeight());
         }
         window.onresize = function (e) {
@@ -529,18 +555,10 @@
                     "info": false
                 });
             }
-            $('div.dataTables_scrollBody').scrollTop(pageScrollPos);
-            $('div.dataTables_scrollBody').scrollLeft(pageScrollPosleft);
         }
-        Sys.WebForms.PageRequestManager.getInstance().add_beginRequest(BeginRequestHandler);
-
         var pageScrollPos = 0;
         var pageScrollPosleft = 0;
 
-        function BeginRequestHandler(sender, args) {
-            pageScrollPos = $('div.dataTables_scrollBody').scrollTop();
-            pageScrollPosleft = $('div.dataTables_scrollBody').scrollLeft();
-        }
         function mapa(nuevo) {
             limpiarWaypoints();
             puntosTodos = JSON.parse($('#hf_todos').val());
@@ -564,12 +582,13 @@
             puntosOrigenes.map((o) => {
                 insertarOrigen(o.ID_PE, o.LAT_PE, o.LON_PE, 'marker_blue.png', o.NOMBRE_PE, '0');
             });
+            const circular = $('#hf_circular').val() === 'S';
             if (!nuevo) {
                 puntosRuta.map((o) => {
                     insertarPuntoRuta(o.PERU_ID, NaN, 'marker_red.png');
                 });
                 crearPoligono();
-                crearRuta();
+                crearRuta(circular);
                 var bounds = new google.maps.LatLngBounds();
                 bounds.extend(origen.position);
                 waypoints["WAYPOINTS"].map((o) => {
@@ -577,6 +596,12 @@
                 });
                 setTimeout(function () { map.fitBounds(bounds) }, 500);
             }
+            else {
+                crearPoligono();
+                refrescarPoligono();
+                direcciones = [];
+            }
+            $('#rb_ambos').prop('checked', true);
         }
         function crearInfoWindow(o) {
             const contenido = `<div id="content">
@@ -601,7 +626,7 @@
 
             var i1;
             tiempo0 = moment.duration(json_origen.PERU_LLEGADA);
-            var output = `<table id="gv_puntos" style="width:100%" class="table table-border table-hover tablita">
+            var output = `<table id="gv_puntos" style="width:100%" class="table table-condensed table-hover tablita">
                             <thead>
                             <tr style="white-space:normal">
                             <th>
@@ -629,7 +654,7 @@
                             <td>
                             </td>
                             <td>
-                            <a class="btn btn-xs btn-primary" style="width:22px" onclick="centrarLatLon(${json_origen.LAT_PE},${json_origen.LON_PE});">0</a>
+                            <a style="font-weight:bold" href="#" onclick="centrarLatLon(${json_origen.LAT_PE},${json_origen.LON_PE});">0</a>
                             </td>
                             <td>
                             ${json_origen.NOMBRE_PE}
@@ -675,7 +700,7 @@
                                 </td>`;
                 }
                 output += `<td class="letra">
-                            <a class="btn btn-xs btn-primary" style="width:22px" onclick="selecciona(${o.PERU_ID});centrarLatLon(${o.PERU_LATITUD},${o.PERU_LONGITUD});">${(i + 1).toString()}</a>
+                            <a style="font-weight:bold" href="#" onclick="selecciona(${o.PERU_ID});centrarLatLon(${o.PERU_LATITUD},${o.PERU_LONGITUD});">${(i + 1).toString()}</a>
                             </td>
                             <td onclick="selecciona(${o.PERU_ID});">
                             ${o.PERU_CODIGO}
@@ -698,15 +723,19 @@
                 tiempoFIN = o.PERU_LLEGADA;
                 i1 = i;
             });
+            const circular = $('#hf_circular').val() === 'S';
             output += `</tbody>
                         <tfoot>
                         <tr>
+                        <td>`;
+            if (retorno_ruta) {
+                output += `<input id="chk_circular" type="checkbox" onclick="circular(this);" ${(circular) ? 'checked' : ''} />`
+            }
+            output += `</td>
                         <td>
                         </td>
                         <td>
-                        </td>
-                        <td>
-                        <a class="btn btn-xs btn-primary" style="width:22px" onclick="centrarLatLon(${json_origen.LAT_PE}, ${json_origen.LON_PE});">0</a>
+                        <a style="font-weight:bold" href="#" onclick="centrarLatLon(${json_origen.LAT_PE}, ${json_origen.LON_PE});">0</a>
                         </td>
                         <td>
                         ${json_origen.NOMBRE_PE}
@@ -753,7 +782,6 @@
         function centrarLatLon(lat, lon) {
             const latLon = new google.maps.LatLng(lat, lon);
             map.setCenter(latLon);
-            // map.setZoom(13);
         }
         function centrarPunto(id) {
             const p = buscarPuntosTodos(id);
@@ -761,13 +789,25 @@
         }
         function refrescar() {
             $('#hf_puntosruta').val(JSON.stringify(puntosRuta));
+            pageScrollPos = $('#tbl_puntos div.dataTables_scrollBody').scrollTop();
+            pageScrollPosleft = $('#tbl_puntos div.dataTables_scrollBody').scrollLeft();
             $('#tbl_puntos').html(jsonToTable());
             tabla2();
-            refrescarRuta();
-            refrescarPoligono();
-            $('#hf_idPunto').val('');
-            $find('ddl_puntoNombre').clearSelection();
-            $('.sel-between').removeClass('enabled');
+            $('#tbl_puntos div.dataTables_scrollBody').scrollTop(pageScrollPos);
+            $('#tbl_puntos div.dataTables_scrollBody').scrollLeft(pageScrollPosleft);
+            const poligono = $('#rb_poligono:checked,#rb_ambos:checked').length > 0;
+            const ruta = $('#rb_ruta:checked,#rb_ambos:checked').length > 0;
+            const circular = $('#hf_circular').val() === 'S';
+            refrescarRuta(ruta, circular);
+            refrescarPoligono(poligono);
+            limpiarPuntos();
+        }
+        function circular(obj) {
+            const circular = $(obj).prop('checked');
+            const circularStr = (circular) ? 'S' : 'N';
+            $('#hf_circular').val(circularStr);
+            const ruta = $('#rb_ruta:checked,#rb_ambos:checked').length > 0;
+            refrescarRuta(ruta, circular);
         }
         function buscarPuntosTodos(id) {
             for (var i = 0; i < puntosTodos.length; i++) {
@@ -775,10 +815,14 @@
             }
             return false;
         }
+        function limpiarPuntos() {
+            $('#hf_idPunto').val('');
+            $('.sel-between').removeClass('enabled');
+            $find('ddl_puntoNombre').findItemByValue('0').select();
+        }
         function selecciona(id) {
 
             $('#hf_idPunto').val(id);
-            //$('#txt_puntoNombre').val(titulo);
             $find('ddl_puntoNombre').findItemByValue(id.toString()).select();
             $('.sel-between').addClass('enabled');
         }

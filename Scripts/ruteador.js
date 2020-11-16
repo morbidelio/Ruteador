@@ -189,7 +189,7 @@ function insertarPuntoRuta(id, pos, icono) {
 function quitarMarcador(id) {
     const index = buscarMarcadorXId(id);
     markers.ID.splice(index, 1);
-    markers["MARCADORES"].splice(index, 1);
+    markers.MARCADORES.splice(index, 1);
     index = buscarPuntoRutaXId(id);
     while (id != -1) {
         waypoints.ID.splice(index, 1);
@@ -220,23 +220,6 @@ function quitarPuntoRuta(id) {
             });
         }
     }
-
-    //if (!isNaN(index) && index > -1) {
-    //var pos = index;
-    //while (pos < waypoints.ID.length) {
-    //    var indexMarcador2 = buscarMarcadorXId(waypoints.ID[pos]);
-    //    var marcador2 = markers.MARKERS[indexMarcador2];
-    //    var label2 = {
-    //        text: (pos + 1).toString(),
-    //        fontFamily: 'Britannic',
-    //        fontWeight: 'bolder',
-    //        fontSize: '14px',
-    //        color: 'white'
-    //    };
-    //    marcador2.setLabel(label2);
-    //    pos = pos + 1;
-    //}
-    //}
 }
 function crearPoligono() {
     var coord = [];
@@ -245,11 +228,11 @@ function crearPoligono() {
     coord.push(destino.getPosition());
     bermudaTriangle = new google.maps.Polygon({
         paths: coord,
-        strokeColor: "#FF0000",
+        strokeColor: (color) ? color : 'purple',
         strokeOpacity: 0.8,
         strokeWeight: 2,
-        fillColor: "#FF0000",
-        fillOpacity: 0.0
+        fillOpacity: 0.0,
+        fillColor: (color) ? color : 'purple'
     });
     bermudaTriangle.setMap(map);
 }
@@ -268,16 +251,12 @@ var tiempos_globales = [];
 var duracion_total = 0;
 //var bounds = new google.maps.LatLngBounds();
 
-function crearRuta() {
+function crearRuta(circular) {
     directionsService = new google.maps.DirectionsService();
-    //var bounds = new google.maps.LatLngBounds();
-    //bounds.extend(origen.position);
-    //waypoints["WAYPOINTS"].map((o) => {
-    //    bounds.extend(o.location);
-    //});
-    //setTimeout(function () { map.fitBounds(bounds) }, 1);
-    //map.fitBounds(bounds);
-
+    direcciones.map((o) => {
+        o.setMap(null);
+    });
+    direcciones = [];
     var Horasalida = new Date(0);
     const time = $("#ddl_buscarHorario option:selected").text().split(/\:|\-/g);
     Horasalida.setHours(time[0]);
@@ -290,9 +269,6 @@ function crearRuta() {
     duracion_total = 0;
     var desway; // = wayway.pop();
     for (var cont_ = 0; cont_ < chinkos.length; cont_++) {
-        //chinkos[cont_].map((o) => {
-        //    bounds.extend(o.location);
-        //});
         desway = chinkos[cont_].pop();
 
         var req = {
@@ -302,7 +278,7 @@ function crearRuta() {
             waypoints: chinkos[cont_], //waypoints["WAYPOINTS"],
             optimizeWaypoints: false,
         };
-        console.log(color);
+        console.log(req);
         const directionsRenderer = new google.maps.DirectionsRenderer({
             preserveViewport: true,
             suppressMarkers: true,
@@ -311,6 +287,7 @@ function crearRuta() {
                 strokeColor: (color) ? color : 'purple'
             }
         });
+        console.log(directionsRenderer);
         directionsService.route(req, function (response, status) {
             if (status === "OK") {
                 directionsRenderer.setDirections(response);
@@ -323,10 +300,7 @@ function crearRuta() {
                     Horasalida.setMinutes(
                         Horasalida.getMinutes() + tiempos[i]["value"] / 60
                     );
-                    puntosRuta[contador_global].PERU_LLEGADA =
-                        ("0" + Horasalida.getHours()).slice(-2) +
-                        ":" +
-                        ("0" + Horasalida.getMinutes()).slice(-2);
+                    puntosRuta[contador_global].PERU_LLEGADA = `${('0' + Horasalida.getHours()).slice(-2)}:${("0" + Horasalida.getMinutes()).slice(-2)}`;
                     $("#t_" + puntosRuta[contador_global].PERU_CODIGO).html(
                         puntosRuta[contador_global].PERU_LLEGADA
                     );
@@ -354,40 +328,61 @@ function crearRuta() {
             icon: "../img/" + "icon_pedido.png",
         });
     }
-    //map.fitBounds(bounds);
+    if (circular) {
+        var req = {
+            origin: origen_relativo.getPosition(),
+            destination: origen.getPosition(), //destino.getPosition(),
+            travelMode: "DRIVING",
+            optimizeWaypoints: false
+        };
+        const directionsRenderer = new google.maps.DirectionsRenderer({
+            preserveViewport: true,
+            suppressMarkers: true,
+            map: map,
+            polylineOptions: {
+                strokeColor: (color) ? color : 'purple'
+            }
+        });
+        directionsService.route(req,
+            function (response, status) {
+                if (status === "OK") {
+                    directionsRenderer.setDirections(response);
+                }
+                else {
+                    msj("No se pudo crear una ruta: " + status, "warn", true);
+                }
+            }
+        );
+
+        direcciones.push(directionsRenderer);
+    }
 }
-function mostrarRuta() {
+function mostrar(ruta, poligono) {
     direcciones.map((o) => {
-        //o.setOptions({ preserveViewport: true, suppressMarkers: true });
-        if (o.getMap()) {
-            o.setMap(null);
-        } else {
-            o.setMap(map);
-        }
+        if (ruta) o.setMap(map);
+        else o.setMap(null)
     });
-}
-function mostrarPoligono() {
-    if (bermudaTriangle.getMap()) {
-        bermudaTriangle.setMap(null);
-    }
-    else {
-        bermudaTriangle.setMap(map);
-    }
+    if (poligono) bermudaTriangle.setMap(map);
+    else bermudaTriangle.setMap(null);
 }
 function refrescarMarcadores() {
     markers.MARKERS.map((o) => {
         o.setMap(map);
     });
 }
-function refrescarPoligono() {
+function refrescarPoligono(show) {
     var coord = [];
     coord.push(origen.getPosition());
     coord = coord.concat(waypoints.POLYGON);
     coord.push(destino.getPosition());
     bermudaTriangle.setPaths(coord);
+    bermudaTriangle.setMap((show) ? map : null);
 }
-function refrescarRuta() {
-    if (!directionsService) directionsService = new google.maps.DirectionsService();
+function refrescarRuta(show, circular) {
+    directionsService = new google.maps.DirectionsService();
+    direcciones.map((o) => {
+        o.setMap(null);
+    });
     direcciones = [];
     contador_global = 0;
     tiempos_globales = [];
@@ -424,7 +419,7 @@ function refrescarRuta() {
         const directionsRenderer = new google.maps.DirectionsRenderer({
             preserveViewport: true,
             suppressMarkers: true,
-            map: map,
+            map: (show) ? map : null,
             polylineOptions: {
                 strokeColor: (color) ? color : 'purple'
             }
@@ -465,5 +460,49 @@ function refrescarRuta() {
             , icon: '../img/' + 'icon_pedido.png'
         });
         cont_ += 1;
+    }
+    if (circular) {
+        //debugger;
+        var req = {
+            origin: origen_relativo.getPosition(),
+            destination: origen.getPosition(), //destino.getPosition(),
+            travelMode: "DRIVING",
+            optimizeWaypoints: false
+        };
+        const directionsRenderer = new google.maps.DirectionsRenderer({
+            preserveViewport: true,
+            suppressMarkers: true,
+            map: (show) ? map : null,
+            polylineOptions: {
+                strokeColor: (color) ? color : 'purple'
+            }
+        });
+        directionsService.route(req,
+            function (response, status) {
+                if (status === "OK") {
+                    directionsRenderer.setDirections(response);
+                    //var tiempos = [];
+
+                    //response.routes[0].legs.map((o, i) => {
+                    //    tiempos_globales.push(o.duration);
+                    //    tiempos.push(o.duration);
+
+                    //    Horasalida.setMinutes(Horasalida.getMinutes() + tiempos[i]["value"] / 60)
+                    //    puntosRuta[contador_global].PERU_LLEGADA = ("0" + Horasalida.getHours()).slice(-2) + ':' + ("0" + Horasalida.getMinutes()).slice(-2);
+                    //    $('#t_' + puntosRuta[contador_global].PERU_CODIGO).html(puntosRuta[contador_global].PERU_LLEGADA);
+                    //    Horasalida.setMinutes(Horasalida.getMinutes() + parseInt(puntosRuta[contador_global].PERU_TIEMPO));
+                    //    duracion_total += parseInt(o.duration.value) + parseInt(puntosRuta[contador_global].PERU_TIEMPO * 60);
+                    //});
+                    //$('#respuesta_direcction').val(JSON.stringify(tiempos_globales));
+                    //tiempo = moment.duration(duracion_total * 1000);
+                    //$('#lbl_puntoSalida').text('Duración :' + tiempo.format('HH:mm'));
+                }
+                else {
+                    msj("No se pudo crear una ruta: " + status, "warn", true);
+                }
+            }
+        );
+
+        direcciones.push(directionsRenderer);
     }
 }

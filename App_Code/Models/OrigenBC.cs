@@ -25,6 +25,10 @@ namespace Ruteador.App_Code.Models
         {
             return tran.Origen_ObtenerTodo(orig_nombre, regi_id, ciud_id, comu_id);
         }
+        public List<OrigenBC> ObtenerArray(string orig_nombre = null, int regi_id = 0, int ciud_id = 0, int comu_id = 0)
+        {
+            return tran.Origen_ObtenerArray(orig_nombre, regi_id, ciud_id, comu_id);
+        }
         public OrigenBC ObtenerXId()
         {
             return tran.Origen_ObtenerXId(this.ID);

@@ -135,7 +135,7 @@ public class UtilsWeb
             drop.DataBind();
             RadComboBoxItem li = new RadComboBoxItem("Seleccione...", "0");
             drop.Items.Insert(0, li);
-            drop.ClearSelection();
+            drop.SelectedIndex = 0;
         }
     }
     public void CargaDrop_patentes(object nombreDrop, string value, string text, DataTable dt, string[] atributos = null, string campo_marca = null, string valor_marca = null)
@@ -367,6 +367,15 @@ public class UtilsWeb
         return path;
     }
 
+    public string id_cliente_roadshow()
+    {
+        string path = System.Web.Configuration.WebConfigurationManager.AppSettings["id_cliente_roadshow"];
+
+
+        return path;
+
+
+    }
     public static void AddFileToZip(string zipFilename, string fileToAdd)
     {
         using (Package zip = System.IO.Packaging.Package.Open(zipFilename, FileMode.OpenOrCreate))

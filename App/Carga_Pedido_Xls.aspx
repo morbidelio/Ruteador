@@ -38,32 +38,27 @@
                 <table class="table table-bordered table-hover tablita">
                     <tr>
                         <th>NumeroPedido</th>
-                        <th>CODIGOCLIENTE</th>
+                        <th>CodigoCliente</th>
                         <th>Fecha</th>
                         <th>Peso</th>
                         <th>TEntrega</th>
+                        <th>NombreCliente</th>
                         <th>Direccion</th>
                         <th>Comuna</th>
                         <th>lat</th>
                         <th>lon</th>
-                        <th>Hora de Salida</th>
-                        <th>NOMBRECLIENTE</th>
+                        <th>Hora de Salida CD</th>
+                        <th>Hora de Apertura</th>
+                        <th>Hora de Cierre</th>
+                        <th>IdCamion</th>
+                        
                     </tr>
                 </table>
             </div>
-            <asp:GridView ID="gv_listar" CssClass="table table-bordered table-hover tablita tab-principal" AutoGenerateColumns="false" Width="100%" runat="server"
+            <asp:GridView ID="gv_listar" CssClass="table table-bordered table-hover tablita tab-nopag" AutoGenerateColumns="TRUE" Width="100%" runat="server"
                 OnRowCreated="gv_listar_RowCreated">
                 <Columns>
-                    <asp:BoundField DataField="PEDI_NUMERO" HeaderText="Número" />
-                    <asp:BoundField DataField="PEDI_CODIGO" HeaderText="Código" />
-                    <asp:BoundField DataField="PEDI_FECHA" HeaderText="Fecha" />
-                    <asp:BoundField DataField="PEDI_PESO" HeaderText="Peso" />
-                    <asp:BoundField DataField="PEDI_TIEMPO" HeaderText="Tiempo entrega" />
-                    <asp:BoundField DataField="PEDI_DIRECCION" HeaderText="Dirección" />
-                    <asp:BoundField DataField="PEDI_COMUNA" HeaderText="Comuna" />
-                    <asp:BoundField DataField="PEDI_LATITUD" HeaderText="Latitud" />
-                    <asp:BoundField DataField="PEDI_LONGITUD" HeaderText="Longitud" />
-                    <asp:BoundField DataField="PEDI_HORASALIDA" HeaderText="Hora salida" />
+ 
                 </Columns>
             </asp:GridView>
         </ContentTemplate>

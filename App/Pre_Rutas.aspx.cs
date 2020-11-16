@@ -18,6 +18,7 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
     UsuarioBC user;
     string callbackReturnValue;
 
+    bool mostrarCosa = Convert.ToBoolean(System.Configuration.ConfigurationManager.AppSettings["retorno_ruta"]);
     protected void Page_Load(object sender, EventArgs e)
     {
         if (Page.IsCallback)
@@ -118,6 +119,15 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
         }
 
     }
+    protected void gv_listar_RowDataBound(object sender, GridViewRowEventArgs e)
+    {
+        if (e.Row.RowType == DataControlRowType.DataRow)
+        {
+            string color = DataBinder.Eval(e.Row.DataItem, "RUTA_COLOR").ToString();
+            LinkButton btn_color = (LinkButton)e.Row.FindControl("btn_color");
+            btn_color.Style.Add("background-color", color);
+        }
+    }
     #endregion
     #region utilsPagina
     private static void PrepareControlForExport(Control control)
@@ -162,6 +172,7 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
         hf_idPunto.Value = "";
         hf_puntosruta.Value = "";
         hf_origen.Value = "";
+        hf_circular.Value = "";
         ddl_puntoNombre.SelectedIndex = 0;
         ddl_vehiculoTracto.SelectedIndex = 0;
         ddl_vehiculoTipo.SelectedIndex = 0;
@@ -179,7 +190,7 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
             int comu_id = Convert.ToInt32(ddl_buscarComuna.SelectedValue);
             int hora_id = Convert.ToInt32(ddl_buscarHorario.SelectedValue);
             string envio = txt_buscaenvio.Text;
-            ViewState["listar"] = new RutaBC().ObtenerPre_RutasTodo(desde: desde
+            ViewState["listar"] = new PreRutaBC().ObtenerTodo(desde: desde
                                         , hasta: hasta
                                         , regi_id: regi_id
                                         , ciud_id: ciud_id
@@ -206,8 +217,9 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
     private void ObtenerPuntosRuta(bool forzarBD)
     {
         PreRutaBC p = new PreRutaBC().ObtenerXId(Convert.ToInt32(hf_idRuta.Value));
+        hf_circular.Value = p.RETORNO;
         DataTable dt;
-        dt = new PreRutaBC().ObtenerPuntos(p.ID);
+        dt = p.ObtenerPuntos(p.ID);
         hf_puntosruta.Value = JsonConvert.SerializeObject(dt);
         
         dt = new PedidoBC().ObtenerTodo(desde: p.FH_CREACION, hasta: p.FH_CREACION, solo_sin_ruta: true, id_ruta: p.ID);
@@ -542,6 +554,7 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
             p.TRAILER.TRAI_ID = Convert.ToInt32(ddl_vehiculoTrailer.SelectedValue);
             p.TRACTO.TRAC_ID = Convert.ToInt32(ddl_vehiculoTracto.SelectedValue);
             p.CONDUCTOR.COND_ID = Convert.ToInt32(ddl_vehiculoConductor.SelectedValue);
+            p.RETORNO = hf_circular.Value;
             foreach (DataRow dr in dt.Rows)
             {
                 if (sb.Length != 0)
@@ -677,5 +690,6 @@ public partial class App_Pre_Rutas : System.Web.UI.Page // , ICallbackEventHandl
 
         return file;
     }
+
 
 }

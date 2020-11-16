@@ -14,10 +14,6 @@ namespace Ruteador.App_Code.Models
         {
             return tran.Ruta_ObtenerTodo();
         }
-        public DataTable ObtenerPre_RutasTodo(DateTime desde, DateTime hasta, int hora_id = 0, int regi_id = 0, int ciud_id = 0, int comu_id = 0, int usua_id = 0, string peru_numero = null, string envio=null)
-        {
-            return tran.PreRuta_ObtenerTodo(desde, hasta, hora_id, regi_id, ciud_id, comu_id, usua_id, peru_numero, envio);
-        }
         public DataTable ObtenerPuntos(int id_ruta)
         {
             return tran.Puntos_ObtenerXRuta(id_ruta);   

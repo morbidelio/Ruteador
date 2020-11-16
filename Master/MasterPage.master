@@ -181,7 +181,7 @@
 
             $(document).ready(function (e) {
                 clearInterval(tick_recarga_ruta_lista);
-                tick_recarga_ruta_lista = setInterval(click_recarga_ruta_lista, 60000);
+                tick_recarga_ruta_lista = setInterval(click_recarga_ruta_lista, 20000);
             });
 
             function click_recarga_ruta_lista() {

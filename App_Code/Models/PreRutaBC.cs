@@ -21,6 +21,22 @@ namespace Ruteador.App_Code.Models
             TRAILER = new TrailerBC();
             TRACTO = new TractoBC();
         }
+        public DataTable ObtenerTodo(DateTime desde, DateTime hasta, int hora_id = 0, int regi_id = 0, int ciud_id = 0, int comu_id = 0, int usua_id = 0, string peru_numero = null, string envio = null)
+        {
+            return tran.PreRuta_ObtenerTodo(desde, hasta, hora_id, regi_id, ciud_id, comu_id, usua_id, peru_numero, envio);
+        }
+        public List<PreRutaBC> ObtenerArray(DateTime desde, DateTime hasta, int hora_id = 0, int regi_id = 0, int ciud_id = 0, int comu_id = 0, int usua_id = 0, string peru_numero = null, string envio = null, bool puntos_ruta = false)
+        {
+            List<PreRutaBC> listado = tran.PreRuta_ObtenerArray(desde, hasta, hora_id, regi_id, ciud_id, comu_id, usua_id, peru_numero, envio);
+            if (puntos_ruta)
+            {
+                foreach(PreRutaBC pr in listado)
+                {
+                    pr.PEDIDOS = new PedidoBC().ObtenerArray(desde: DateTime.MinValue, hasta:DateTime.MinValue, id_ruta: pr.ID);
+                }
+            }
+            return listado;
+        }
         public DataTable ObtenerPuntos(int id_ruta = 0)
         {
             return tran.Puntos_ObtenerXPreRuta(id_ruta);
@@ -36,6 +52,14 @@ namespace Ruteador.App_Code.Models
         public bool GuardarPuntos(string id_destinos, string tiempos, string hora_salida)
         {
             return tran.PreRuta_GuardarPuntos(this, id_destinos, tiempos, hora_salida);
+        }
+        public bool GuardarPuntos()
+        {
+            return tran.PreRuta_GuardarPuntos(this);
+        }
+        public bool GuardarPuntos(PreRutaBC p)
+        {
+            return tran.PreRuta_GuardarPuntos(p);
         }
         public bool GuardarDetalle()
         {
@@ -63,7 +87,7 @@ namespace Ruteador.App_Code.Models
         }
         public DataTable CrearEnvio(string pedidos, int usua_id, bool archivar)
         {
-            return tran.PreRuta_CrearEnvio(pedidos, usua_id, archivar); 
+            return tran.PreRuta_CrearEnvio(pedidos, usua_id, archivar);
         }
     }
     public partial class PreRuta
@@ -98,5 +122,6 @@ namespace Ruteador.App_Code.Models
         public OrigenBC ORIGEN { get; set; }
         public TrailerBC TRAILER { get; set; }
         public TractoBC TRACTO { get; set; }
+        public List<PedidoBC> PEDIDOS { get; set; }
     }
 }

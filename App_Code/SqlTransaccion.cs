@@ -371,6 +371,72 @@ namespace Ruteador.App_Code
                 data.CerrarSqlConeccion();
             }
         }
+        internal List<OrigenBC> Origen_ObtenerArray(string orig_nombre, int regi_id, int ciud_id, int comu_id)
+        {
+            try
+            {
+                List<OrigenBC> listado = new List<OrigenBC>();
+                data.CargarSqlComando("[dbo].[LISTAR_ORIGEN]");
+                if (!string.IsNullOrEmpty(orig_nombre))
+                    data.AgregarSqlParametro("@orig_nombre", orig_nombre);
+                if (regi_id != 0)
+                    data.AgregarSqlParametro("@regi_id", regi_id);
+                if (ciud_id != 0)
+                    data.AgregarSqlParametro("@ciud_id", ciud_id);
+                if (comu_id != 0)
+                    data.AgregarSqlParametro("@comu_id", comu_id);
+                data.EjecutarSqlLector();
+                while (data.SqlLectorDatos.Read())
+                {
+                    OrigenBC o = new OrigenBC();
+                    if (data.SqlLectorDatos["ID"] != DBNull.Value)
+                        o.ID = Convert.ToInt32(data.SqlLectorDatos["ID"]);
+                    if (data.SqlLectorDatos["ID_PE"] != DBNull.Value)
+                        o.ID_PE = Convert.ToString(data.SqlLectorDatos["ID_PE"]);
+                    if (data.SqlLectorDatos["NOMBRE_PE"] != DBNull.Value)
+                        o.NOMBRE_PE = Convert.ToString(data.SqlLectorDatos["NOMBRE_PE"]);
+                    if (data.SqlLectorDatos["DIRECCION_PE"] != DBNull.Value)
+                        o.DIRECCION_PE = Convert.ToString(data.SqlLectorDatos["DIRECCION_PE"]);
+                    if (data.SqlLectorDatos["LAT_PE"] != DBNull.Value)
+                        o.LAT_PE = Convert.ToDecimal(data.SqlLectorDatos["LAT_PE"]);
+                    if (data.SqlLectorDatos["LON_PE"] != DBNull.Value)
+                        o.LON_PE = Convert.ToDecimal(data.SqlLectorDatos["LON_PE"]);
+                    if (data.SqlLectorDatos["RADIO_PE"] != DBNull.Value)
+                        o.RADIO_PE = Convert.ToInt32(data.SqlLectorDatos["RADIO_PE"]);
+                    if (data.SqlLectorDatos["IS_POLIGONO"] != DBNull.Value)
+                        o.IS_POLIGONO = Convert.ToBoolean(data.SqlLectorDatos["IS_POLIGONO"]);
+                    if (data.SqlLectorDatos["ID_OPE"] != DBNull.Value)
+                        o.OPERACION.OPER_ID = Convert.ToInt32(data.SqlLectorDatos["ID_OPE"]);
+                    if (data.SqlLectorDatos["FH_CREA"] != DBNull.Value)
+                        o.FH_CREA = Convert.ToDateTime(data.SqlLectorDatos["FH_CREA"]);
+                    if (data.SqlLectorDatos["FH_UPDATE"] != DBNull.Value)
+                        o.FH_UPDATE = Convert.ToDateTime(data.SqlLectorDatos["FH_UPDATE"]);
+                    if (data.SqlLectorDatos["COMU_ID"] != DBNull.Value)
+                        o.COMUNA.COMU_ID = Convert.ToInt32(data.SqlLectorDatos["COMU_ID"]);
+                    if (data.SqlLectorDatos["COMU_NOMBRE"] != DBNull.Value)
+                        o.COMUNA.COMU_NOMBRE = Convert.ToString(data.SqlLectorDatos["COMU_NOMBRE"]);
+                    if (data.SqlLectorDatos["CIUD_ID"] != DBNull.Value)
+                        o.COMUNA.CIUDAD.CIUD_ID = Convert.ToInt32(data.SqlLectorDatos["CIUD_ID"]);
+                    if (data.SqlLectorDatos["CIUD_NOMBRE"] != DBNull.Value)
+                        o.COMUNA.CIUDAD.CIUD_NOMBRE = Convert.ToString(data.SqlLectorDatos["CIUD_NOMBRE"]);
+                    if (data.SqlLectorDatos["REGI_ID"] != DBNull.Value)
+                        o.COMUNA.CIUDAD.REGION.REGI_ID = Convert.ToInt32(data.SqlLectorDatos["REGI_ID"]);
+                    if (data.SqlLectorDatos["REGI_NOMBRE"] != DBNull.Value)
+                        o.COMUNA.CIUDAD.REGION.REGI_NOMBRE = Convert.ToString(data.SqlLectorDatos["REGI_NOMBRE"]);
+                    listado.Add(o);
+                }
+                return listado;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                data.LimpiarSqlParametros();
+                data.CerrarSqlConeccion();
+            }
+        }
         internal OrigenBC Origen_ObtenerXId(int origen_id)
         {
             OrigenBC o = new OrigenBC();
@@ -782,6 +848,58 @@ namespace Ruteador.App_Code
 
 
         }
+        internal string[] Pedido_campos_cabecera(int cliente_id)
+        {
+
+       
+            SqlAccesoDatos data2 = new SqlAccesoDatos("Integra");
+            try
+            {
+                data2.CargarSqlComando("[DBO].[RUTEADOR_CAMPOS_CABECERA]");
+                data2.AgregarSqlParametro("@ID_CLIENTE", cliente_id);
+
+                return data2.EjecutaSqlScalar().ToString().Split(',');
+
+
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+            finally
+            {
+                data2.LimpiarSqlParametros();
+                data2.CerrarSqlConeccion();
+            }
+
+
+        }
+        internal string[] Pedido_campos_detalle(int cliente_id)
+        {
+
+
+            SqlAccesoDatos data2 = new SqlAccesoDatos("Integra");
+            try
+            {
+                data2.CargarSqlComando("[DBO].[RUTEADOR_CAMPOS_detalle]");
+                data2.AgregarSqlParametro("@ID_CLIENTE", cliente_id);
+
+                return data2.EjecutaSqlScalar().ToString().Split(',');
+
+
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+            finally
+            {
+                data2.LimpiarSqlParametros();
+                data2.CerrarSqlConeccion();
+            }
+
+
+        }
         internal DataTable Pedido_ObtenerTodo(DateTime desde, DateTime hasta, int hora_id, int regi_id, int ciud_id, int comu_id, int usua_id, string peru_numero, bool solo_sin_ruta, int id_ruta)
         {
             try
@@ -810,6 +928,193 @@ namespace Ruteador.App_Code
                     data.AgregarSqlParametro("@id_ruta", id_ruta);
 
                 return data.EjecutarSqlquery2();
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+            finally
+            {
+                data.LimpiarSqlParametros();
+                data.CerrarSqlConeccion();
+            }
+        }
+        internal List<PedidoBC> Pedido_ObtenerArray(bool solo_sin_ruta, DateTime desde, DateTime hasta, int hora_id, int regi_id, int ciud_id, int comu_id, int usua_id, string peru_numero, int id_ruta)
+        {
+            try
+            {
+                List<PedidoBC> listado = new List<PedidoBC>();
+                data.CargarSqlComando("[dbo].[LISTAR_PEDIDOSV2]");
+                data.AgregarSqlParametro("@solo_sin_ruta", solo_sin_ruta);
+                if (desde != DateTime.MinValue && hasta != DateTime.MinValue)
+                {
+                    data.AgregarSqlParametro("@fh_desde", desde);
+                    data.AgregarSqlParametro("@fh_hasta", hasta);
+                }
+                if (usua_id != 0)
+                    data.AgregarSqlParametro("@id_usuario", usua_id);
+                if (regi_id != 0)
+                    data.AgregarSqlParametro("@regi_id", regi_id);
+                if (ciud_id != 0)
+                    data.AgregarSqlParametro("@ciud_id", ciud_id);
+                if (comu_id != 0)
+                    data.AgregarSqlParametro("@comu_id", comu_id);
+                if (hora_id != 0)
+                    data.AgregarSqlParametro("@hora_id", hora_id);
+                if (!string.IsNullOrEmpty(peru_numero))
+                    data.AgregarSqlParametro("@peru_numero", peru_numero);
+                if (id_ruta != 0)
+                    data.AgregarSqlParametro("@id_ruta", id_ruta);
+                data.EjecutarSqlLector();
+                while (data.SqlLectorDatos.Read())
+                {
+                    PedidoBC p = new PedidoBC();
+                    if (data.SqlLectorDatos["PERU_ID"] != DBNull.Value)
+                        p.PERU_ID = Convert.ToInt64(data.SqlLectorDatos["PERU_ID"]);
+                    if (data.SqlLectorDatos["PERU_NUMERO"] != DBNull.Value)
+                        p.PERU_NUMERO = Convert.ToString(data.SqlLectorDatos["PERU_NUMERO"]);
+                    if (data.SqlLectorDatos["PERU_CODIGO"] != DBNull.Value)
+                        p.PERU_CODIGO = Convert.ToString(data.SqlLectorDatos["PERU_CODIGO"]);
+                    if (data.SqlLectorDatos["PERU_FECHA"] != DBNull.Value)
+                        p.PERU_FECHA = Convert.ToDateTime(data.SqlLectorDatos["PERU_FECHA"]);
+                    if (data.SqlLectorDatos["PERU_PESO"] != DBNull.Value)
+                        p.PERU_PESO = Convert.ToString(data.SqlLectorDatos["PERU_PESO"]);
+                    if (data.SqlLectorDatos["PERU_TIEMPO"] != DBNull.Value)
+                        p.PERU_TIEMPO = Convert.ToString(data.SqlLectorDatos["PERU_TIEMPO"]);
+                    if (data.SqlLectorDatos["PERU_DIRECCION"] != DBNull.Value)
+                        p.PERU_DIRECCION = Convert.ToString(data.SqlLectorDatos["PERU_DIRECCION"]);
+                    if (data.SqlLectorDatos["PERU_LATITUD"] != DBNull.Value)
+                        p.PERU_LATITUD = Convert.ToDecimal(data.SqlLectorDatos["PERU_LATITUD"]);
+                    if (data.SqlLectorDatos["PERU_LONGITUD"] != DBNull.Value)
+                        p.PERU_LONGITUD = Convert.ToDecimal(data.SqlLectorDatos["PERU_LONGITUD"]);
+                    if (data.SqlLectorDatos["HORA_ID"] != DBNull.Value)
+                        p.HORA_SALIDA.HORA_ID = Convert.ToInt32(data.SqlLectorDatos["HORA_ID"]);
+                    if (data.SqlLectorDatos["HORA_COD"] != DBNull.Value)
+                        p.HORA_SALIDA.HORA_COD = Convert.ToString(data.SqlLectorDatos["HORA_COD"]);
+                    if (data.SqlLectorDatos["PERU_USUA_ID"] != DBNull.Value)
+                        p.USUARIO_PEDIDO.USUA_ID = Convert.ToInt32(data.SqlLectorDatos["PERU_USUA_ID"]);
+                    if (data.SqlLectorDatos["PERU_ENVIADO_RUTEADOR"] != DBNull.Value)
+                        p.PERU_ENVIADO_RUTEADOR = Convert.ToBoolean(data.SqlLectorDatos["PERU_ENVIADO_RUTEADOR"]);
+                    if (data.SqlLectorDatos["PERU_FH_ENVIO"] != DBNull.Value)
+                        p.PERU_FH_ENVIO = Convert.ToDateTime(data.SqlLectorDatos["PERU_FH_ENVIO"]);
+                    if (data.SqlLectorDatos["USR_ENVIO"] != DBNull.Value)
+                        p.USUARIO_ENVIO.USUA_ID = Convert.ToInt32(data.SqlLectorDatos["USR_ENVIO"]);
+                    if (data.SqlLectorDatos["PERU_FH_CREACION"] != DBNull.Value)
+                        p.PERU_FH_CREACION = Convert.ToDateTime(data.SqlLectorDatos["PERU_FH_CREACION"]);
+                    if (data.SqlLectorDatos["COMU_ID"] != DBNull.Value)
+                        p.COMUNA.COMU_ID = Convert.ToInt32(data.SqlLectorDatos["COMU_ID"]);
+                    if (data.SqlLectorDatos["COMU_NOMBRE"] != DBNull.Value)
+                        p.COMUNA.COMU_NOMBRE = Convert.ToString(data.SqlLectorDatos["COMU_NOMBRE"]);
+                    if (data.SqlLectorDatos["CIUD_ID"] != DBNull.Value)
+                        p.COMUNA.CIUDAD.CIUD_ID = Convert.ToInt32(data.SqlLectorDatos["CIUD_ID"]);
+                    if (data.SqlLectorDatos["CIUD_NOMBRE"] != DBNull.Value)
+                        p.COMUNA.CIUDAD.CIUD_NOMBRE = Convert.ToString(data.SqlLectorDatos["CIUD_NOMBRE"]);
+                    if (data.SqlLectorDatos["REGI_ID"] != DBNull.Value)
+                        p.COMUNA.CIUDAD.REGION.REGI_ID = Convert.ToInt32(data.SqlLectorDatos["REGI_ID"]);
+                    if (data.SqlLectorDatos["REGI_NOMBRE"] != DBNull.Value)
+                        p.COMUNA.CIUDAD.REGION.REGI_NOMBRE = Convert.ToString(data.SqlLectorDatos["REGI_NOMBRE"]);
+                    listado.Add(p);
+                }
+                return listado;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+            finally
+            {
+                data.LimpiarSqlParametros();
+                data.CerrarSqlConeccion();
+            }
+        }
+        internal List<PedidoBC> Pedido_ObtenerArray(DateTime desde, DateTime hasta, int hora_id, int regi_id, int ciud_id, int comu_id, int usua_id, string peru_numero, int id_ruta)
+        {
+            try
+            {
+                List<PedidoBC> listado = new List<PedidoBC>();
+                data.CargarSqlComando("[dbo].[LISTAR_PEDIDOSV2]");
+                if (desde != DateTime.MinValue && hasta != DateTime.MinValue)
+                {
+                    data.AgregarSqlParametro("@fh_desde", desde);
+                    data.AgregarSqlParametro("@fh_hasta", hasta);
+                }
+                if (usua_id != 0)
+                    data.AgregarSqlParametro("@id_usuario", usua_id);
+                if (regi_id != 0)
+                    data.AgregarSqlParametro("@regi_id", regi_id);
+                if (ciud_id != 0)
+                    data.AgregarSqlParametro("@ciud_id", ciud_id);
+                if (comu_id != 0)
+                    data.AgregarSqlParametro("@comu_id", comu_id);
+                if (hora_id != 0)
+                    data.AgregarSqlParametro("@hora_id", hora_id);
+                if (!string.IsNullOrEmpty(peru_numero))
+                    data.AgregarSqlParametro("@peru_numero", peru_numero);
+                if (id_ruta != 0)
+                    data.AgregarSqlParametro("@id_ruta", id_ruta);
+                data.EjecutarSqlLector();
+                while (data.SqlLectorDatos.Read())
+                {
+                    PedidoBC p = new PedidoBC();
+                    if (data.SqlLectorDatos["PERU_ID"] != DBNull.Value)
+                        p.PERU_ID = Convert.ToInt64(data.SqlLectorDatos["PERU_ID"]);
+                    if (data.SqlLectorDatos["PERU_NUMERO"] != DBNull.Value)
+                        p.PERU_NUMERO = Convert.ToString(data.SqlLectorDatos["PERU_NUMERO"]);
+                    if (data.SqlLectorDatos["PERU_CODIGO"] != DBNull.Value)
+                        p.PERU_CODIGO = Convert.ToString(data.SqlLectorDatos["PERU_CODIGO"]);
+                    if (data.SqlLectorDatos["PERU_FECHA"] != DBNull.Value)
+                        p.PERU_FECHA = Convert.ToDateTime(data.SqlLectorDatos["PERU_FECHA"]);
+                    if (data.SqlLectorDatos["PERU_PESO"] != DBNull.Value)
+                        p.PERU_PESO = Convert.ToString(data.SqlLectorDatos["PERU_PESO"]);
+                    if (data.SqlLectorDatos["PERU_TIEMPO"] != DBNull.Value)
+                        p.PERU_TIEMPO = Convert.ToString(data.SqlLectorDatos["PERU_TIEMPO"]);
+                    if (data.SqlLectorDatos["PERU_DIRECCION"] != DBNull.Value)
+                        p.PERU_DIRECCION = Convert.ToString(data.SqlLectorDatos["PERU_DIRECCION"]);
+                    if (data.SqlLectorDatos["PERU_LATITUD"] != DBNull.Value)
+                        p.PERU_LATITUD = Convert.ToDecimal(data.SqlLectorDatos["PERU_LATITUD"]);
+                    if (data.SqlLectorDatos["PERU_LONGITUD"] != DBNull.Value)
+                        p.PERU_LONGITUD = Convert.ToDecimal(data.SqlLectorDatos["PERU_LONGITUD"]);
+                    if (data.SqlLectorDatos["HORA_ID"] != DBNull.Value)
+                        p.HORA_SALIDA.HORA_ID = Convert.ToInt32(data.SqlLectorDatos["HORA_ID"]);
+                    if (data.SqlLectorDatos["HORA_COD"] != DBNull.Value)
+                        p.HORA_SALIDA.HORA_COD = Convert.ToString(data.SqlLectorDatos["HORA_COD"]);
+                    if (data.SqlLectorDatos["PERU_USUA_ID"] != DBNull.Value)
+                        p.USUARIO_PEDIDO.USUA_ID = Convert.ToInt32(data.SqlLectorDatos["PERU_USUA_ID"]);
+                    if (data.SqlLectorDatos["PERU_ENVIADO_RUTEADOR"] != DBNull.Value)
+                        p.PERU_ENVIADO_RUTEADOR = Convert.ToBoolean(data.SqlLectorDatos["PERU_ENVIADO_RUTEADOR"]);
+                    if (data.SqlLectorDatos["PERU_FH_ENVIO"] != DBNull.Value)
+                        p.PERU_FH_ENVIO = Convert.ToDateTime(data.SqlLectorDatos["PERU_FH_ENVIO"]);
+                    if (data.SqlLectorDatos["USR_ENVIO"] != DBNull.Value)
+                        p.USUARIO_ENVIO.USUA_ID = Convert.ToInt32(data.SqlLectorDatos["USR_ENVIO"]);
+                    if (data.SqlLectorDatos["PERU_FH_CREACION"] != DBNull.Value)
+                        p.PERU_FH_CREACION = Convert.ToDateTime(data.SqlLectorDatos["PERU_FH_CREACION"]);
+                    if (data.SqlLectorDatos["COMU_ID"] != DBNull.Value)
+                        p.COMUNA.COMU_ID = Convert.ToInt32(data.SqlLectorDatos["COMU_ID"]);
+                    if (data.SqlLectorDatos["COMU_NOMBRE"] != DBNull.Value)
+                        p.COMUNA.COMU_NOMBRE = Convert.ToString(data.SqlLectorDatos["COMU_NOMBRE"]);
+                    if (data.SqlLectorDatos["CIUD_ID"] != DBNull.Value)
+                        p.COMUNA.CIUDAD.CIUD_ID = Convert.ToInt32(data.SqlLectorDatos["CIUD_ID"]);
+                    if (data.SqlLectorDatos["CIUD_NOMBRE"] != DBNull.Value)
+                        p.COMUNA.CIUDAD.CIUD_NOMBRE = Convert.ToString(data.SqlLectorDatos["CIUD_NOMBRE"]);
+                    if (data.SqlLectorDatos["REGI_ID"] != DBNull.Value)
+                        p.COMUNA.CIUDAD.REGION.REGI_ID = Convert.ToInt32(data.SqlLectorDatos["REGI_ID"]);
+                    if (data.SqlLectorDatos["REGI_NOMBRE"] != DBNull.Value)
+                        p.COMUNA.CIUDAD.REGION.REGI_NOMBRE = Convert.ToString(data.SqlLectorDatos["REGI_NOMBRE"]);
+                    if (data.SqlLectorDatos["RPPE_ID"] != DBNull.Value)
+                        p.RUTA_PEDIDO.RPPE_ID = Convert.ToInt32(data.SqlLectorDatos["RPPE_ID"]);
+                    if (data.SqlLectorDatos["FH_PLANIFICA"] != DBNull.Value)
+                        p.RUTA_PEDIDO.FH_PLANIFICA = Convert.ToDateTime(data.SqlLectorDatos["FH_PLANIFICA"]);
+                    if (data.SqlLectorDatos["FH_LLEGADA"] != DBNull.Value)
+                        p.RUTA_PEDIDO.FH_LLEGADA = Convert.ToDateTime(data.SqlLectorDatos["FH_LLEGADA"]);
+                    if (data.SqlLectorDatos["FH_SALIDA"] != DBNull.Value)
+                        p.RUTA_PEDIDO.FH_SALIDA = Convert.ToDateTime(data.SqlLectorDatos["FH_SALIDA"]);
+                    if (data.SqlLectorDatos["SECUENCIA"] != DBNull.Value)
+                        p.RUTA_PEDIDO.SECUENCIA = Convert.ToInt32(data.SqlLectorDatos["SECUENCIA"]);
+                    if (data.SqlLectorDatos["tiempo"] != DBNull.Value)
+                        p.RUTA_PEDIDO.tiempo = Convert.ToInt32(data.SqlLectorDatos["tiempo"]);
+                    listado.Add(p);
+                }
+                return listado;
             }
             catch (Exception ex)
             {
@@ -1274,7 +1579,7 @@ namespace Ruteador.App_Code
                 data.CerrarSqlConeccion();
             }
         }
-        internal DataTable PreRuta_ObtenerTodo(DateTime desde, DateTime hasta, int hora_id = 0, int regi_id = 0, int ciud_id = 0, int comu_id = 0, int usua_id = 0, string peru_numero = null, string envio = null)
+        internal DataTable PreRuta_ObtenerTodo(DateTime desde, DateTime hasta, int hora_id, int regi_id, int ciud_id, int comu_id, int usua_id, string peru_numero, string envio)
         {
             try
             {
@@ -1301,6 +1606,137 @@ namespace Ruteador.App_Code
                     data.AgregarSqlParametro("@envio", envio);
                 return data.EjecutarSqlquery2();
 
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                data.LimpiarSqlParametros();
+                data.CerrarSqlConeccion();
+            }
+        }
+        internal List<PreRutaBC> PreRuta_ObtenerArray(DateTime desde, DateTime hasta, int hora_id, int regi_id, int ciud_id, int comu_id, int usua_id, string peru_numero, string envio)
+        {
+            try
+            {
+                List<PreRutaBC> listado = new List<PreRutaBC>();
+                data.CargarSqlComando("[dbo].[LISTAR_PRERUTA]");
+                if (desde != DateTime.MinValue && hasta != DateTime.MinValue)
+                {
+                    data.AgregarSqlParametro("@fh_desde", desde);
+                    data.AgregarSqlParametro("@fh_hasta", hasta);
+                }
+
+                if (usua_id != 0)
+                    data.AgregarSqlParametro("@id_usuario", usua_id);
+                if (regi_id != 0)
+                    data.AgregarSqlParametro("@regi_id", regi_id);
+                if (ciud_id != 0)
+                    data.AgregarSqlParametro("@ciud_id", ciud_id);
+                if (comu_id != 0)
+                    data.AgregarSqlParametro("@comu_id", comu_id);
+                if (hora_id != 0)
+                    data.AgregarSqlParametro("@hora_id", hora_id);
+                if (!string.IsNullOrEmpty(peru_numero))
+                    data.AgregarSqlParametro("@numero", peru_numero);
+                if (!string.IsNullOrEmpty(envio))
+                    data.AgregarSqlParametro("@envio", envio);
+                data.EjecutarSqlLector();
+                while (data.SqlLectorDatos.Read())
+                {
+                    PreRutaBC pr = new PreRutaBC();
+                    if (data.SqlLectorDatos["ID"] != DBNull.Value)
+                        pr.ID = Convert.ToInt32(data.SqlLectorDatos["ID"]);
+                    if (data.SqlLectorDatos["NUMERO"] != DBNull.Value)
+                        pr.NUMERO = Convert.ToString(data.SqlLectorDatos["NUMERO"]);
+                    if (data.SqlLectorDatos["FH_VIAJE"] != DBNull.Value)
+                        pr.FH_VIAJE = Convert.ToDateTime(data.SqlLectorDatos["FH_VIAJE"]);
+                    if (data.SqlLectorDatos["ID_MOVIL"] != DBNull.Value)
+                        pr.ID_MOVIL = Convert.ToInt32(data.SqlLectorDatos["ID_MOVIL"]);
+                    if (data.SqlLectorDatos["ID_ESTADO"] != DBNull.Value)
+                        pr.ID_ESTADO = Convert.ToInt32(data.SqlLectorDatos["ID_ESTADO"]);
+                    if (data.SqlLectorDatos["OBSERVACION"] != DBNull.Value)
+                        pr.OBSERVACION = Convert.ToString(data.SqlLectorDatos["OBSERVACION"]);
+                    if (data.SqlLectorDatos["ID_TIPOVIAJE"] != DBNull.Value)
+                        pr.ID_TIPOVIAJE = Convert.ToInt32(data.SqlLectorDatos["ID_TIPOVIAJE"]);
+                    if (data.SqlLectorDatos["RETORNO"] != DBNull.Value)
+                        pr.RETORNO = Convert.ToString(data.SqlLectorDatos["RETORNO"]);
+                    if (data.SqlLectorDatos["FH_CREACION"] != DBNull.Value)
+                        pr.FH_CREACION = Convert.ToDateTime(data.SqlLectorDatos["FH_CREACION"]);
+                    if (data.SqlLectorDatos["FH_UPDATE"] != DBNull.Value)
+                        pr.FH_UPDATE = Convert.ToDateTime(data.SqlLectorDatos["FH_UPDATE"]);
+                    if (data.SqlLectorDatos["FH_RETORNO"] != DBNull.Value)
+                        pr.FH_RETORNO = Convert.ToDateTime(data.SqlLectorDatos["FH_RETORNO"]);
+                    if (data.SqlLectorDatos["FH_SALIDA"] != DBNull.Value)
+                        pr.FH_SALIDA = Convert.ToDateTime(data.SqlLectorDatos["FH_SALIDA"]);
+                    if (data.SqlLectorDatos["TOTAL_KG"] != DBNull.Value)
+                        pr.TOTAL_KG = Convert.ToDecimal(data.SqlLectorDatos["TOTAL_KG"]);
+                    if (data.SqlLectorDatos["CORREO_GPS"] != DBNull.Value)
+                        pr.CORREO_GPS = Convert.ToBoolean(data.SqlLectorDatos["CORREO_GPS"]);
+                    if (data.SqlLectorDatos["ID_CLIENTE_GPS"] != DBNull.Value)
+                        pr.ID_CLIENTE_GPS = Convert.ToInt32(data.SqlLectorDatos["ID_CLIENTE_GPS"]);
+                    if (data.SqlLectorDatos["RUTA"] != DBNull.Value)
+                        pr.RUTA = Convert.ToString(data.SqlLectorDatos["RUTA"]);
+                    if (data.SqlLectorDatos["FECHA_PRESENTACION"] != DBNull.Value)
+                        pr.FECHA_PRESENTACION = Convert.ToDateTime(data.SqlLectorDatos["FECHA_PRESENTACION"]);
+                    if (data.SqlLectorDatos["FECHA_INICIOCARGA"] != DBNull.Value)
+                        pr.FECHA_INICIOCARGA = Convert.ToDateTime(data.SqlLectorDatos["FECHA_INICIOCARGA"]);
+                    if (data.SqlLectorDatos["FECHA_FINCARGA"] != DBNull.Value)
+                        pr.FECHA_FINCARGA = Convert.ToDateTime(data.SqlLectorDatos["FECHA_FINCARGA"]);
+                    if (data.SqlLectorDatos["FECHA_DESPACHOEXP"] != DBNull.Value)
+                        pr.FECHA_DESPACHOEXP = Convert.ToDateTime(data.SqlLectorDatos["FECHA_DESPACHOEXP"]);
+                    if (data.SqlLectorDatos["FECHA_INICIOEXP"] != DBNull.Value)
+                        pr.FECHA_INICIOEXP = Convert.ToDateTime(data.SqlLectorDatos["FECHA_INICIOEXP"]);
+                    if (data.SqlLectorDatos["FECHA_FINEXP"] != DBNull.Value)
+                        pr.FECHA_FINEXP = Convert.ToDateTime(data.SqlLectorDatos["FECHA_FINEXP"]);
+                    if (data.SqlLectorDatos["RUTA_COLOR"] != DBNull.Value)
+                        pr.RUTA_COLOR = Convert.ToString(data.SqlLectorDatos["RUTA_COLOR"]);
+                    // Conductor
+                    if (data.SqlLectorDatos["ID_CONDUCTOR"] != DBNull.Value)
+                        pr.CONDUCTOR.COND_ID = Convert.ToInt32(data.SqlLectorDatos["ID_CONDUCTOR"]);
+                    if (data.SqlLectorDatos["COND_RUT"] != DBNull.Value)
+                        pr.CONDUCTOR.COND_RUT = Convert.ToString(data.SqlLectorDatos["COND_RUT"]);
+                    if (data.SqlLectorDatos["COND_NOMBRE"] != DBNull.Value)
+                        pr.CONDUCTOR.COND_NOMBRE = Convert.ToString(data.SqlLectorDatos["COND_NOMBRE"]);
+                    // Origen
+                    if (data.SqlLectorDatos["ID_ORIGEN"] != DBNull.Value)
+                        pr.ORIGEN.ID = Convert.ToInt32(data.SqlLectorDatos["ID_ORIGEN"]);
+                    if (data.SqlLectorDatos["ORIGEN_NOMBRE"] != DBNull.Value)
+                        pr.ORIGEN.NOMBRE_PE = Convert.ToString(data.SqlLectorDatos["ORIGEN_NOMBRE"]);
+                    if (data.SqlLectorDatos["ORIGEN_DIRECCION"] != DBNull.Value)
+                        pr.ORIGEN.DIRECCION_PE = Convert.ToString(data.SqlLectorDatos["ORIGEN_DIRECCION"]);
+                    if (data.SqlLectorDatos["ORIGEN_LAT"] != DBNull.Value)
+                        pr.ORIGEN.LAT_PE = Convert.ToDecimal(data.SqlLectorDatos["ORIGEN_LAT"]);
+                    if (data.SqlLectorDatos["ORIGEN_LON"] != DBNull.Value)
+                        pr.ORIGEN.LON_PE = Convert.ToDecimal(data.SqlLectorDatos["ORIGEN_LON"]);
+                    if (data.SqlLectorDatos["HORARIO"] != DBNull.Value)
+                        pr.ORIGEN.PERU_LLEGADA = data.SqlLectorDatos["HORARIO"].ToString();
+                    // Operacion
+                    if (data.SqlLectorDatos["ID_OPE"] != DBNull.Value)
+                        pr.OPERACION.OPER_ID = Convert.ToInt32(data.SqlLectorDatos["ID_OPE"]);
+                    // Envio
+                    if (data.SqlLectorDatos["ID_ENVIO"] != DBNull.Value)
+                        pr.ENVIO.Env_ID = Convert.ToInt32(data.SqlLectorDatos["ID_ENVIO"]);
+                    // Trailer
+                    if (data.SqlLectorDatos["TRAI_ID"] != DBNull.Value)
+                        pr.TRAILER.TRAI_ID = Convert.ToInt32(data.SqlLectorDatos["TRAI_ID"]);
+                    if (data.SqlLectorDatos["TRAI_PLACA"] != DBNull.Value)
+                        pr.TRAILER.TRAI_PLACA = Convert.ToString(data.SqlLectorDatos["TRAI_PLACA"]);
+                    // Trailer Tipo
+                    if (data.SqlLectorDatos["TRTI_ID"] != DBNull.Value)
+                        pr.TRAILER.TRAILER_TIPO.TRTI_ID = Convert.ToInt32(data.SqlLectorDatos["TRTI_ID"]);
+                    if (data.SqlLectorDatos["TIPO_VEHICULO"] != DBNull.Value)
+                        pr.TRAILER.TRAILER_TIPO.TRTI_DESC = Convert.ToString(data.SqlLectorDatos["TIPO_VEHICULO"]);
+                    // Tracto
+                    if (data.SqlLectorDatos["TRAC_ID"] != DBNull.Value)
+                        pr.TRACTO.TRAC_ID = Convert.ToInt32(data.SqlLectorDatos["TRAC_ID"]);
+                    if (data.SqlLectorDatos["TRAC_PLACA"] != DBNull.Value)
+                        pr.TRACTO.TRAC_PLACA = Convert.ToString(data.SqlLectorDatos["TRAC_PLACA"]);
+                    listado.Add(pr);
+                }
+                return listado;
             }
             catch (Exception ex)
             {
@@ -1409,7 +1845,6 @@ namespace Ruteador.App_Code
                         pr.TRACTO.TRAC_ID = Convert.ToInt32(data.SqlLectorDatos["TRAC_ID"]);
                     if (data.SqlLectorDatos["TRAC_PLACA"] != DBNull.Value)
                         pr.TRACTO.TRAC_PLACA = Convert.ToString(data.SqlLectorDatos["TRAC_PLACA"]);
-
                 }
                 return pr;
             }
@@ -1455,9 +1890,56 @@ namespace Ruteador.App_Code
                     data.AgregarSqlParametro("@TRAC_ID", p.TRACTO.TRAC_ID);
                 if (p.CONDUCTOR.COND_ID != 0)
                     data.AgregarSqlParametro("@COND_ID", p.CONDUCTOR.COND_ID);
+                if (!string.IsNullOrEmpty(p.RETORNO))
+                    data.AgregarSqlParametro("@RETORNO", p.RETORNO);
                 data.AgregarSqlParametro("@ID_DESTINOS", id_destinos);
                 data.AgregarSqlParametro("@id_tiempos", tiempos);
                 data.AgregarSqlParametro("@hora_salida", hora_salida);
+                data.EjecutarSqlEscritura();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                data.LimpiarSqlParametros();
+                data.CerrarSqlConeccion();
+            }
+        }
+        internal bool PreRuta_GuardarPuntos(PreRutaBC pre_ruta)
+        {
+            try
+            {
+                DataTable dt = new DataTable();
+                dt.Columns.Add("ID_DESTINO", typeof(int));
+                dt.Columns.Add("SECUENCIA", typeof(int));
+                dt.Columns.Add("FH_LLEGADA", typeof(DateTime));
+                dt.Columns.Add("FH_SALIDA", typeof(DateTime));
+                dt.Columns.Add("TIEMPO", typeof(int));
+
+                DateTime fechaRelativa = pre_ruta.FECHA_DESPACHOEXP;
+                string[] temp = pre_ruta.PEDIDOS[0].HORA_SALIDA.HORA_COD.Split(":".ToCharArray());
+
+                fechaRelativa = fechaRelativa.Date.AddHours(Convert.ToInt32(temp[0])).AddMinutes(Convert.ToInt32(temp[1]));
+
+                foreach (PedidoBC p in pre_ruta.PEDIDOS)
+                {
+                    p.RUTA_PEDIDO.tiempo = Convert.ToInt32(p.RUTA_PEDIDO.FH_LLEGADA.Subtract(fechaRelativa).TotalMinutes);
+                    fechaRelativa = p.RUTA_PEDIDO.FH_SALIDA;
+                    DataRow dr = dt.NewRow();
+                    dr["ID_DESTINO"] = p.PERU_ID;
+                    dr["SECUENCIA"] = p.RUTA_PEDIDO.SECUENCIA;
+                    dr["FH_LLEGADA"] = p.RUTA_PEDIDO.FH_LLEGADA;
+                    dr["FH_SALIDA"] = p.RUTA_PEDIDO.FH_SALIDA;
+                    dr["TIEMPO"] = p.RUTA_PEDIDO.tiempo;
+                    dt.Rows.Add(dr);
+                }
+
+                data.CargarSqlComando("[dbo].[GUARDAR_PUNTOS_PRE_RUTA_V2]");
+                data.AgregarSqlParametro("@ID_RUTA", pre_ruta.ID);
+                data.AgregarSqlParametro("@PEDIDOS_RUTA", dt);
                 data.EjecutarSqlEscritura();
                 return true;
             }

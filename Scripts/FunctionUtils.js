@@ -66,8 +66,6 @@ function validaRut(rut) {
     }
     return false;
 }
-
-
 function formatearRut(rut) {
     var sRut1 = "";
     for (var i = 0; i < rut.value.length; i++) {
@@ -97,8 +95,16 @@ function formatearRut(rut) {
     }   //Pasamos al campo el valor formateado   
     rut.value = sRut.toUpperCase();
 }
-
 function validaPatente(p) {
     var rex = /[a-zA-Z]{4}[\d]{2}|[a-zA-Z]{2}[\d]{4}/g
     return rex.test(p);
+}
+function secondsToString(seconds) {
+    var hour = Math.floor(seconds / 3600);
+    hour = (hour < 10) ? '0' + hour : hour;
+    var minute = Math.floor((seconds / 60) % 60);
+    minute = (minute < 10) ? '0' + minute : minute;
+    var second = seconds % 60;
+    second = (second < 10) ? '0' + second : second;
+    return hour + ':' + minute + ':' + second;
 }

@@ -22,6 +22,7 @@ namespace Ruteador.App_Code.Models
             USUARIO_PEDIDO = new UsuarioBC();
             USUARIO_ENVIO = new UsuarioBC();
             HORA_SALIDA = new HorarioBC();
+            RUTA_PEDIDO = new RutaPedidoBC();
         }
         public DataTable ObtenerTodo(DateTime desde, DateTime hasta, int hora_id = 0, int regi_id = 0, int ciud_id = 0, int comu_id = 0, int usua_id = 0, string peru_numero = null, bool solo_sin_ruta = false, int id_ruta=0)
         {
@@ -30,6 +31,14 @@ namespace Ruteador.App_Code.Models
         public DataTable ObtenerTodo(int hora_id = 0, int regi_id = 0, int ciud_id = 0, int comu_id = 0, int usua_id = 0, string peru_numero = null, bool solo_sin_ruta = false, int id_ruta = 0)
         {
             return tran.Pedido_ObtenerTodo(DateTime.MinValue, DateTime.MinValue, hora_id, regi_id, ciud_id, comu_id, usua_id, peru_numero, solo_sin_ruta, id_ruta);
+        }
+        public List<PedidoBC> ObtenerArray(bool solo_sin_ruta, DateTime desde, DateTime hasta, int hora_id = 0, int regi_id = 0, int ciud_id = 0, int comu_id = 0, int usua_id = 0, string peru_numero = null, int id_ruta = 0)
+        {
+            return tran.Pedido_ObtenerArray(solo_sin_ruta, desde, hasta, hora_id, regi_id, ciud_id, comu_id, usua_id, peru_numero, id_ruta);
+        }
+        public List<PedidoBC> ObtenerArray(DateTime desde, DateTime hasta, int hora_id = 0, int regi_id = 0, int ciud_id = 0, int comu_id = 0, int usua_id = 0, string peru_numero = null, int id_ruta = 0)
+        {
+            return tran.Pedido_ObtenerArray(desde, hasta, hora_id, regi_id, ciud_id, comu_id, usua_id, peru_numero, id_ruta);
         }
         public PedidoBC ObtenerXId()
         {
@@ -92,5 +101,6 @@ namespace Ruteador.App_Code.Models
         public UsuarioBC USUARIO_PEDIDO { get; set; }
         public UsuarioBC USUARIO_ENVIO { get; set; }
         public HorarioBC HORA_SALIDA { get; set; }
+        public RutaPedidoBC RUTA_PEDIDO { get; set; }
     }
 }

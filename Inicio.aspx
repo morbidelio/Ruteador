@@ -50,23 +50,33 @@
                 <li data-target="#myCarousel" data-slide-to="1"></li>
                 <li data-target="#myCarousel" data-slide-to="2"></li>
                 <li data-target="#myCarousel" data-slide-to="3"></li>
+                <li data-target="#myCarousel" data-slide-to="4"></li>
+                <li data-target="#myCarousel" data-slide-to="5"></li>
             </ol>
             <!-- Wrapper for slides -->
             <div class="carousel-inner">
                 <div class="item active">
-                    <img src="./img/img_fondo/CAMION1.jpg" alt="Patente" style="width: 100%; height: 120vh"
+                    <img src="./img/img_fondo/Route1.jpg" alt="Route" style="width: 100%; height: 120vh"
                         class="img-responsive" />
                 </div>
                 <div class="item">
-                    <img src="./img/img_fondo/BODEGA1.jpg" alt="Bodega" style="width: 100%; height: 120vh"
+                    <img src="./img/img_fondo/Route2.jpg" alt="Route" style="width: 100%; height: 120vh"
                         class="img-responsive" />
                 </div>
                 <div class="item">
-                    <img src="./img/img_fondo/BARCO1.jpg" alt="Barco" style="width: 100%; height: 120vh"
+                    <img src="./img/img_fondo/Route3.jpg" alt="Route" style="width: 100%; height: 120vh"
                         class="img-responsive" />
                 </div>
                 <div class="item">
-                    <img src="./img/img_fondo/MOBILE1.jpg" alt="Mobile" style="width: 100%; height: 120vh"
+                    <img src="./img/img_fondo/Route4.jpg" alt="Route" style="width: 100%; height: 120vh"
+                        class="img-responsive" />
+                </div>
+                <div class="item">
+                    <img src="./img/img_fondo/Route5.jpg" alt="Route" style="width: 100%; height: 120vh"
+                        class="img-responsive" />
+                </div>
+                <div class="item">
+                    <img src="./img/img_fondo/Route6.jpg" alt="Route" style="width: 100%; height: 120vh"
                         class="img-responsive" />
                 </div>
             </div>
@@ -79,10 +89,7 @@
             </div>
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                 <center>
-                    <img id="IMGL" class="img-responsive" src="img/img_icono_q/logo_login.png" />
-                    <img id="IMGD" class="img-responsive" src="img/img_icono_q/logo_loginCliente.png" />
-                    <img id="IMGT" class="img-responsive" src="img/img_icono_q/logo_loginTrans.png" />
-                    <img id="IMGA" class="img-responsive" src="img/img_icono_q/logo_loginAcceso.png" />
+                    <img id="IMGL" class="img-responsive" src="img/RouteLogo.png" style="height:30vh" />
                 </center>
             </div>
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
