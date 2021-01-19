@@ -1,45 +1,45 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Master/MasterPage.master" AutoEventWireup="true" CodeFile="Usuario.aspx.cs" Inherits="App_Usuario" %>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="titulo" runat="server">
-    <div class="col-xs-12 separador"></div>
     <h2>Maestro Usuario</h2>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="Filtro" runat="server">
-    <div class="col-xs-12 separador"></div>
+    <div class="col-xs-12 col-md-12 col-lg-12 separador"></div>
     <asp:UpdatePanel runat="server">
         <ContentTemplate>
-            <div class="col-xs-1 text-right">
+        <div class="row">
+            <div class="col-xs-1 col-md-1 col-lg-1 text-right">
                 Rut
             </div>
-            <div class="col-xs-1">
+            <div class="col-xs-1 col-md-1 col-lg-1">
                 <asp:TextBox ID="txt_buscarRut" CssClass="form-control" runat="server" />
             </div>
-            <div class="col-xs-1 text-right">
+            <div class="col-xs-1 col-md-1 col-lg-1 text-right">
                 Nombre
             </div>
-            <div class="col-xs-1">
+            <div class="col-xs-1 col-md-1 col-lg-1">
                 <asp:TextBox ID="txt_buscarNombre" CssClass="form-control" runat="server" />
             </div>
-            <div class="col-xs-1 text-right">
+            <div class="col-xs-1 col-md-1 col-lg-1 text-right">
                 Apellido
             </div>
-            <div class="col-xs-1">
+            <div class="col-xs-1 col-md-1 col-lg-1">
                 <asp:TextBox ID="txt_buscarApellido" CssClass="form-control" runat="server" />
             </div>
-            <%--<div class="col-xs-12 separador"></div>--%>
-            <div class="col-xs-1 text-right">
+            <%--<div class="col-xs-12 col-md-12 col-lg-12 separador"></div>--%>
+            <div class="col-xs-1 col-md-1 col-lg-1 text-right">
                 Username
             </div>
-            <div class="col-xs-1">
+            <div class="col-xs-1 col-md-1 col-lg-1">
                 <asp:TextBox ID="txt_buscarUsername" CssClass="form-control" runat="server" />
             </div>
-            <div class="col-xs-1 text-right">
+            <div class="col-xs-1 col-md-1 col-lg-1 text-right">
                 Tipo
             </div>
-            <div class="col-xs-2">
+            <div class="col-xs-2 col-md-2 col-lg-2">
                 <asp:DropDownList ID="ddl_buscarTipo" CssClass="form-control" runat="server" />
             </div>
-            <div class="col-xs-1">
+            <div class="col-xs-1 col-md-1 col-lg-1">
                 <asp:LinkButton ID="btn_buscar" OnClick="btn_buscar_Click" CssClass="btn btn-primary" runat="server">
                     <span class="glyphicon glyphicon-search" />
                 </asp:LinkButton>
@@ -47,13 +47,14 @@
                     <span class="glyphicon glyphicon-plus" />
                 </asp:LinkButton>
             </div>
+            </div>
         </ContentTemplate>
     </asp:UpdatePanel>
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="Contenedor" runat="server">
     <asp:UpdatePanel runat="server">
         <ContentTemplate>
-            <div class="col-xs-12">
+            <div class="col-xs-12 col-md-12 col-lg-12">
                 <asp:GridView ID="gv_listar" AutoGenerateColumns="False" AllowSorting="true" Width="100%" CssClass="table table-bordered table-hover tablita tab-pag" runat="server"
                     EmptyDataText="No hay registros" OnRowCreated="gv_listar_RowCreated" OnRowDataBound="gv_listar_RowDataBound" OnRowCommand="gv_listar_RowCommand" OnSorting="gv_listar_Sorting" DataKeyNames="USUA_ID,USUA_ESTADO,USTI_NIVEL_PERMISOS">
                     <Columns>
@@ -104,61 +105,61 @@
                             </h4>
                         </div>
                         <div class="modal-body" style="height: auto; overflow: auto">
-                            <div class="col-xs-4">
+                            <div class="col-xs-4 col-md-4 col-lg-4">
                                 Nombre
                                 <br />
                                 <asp:TextBox ID="txt_editNombre" CssClass="form-control" runat="server" />
                             </div>
-                            <div class="col-xs-4">
+                            <div class="col-xs-4 col-md-4 col-lg-4">
                                 Apellido
                                 <br />
                                 <asp:TextBox ID="txt_editApellido" CssClass="form-control" runat="server" />
                             </div>
-                            <div class="col-xs-4">
+                            <div class="col-xs-4 col-md-4 col-lg-4">
                                 Rut
                                 <br />
                                 <asp:TextBox ID="txt_editRut" OnTextChanged="txt_editRut_TextChanged" AutoPostBack="true" CssClass="form-control input-rut" runat="server" />
                             </div>
-                            <div class="col-xs-4">
+                            <div class="col-xs-4 col-md-4 col-lg-4">
                                 Correo
                                 <br />
                                 <asp:TextBox ID="txt_editCorreo" CssClass="form-control" runat="server" />
                             </div>
-                            <div class="col-xs-4">
+                            <div class="col-xs-4 col-md-4 col-lg-4">
                                 Username
                                 <br />
                                 <asp:TextBox ID="txt_editUsername" CssClass="form-control" runat="server" />
                             </div>
-                            <div class="col-xs-3">
+                            <div class="col-xs-3 col-md-3 col-lg-3">
                                 Contraseña
                                 <br />
                                 <asp:TextBox ID="txt_editPassword" CssClass="form-control" runat="server" />
                             </div>
-                            <div class="col-xs-1">
+                            <div class="col-xs-1 col-md-1 col-lg-1">
                                 <br />
                                 <asp:LinkButton ID="btn_editGenerar" CssClass="btn btn-warning" ToolTip="Generar Automáticamente" runat="server" OnClick="btn_editGenerar_Click">
                   <span class="glyphicon glyphicon-certificate" />
                                 </asp:LinkButton>
                             </div>
-                            <div class="col-xs-4">
+                            <div class="col-xs-4 col-md-4 col-lg-4">
                                 Observación
                                 <br />
                                 <asp:TextBox ID="txt_editObservacion" CssClass="form-control" runat="server" />
                             </div>
-                            <div class="col-xs-4">
+                            <div class="col-xs-4 col-md-4 col-lg-4">
                                 Tipo Usuario
                                 <br />
                                 <asp:DropDownList ID="ddl_editTipo" CssClass="form-control" runat="server" />
                             </div>
-                            <div class="col-xs-4">
+                            <div class="col-xs-4 col-md-4 col-lg-4">
                                 Operación
                                 <br />
                                 <div style="max-height:100px;overflow-y:auto;border:solid 1px lightgray;padding-left:5px;border-radius:5px;">
                                     <asp:CheckBoxList ID="chklst_editOp" CssClass="checklist" runat="server"></asp:CheckBoxList>
                                 </div>
                             </div>
-                            <div class="col-xs-12 separador"></div>
-                            <div class="col-xs-12" style="text-align: center">
+                            <div class="col-xs-12 col-md-12 col-lg-12 separador"></div>
+                            <div class="col-xs-12 col-md-12 col-lg-12" style="text-align: center">
                                 <asp:LinkButton ID="btn_editGuardar" OnClick="btn_editGuardar_Click" CssClass="btn btn-primary" runat="server">
                                     <span class="glyphicon glyphicon-floppy-disk" />
                                 </asp:LinkButton>

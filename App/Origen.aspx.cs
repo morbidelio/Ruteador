@@ -25,6 +25,15 @@ public partial class App_Origen : System.Web.UI.Page
         if (!IsPostBack)
         {
             CargaDrops();
+            ListItem lInicial = new ListItem("<svg height=\"30\" width=\"30\"><path transform=\"scale(0.7) translate(20, 45)\" stroke=\"#000\" fill=\"#1B18C9\" d=\"M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0,1,1 10,-30 C 10,-22 2,-20 0,0 z\" /></svg>", "0");
+            rb_editIconos.Items.Add(lInicial);
+            DataTable dt = new IconoBC().ObtenerTodo();
+            foreach(DataRow dr in dt.Rows)
+            {
+                string path = System.Web.Configuration.WebConfigurationManager.AppSettings["imgOrigen"];
+                ListItem lItem = new ListItem(string.Format("<img width=\"30\" src=\"{0}/{1}\" >", path, dr["ICON_URL"].ToString()), dr["ICON_ID"].ToString());
+                rb_editIconos.Items.Add(lItem);
+            }
             ObtenerOrigenes(true);
         }
     }
@@ -139,6 +148,7 @@ public partial class App_Origen : System.Web.UI.Page
             o.COMUNA.CIUDAD.CIUD_ID = Convert.ToInt32(ddl_editCiudad.SelectedValue);
             o.COMUNA.COMU_ID = Convert.ToInt32(ddl_editComu.SelectedValue);
             o.OPERACION.OPER_ID = Convert.ToInt32(ddl_editOpe.SelectedValue);
+            o.ICONO.ICON_ID = Convert.ToInt32(rb_editIconos.SelectedValue);
             if (string.IsNullOrEmpty(hf_idOrigen.Value))
             {
                 if (o.Guardar())
@@ -232,6 +242,8 @@ public partial class App_Origen : System.Web.UI.Page
         txt_editLon.Text = "";
         txt_editRadio.Text = "";
         chk_editPoligono.Checked = false;
+        rb_editIconos.ClearSelection();
+        hf_iconOrigen.Value = "";
         ddl_editOpe.ClearSelection();
     }
     private void LlenarDatos(OrigenBC o)
@@ -250,6 +262,8 @@ public partial class App_Origen : System.Web.UI.Page
         txt_editRadio.Text = o.RADIO_PE.ToString();
         chk_editPoligono.Checked = o.IS_POLIGONO;
         ddl_editOpe.SelectedValue = o.OPERACION.OPER_ID.ToString();
+        rb_editIconos.SelectedValue = o.ICONO.ICON_ID.ToString();
+        rb_editIconos_SelectedIndexChanged(null, null);
         ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "map", "mapa();", true);
     }
     private void CargaDrops()
@@ -270,5 +284,20 @@ public partial class App_Origen : System.Web.UI.Page
         ViewState["sortOrder"] = direccion;
         ViewState["sortExpresion"] = e.SortExpression + " " + direccion;
         ObtenerOrigenes(false);
+    }
+
+    protected void rb_editIconos_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (rb_editIconos.SelectedIndex > 0)
+        {
+            string path = System.Web.Configuration.WebConfigurationManager.AppSettings["imgOrigen"];
+            IconoBC i = new IconoBC().ObtenerXId(Convert.ToInt32(rb_editIconos.SelectedValue));
+            hf_iconOrigen.Value = path + "/" + i.ICON_URL;
+        }
+        else
+        {
+            hf_iconOrigen.Value = "";
+        }
+        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "map", "mapa();", true);
     }
 }

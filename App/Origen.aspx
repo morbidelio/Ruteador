@@ -1,7 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Master/MasterPage.master" AutoEventWireup="true" CodeFile="Origen.aspx.cs" Inherits="App_Origen" %>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="titulo" runat="server">
-    <div class="col-xs-12 separador"></div>
     <h2>Maestro Origen</h2>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="Filtro" runat="server">
@@ -38,7 +37,7 @@
                     <asp:ListItem Value="0">Todos...</asp:ListItem>
                 </asp:DropDownList>
             </div>
-            <div class="col-xs-1">
+            <div class="col-xs-1 btn-group" role="group">
                 <asp:LinkButton ID="btn_buscar" OnClick="btn_buscar_Click" CssClass="btn btn-primary" runat="server">
                     <span class="glyphicon glyphicon-search" />
                 </asp:LinkButton>
@@ -170,6 +169,12 @@
                                     <br />
                                     <asp:TextBox ID="txt_editLon" ClientIDMode="Static" Enabled="false" CssClass="form-control" runat="server" />
                                 </div>
+                                <div class="col-xs-12 separador"></div>
+                                <div class="col-xs-12">
+                                    Ícono
+                                    <br />
+                                    <asp:RadioButtonList ID="rb_editIconos" RepeatDirection="Horizontal" OnSelectedIndexChanged="rb_editIconos_SelectedIndexChanged" AutoPostBack="true" runat="server"></asp:RadioButtonList>
+                                </div>
                             </div>
                             <div class="col-xs-4" style="height: 65vh" id="map">
                             </div>
@@ -221,6 +226,7 @@
     <asp:UpdatePanel runat="server">
         <ContentTemplate>
             <asp:HiddenField ID="hf_idOrigen" runat="server" />
+            <asp:HiddenField ID="hf_iconOrigen" ClientIDMode="Static" runat="server" />
         </ContentTemplate>
     </asp:UpdatePanel>
 </asp:Content>
@@ -232,7 +238,8 @@
             var lat = ($('#txt_editLat').val() == '') ? undefined : parseFloat($('#txt_editLat').val().replace(',','.'));
             var lon = ($('#txt_editLon').val() == '') ? undefined : parseFloat($('#txt_editLon').val().replace(',','.'));
             cargamapa(8, mapa, lat, lon);
-            insertarMarcador(lat, lon, 'icon_pe.png', nombre);
+            if ($('#hf_iconOrigen').val() === '') insertarMarcador(lat, lon, nombre)
+            else insertarMarcador(lat, lon, nombre, $('#hf_iconOrigen').val());
         }
         function EndRequestHandler1(sender, args) {
             $('#<%=btn_editGuardar.ClientID%>').click(function (e) {

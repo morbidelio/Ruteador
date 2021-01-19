@@ -7,6 +7,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>::: QRutas :::</title>
     <link href="../css/Bootstrap.css" rel="stylesheet" type="text/css" />
+    <%--<link href="../Scripts/bootstrap-5.0.0-beta1-dist/css/bootstrap.css" rel="stylesheet" />--%>
     <link href="../css/Estilo-Nuevo.css" rel="stylesheet" type="text/css" />
     <link href="../CSS/Font.css" rel="stylesheet" />
     <link href="../CSS/Progresbar.css" rel="stylesheet" />
@@ -16,10 +17,12 @@
     <script src="../Scripts/jquery-3.5.1.min.js" type="text/javascript"></script>
     <script src="../Scripts/jquery-ui-1.12.1.min.js"></script>
     <script src="../Scripts/Bootstrap.js" type="text/javascript"></script>
+    <%--<script src="../Scripts/bootstrap-5.0.0-beta1-dist/js/bootstrap.bundle.js"></script>--%>
     <script src="../Scripts/FunctionUtils.js" type="text/javascript"></script>
     <script src="../Scripts/DataTables/media/js/jquery.dataTables.min.js"></script>
     <script src="../Scripts/DataTables/media/js/dataTables.bootstrap.min.js"></script>
     <script src="../Scripts/DataTables/extensions/RowReorder/js/dataTables.rowReorder.min.js"></script>
+    <script src="../Scripts/DataTables/extensions/Scroller/js/dataTables.scroller.min.js"></script>
     <%--<script src="../Scripts/moment.min.js"></script>--%>
     <script src="../Scripts/moment-with-locales.min.js"></script>
     <script src="../Scripts/moment-duration-format.js" type="text/javascript"></script>
@@ -32,12 +35,11 @@
     <form id="form1" runat="server">
         <asp:ScriptManager runat="server"></asp:ScriptManager>
         <script type="text/javascript">
-            $(function () {
-                $('[data-toggle="tooltip"]').tooltip()
-            })
             $.fn.dataTable.ext.errMode = 'none';
+            var tabObject;
 
             function EndRequestHandler1(sender, args) {
+                $('[title]').tooltip({ container: 'body' });
                 $('.input-double').on('input', function () {
                     this.value = this.value.replace(/[^\d\,kK]/g, '');
                 });
@@ -116,7 +118,6 @@
                 xmlhttp.setRequestHeader('Cache-Control', 'no-cache');
                 xmlhttp.send();
             }
-            var notify;
             function msj(mensaje, clase, hide) {
                 if (notify != undefined && notify != null) {
                     notify = null;
@@ -130,24 +131,13 @@
                         autoHide: hide
                     });
             }
-            function tablaPrincipal() {
-                if ($('.tab-pag')[0] != undefined && $('.tab-pag')[0].rows.length > 1) {
-                    $('.tab-pag').DataTable({
-                        scrollY: calcPagHeight(),
-                        scrollX: false,
-                        scrollCollapse: true,
-                        paging: true,
-                        pageLength: 20,
-                        pagingType: "full_numbers",
-                        ordering: false,
-                        searching: false,
-                        lengthChange: false,
-                        info: false
-                    });
+            function tableSPag(tableName, height) {
+                if ($.fn.DataTable.isDataTable(`#${tableName}`)) {
+                    tabObject.draw();
                 }
-                if ($('.tab-nopag')[0] != undefined && $('.tab-nopag')[0].rows.length > 1) {
-                    $('.tab-nopag').DataTable({
-                        scrollY: calcNoPagHeight(),
+                else if ($(`#${tableName}>thead`).length > 0) {
+                    tabObject = $(`#${tableName}`).DataTable({
+                        scrollY: (height) ? height : calcPagHeight(),
                         scrollX: true,
                         scrollCollapse: true,
                         paging: false,
@@ -158,6 +148,55 @@
                     });
                 }
             }
+            function tablaPrincipal() {
+                if ($.fn.DataTable.isDataTable('.tab-pag')) {
+                    tabObject.draw();
+                    //$('.tab-pag').DataTable().draw();
+                }
+                else if ($('.tab-pag>thead').length > 0) {
+                    tabObject = $('.tab-pag').DataTable({
+                        scrollY: calcPagHeight(),
+                        scrollX: true,
+                        scrollCollapse: true,
+                        paging: true,
+                        pageLength: 20,
+                        pagingType: "full_numbers",
+                        ordering: false,
+                        searching: false,
+                        lengthChange: false,
+                        info: false
+                    });
+                }
+                if ($.fn.DataTable.isDataTable('.tab-nopag')) {
+                    tabObject.draw();
+                    //$('.tab-nopag').DataTable().draw();
+                }
+                else if ($('.tab-nopag>thead').length > 0) {
+                    tabObject = $('.tab-nopag').DataTable({
+                        scrollY: calcNoPagHeight(),
+                        scrollX: true,
+                        scrollCollapse: true,
+                        paging: false,
+                        ordering: false,
+                        searching: false,
+                        lengthChange: false,
+                        scroller: true,
+                        info: false
+                    });
+                }
+                $('div.dataTables_scrollBody').scrollTop(pageScrollPos);
+                $('div.dataTables_scrollBody').scrollLeft(pageScrollPosleft);
+            }
+
+            Sys.WebForms.PageRequestManager.getInstance().add_beginRequest(BeginRequestHandler);
+
+            var pageScrollPos = 0;
+            var pageScrollPosleft = 0;
+            function BeginRequestHandler(sender, args) {
+                pageScrollPos = $('div.dataTables_scrollBody').scrollTop();
+                pageScrollPosleft = $('div.dataTables_scrollBody').scrollLeft();
+            }
+
             var calcPagHeight = function () {
                 return $(window).height() - $("#scrolls").offset().top - 120;
             };

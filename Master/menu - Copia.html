@@ -1,0 +1,211 @@
+﻿<style type="text/css">
+    .ul_interno {
+        background-color: rgb(135,186,247) !important;
+        font-weight: bold;
+    }
+
+    .li_interno:hover {
+        color: rgb(102, 204, 255) !important;
+    }
+
+    .ul_interno li:hover, .ul_interno li:focus {
+        background: white !important;
+        color: black !important;
+    }
+
+    #bajo-cabecera {
+        height: 30px;
+    }
+
+    .dropdown-submenu {
+        position: relative;
+        background: #87baf7;
+    }
+
+    .dropdown-submenu > .dropdown-menu {
+        top: 0;
+        left: 100%;
+        margin-top: -6px;
+        margin-left: -1px;
+        -webkit-border-radius: 0 6px 6px 6px;
+        -moz-border-radius: 0 6px 6px;
+        border-radius: 0 6px 6px 6px;
+    }
+
+    .dropdown-submenu:hover > .dropdown-menu {
+        display: block;
+    }
+
+    .dropdown-submenu > a:after {
+        display: block;
+        content: " ";
+        float: right;
+        width: 0;
+        height: 0;
+        border-color: transparent;
+        border-style: solid;
+        border-width: 5px 0 5px 5px;
+        border-left-color: #ccc;
+        margin-top: 5px;
+        margin-right: -10px;
+    }
+
+    .dropdown-submenu:hover > a:after {
+        border-left-color: #fff;
+    }
+
+    .dropdown-submenu.pull-left {
+        float: none;
+    }
+
+    .dropdown-submenu.pull-left > .dropdown-menu {
+        left: -100%;
+        margin-left: 10px;
+        -webkit-border-radius: 6px 0 6px 6px;
+        -moz-border-radius: 6px 0 6px 6px;
+        border-radius: 6px 0 6px 6px;
+    }
+
+    navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
+        color: #fff;
+        background-color: white !important;
+    }
+</style>
+<nav ID="nav" class="navbar navbar-expand-lg navbar-light bg-light NavQ" style="margin-top: 0px" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navigationbar">
+                <span class="navbar-toggler-icon"></span>
+                <!--<span class="sr-only">
+                    Toggle navigation
+                </span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>-->
+            </button>
+            <a id="menu-toggle" class="navbar-brand NavQA" href="#">
+                <img src="../img/img_icono_q/MMPFQ2.png" alt="Q Analytics" />
+            </a>
+        </div>
+        <div class="collapse navbar-collapse" id="navigationbar">
+            <label id="lbl_menu"></label>
+            <% Ruteador.App_Code.Models.UsuarioBC u = (Ruteador.App_Code.Models.UsuarioBC)Session["USUARIO"]; %>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="NavQA"></li>
+                <li class="NavQA" style="padding:15px">
+                    <span>
+                        Bienvenido  <%=u.USUA_USERNAME%>
+                    </span>
+                </li>
+                <li class="NavQA" id="dv_nombreUsuario">
+                    <a id="cambio" href="javascript:__doPostBack('ctl00$cambio_pass','')" style="color:inherit">Cambio Pass</a>
+                </li>
+                <li>
+                    <a class="NavQA" href="../Inicio.aspx">
+                        <span class="glyphicon glyphicon-log-in"></span>&nbsp;Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</nav>
+<!--<div class="col-xs-12 separador">
+</div>
+<div class="col-xs-12 separador">
+</div>
+<div class="col-xs-12" id="bajo-cabecera">
+</div>-->
+<script type="text/javascript">
+    function modalCambioPass() {
+        $("#modalConfirmaciopass").modal();
+    }
+    function json(r) {
+        var json = JSON.parse(r.data);
+        var menu = "<ul class='nav navbar-nav'>";
+        for (var r = 0; r < json.length; r++) {
+            menu += `<li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle NavQA" data-toggle="dropdown" href="#">${json[r].MENU_TITULO}</a>
+                    <ul class="dropdown-menu ul_interno">`;
+            var sub_menu = JSON.parse(json[r].MENU_HIJOS);
+            if (sub_menu.length > 0) {
+                for (i = 0; i < submenu.length; i++) {
+                    menu += `<li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle NavQA" data-toggle="dropdown" href="#">${submenu[i].MENU_TITULO}</a>
+                            <ul class="dropdown-menu ul_interno">
+                            <li><a style="color:#00489c" href="${submenu[i].MENU_LINK}" onclick="javascript:redirige('${submenu[i].MENU_LINK}')">${submenu[i].MENU_TITULO}</a></li>`
+                }
+            }
+            else {
+                menu = menu + "<li class='nav-item dropdown'>";
+                menu = menu + "<a class='nav-link dropdown-toggle NavQA' href='" + json[r].MENU_LINK + "' ><span class='glyphicon " + json[r].MENU_ICONO + "' ></span>" + " " + json[r].MENU_TITULO + "</a>"
+                menu = menu + "</li>"
+            }
+            menu += "</ul>"
+            document.getElementById("lbl_menu").innerHTML = menu
+        }
+    }
+
+    $(document).ready(function () {
+        $.ajax({
+            type: "POST",
+            url: "../Master/menu_json.aspx/SendMessage",
+            data: "",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                const json = JSON.parse(result.d);
+                var jMenu = $('<ul class="navbar-nav"></ul>');
+                for (var j of json) {
+                    var jItem = $('<li class="nav-item"></li>');
+                    var jLink = $('<a class="nav-link NavQA"></a>');
+                    if (j.MENU_HIJOS.length > 0) {
+                        jItem.addClass('dropdown');
+                        jLink.addClass('dropdown-toggle');
+                        jLink.attr('id', `navDrop${j.MENU_ID}`);
+                        jLink.attr('href', '#');
+                        jLink.attr('data-bs-toggle', 'dropdown');
+                        jLink.attr('aria-expanded', 'false');
+                        jLink.html(`<span class="glyphicon ${j.MENU_ICONO}"></span>${j.MENU_TITULO}`);
+                        var jSubmenu = $(`<ul class="dropdown-menu ul_interno" aria-labelledby="navDrop${j.MENU_ID}"></ul>`);
+                        for (var s of j.MENU_HIJOS) {
+                            var jSubmenuLink = $(`<li><a style="color:#00489c" class="dropdown-item" href="${s.MENU_LINK}">${s.MENU_TITULO}</a></li>`);
+                            jSubmenu.append(jSubmenuLink);
+                        }
+                        jItem.append(jLink).append(jSubmenu);
+                    }
+                    else {
+                        jLink.attr('aria-current', 'page');
+                        jLink.attr('href', j.MENU_LINK);
+                        jLink.html(`<span class='glyphicon ${j.MENU_ICONO}' ></span> ${j.MENU_TITULO}`);
+                        jItem.append(jLink);
+                    }
+                    jMenu.append(jItem);
+                }
+                $('#navigationbar').html(jMenu);
+
+
+                //var menu = '<ul class="navbar-nav">';
+                //for (var r = 0; r < json.length; r++) {
+                //    var submenu = json[r].MENU_HIJOS;
+                //    menu += `<li class="nav-item`;
+                //    if (submenu.length > 0) {
+                //        menu += `dropdown">
+                //                <a class="nav-link NavQA" href="#"><span class="glyphicon ${json[r].MENU_ICONO}"></span>${json[r].MENU_TITULO}</a>
+                //                <ul class="dropdown-menu ul_interno" aria-labelledby="navbarDropdown">`;
+                //        for (i = 0; i < submenu.length; i++) {
+                //            menu += `<li><a style="color:#00489c" href="${submenu[i].MENU_LINK}">${submenu[i].MENU_TITULO}</a></li>`;
+                //        }
+                //        menu += '</ul>';
+                //    }
+                //    else {
+                //        menu += `">
+                //                <a class='nav-link dropdown-toggle NavQA' href='${json[r].MENU_LINK}' ><span class='glyphicon ${json[r].MENU_ICONO}' ></span> ${json[r].MENU_TITULO}</a>
+                //                </li>`;
+                //    }
+                //    document.getElementById("lbl_menu").innerHTML = menu
+                //}
+            }
+        });
+    });
+</script>

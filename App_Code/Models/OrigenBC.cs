@@ -17,9 +17,10 @@ namespace Ruteador.App_Code.Models
             //
             // TODO: Agregar aquí la lógica del constructor
             //
-            this.OPERACION = new OperacionBC();
-            this.COMUNA = new ComunaBC();
-            this.RADIO_PE = 50;
+            OPERACION = new OperacionBC();
+            COMUNA = new ComunaBC();
+            RADIO_PE = 50;
+            ICONO = new IconoBC();
         }
         public DataTable ObtenerTodo(string orig_nombre = null, int regi_id = 0, int ciud_id = 0, int comu_id = 0)
         {
@@ -79,9 +80,9 @@ namespace Ruteador.App_Code.Models
         public int ID_MERCADO { get; set; }
         public int ID_ZONA { get; set; }
         public int invalido { get; set; }
+        public string PERU_LLEGADA { get; set; }
         public OperacionBC OPERACION { get; set; }
         public ComunaBC COMUNA { get; set; }
-        public string PERU_LLEGADA { get; set; }
-        
+        public IconoBC ICONO { get; set; }
     }
 }

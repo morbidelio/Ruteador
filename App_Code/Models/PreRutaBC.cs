@@ -20,6 +20,7 @@ namespace Ruteador.App_Code.Models
             ORIGEN = new OrigenBC();
             TRAILER = new TrailerBC();
             TRACTO = new TractoBC();
+            HORARIO = new HorarioBC();
         }
         public DataTable ObtenerTodo(DateTime desde, DateTime hasta, int hora_id = 0, int regi_id = 0, int ciud_id = 0, int comu_id = 0, int usua_id = 0, string peru_numero = null, string envio = null)
         {
@@ -27,23 +28,31 @@ namespace Ruteador.App_Code.Models
         }
         public List<PreRutaBC> ObtenerArray(DateTime desde, DateTime hasta, int hora_id = 0, int regi_id = 0, int ciud_id = 0, int comu_id = 0, int usua_id = 0, string peru_numero = null, string envio = null, bool puntos_ruta = false)
         {
-            List<PreRutaBC> listado = tran.PreRuta_ObtenerArray(desde, hasta, hora_id, regi_id, ciud_id, comu_id, usua_id, peru_numero, envio);
-            if (puntos_ruta)
-            {
-                foreach(PreRutaBC pr in listado)
-                {
-                    pr.PEDIDOS = new PedidoBC().ObtenerArray(desde: DateTime.MinValue, hasta:DateTime.MinValue, id_ruta: pr.ID);
-                }
-            }
-            return listado;
+            return tran.PreRuta_ObtenerArray(desde, hasta, hora_id, regi_id, ciud_id, comu_id, usua_id, peru_numero, envio, puntos_ruta);
         }
-        public DataTable ObtenerPuntos(int id_ruta = 0)
+        //public List<PreRutaBC> ObtenerArray(DateTime desde, DateTime hasta, int hora_id = 0, int regi_id = 0, int ciud_id = 0, int comu_id = 0, int usua_id = 0, string peru_numero = null, string envio = null, bool puntos_ruta = false)
+        //{
+        //    List<PreRutaBC> listado = tran.PreRuta_ObtenerArray(desde, hasta, hora_id, regi_id, ciud_id, comu_id, usua_id, peru_numero, envio);
+        //    if (puntos_ruta)
+        //    {
+        //        foreach(PreRutaBC pr in listado)
+        //        {
+        //            pr.PEDIDOS = new PedidoBC().ObtenerArray(desde: DateTime.MinValue, hasta:DateTime.MinValue, id_ruta: pr.ID);
+        //        }
+        //    }
+        //    return listado;
+        //}
+        public DataTable ObtenerPuntos(long id_ruta = 0)
         {
             return tran.Puntos_ObtenerXPreRuta(id_ruta);
         }
-        public PreRutaBC ObtenerXId(int id_preruta)
+        public PreRutaBC ObtenerXId(long id_preruta, bool puntos_ruta = false)
         {
-            return tran.PreRuta_ObtenerXId(id_preruta);
+            return tran.PreRuta_ObtenerXId(id_preruta, puntos_ruta);
+        }
+        public PreRutaBC ObtenerXId(bool puntos_ruta = false)
+        {
+            return tran.PreRuta_ObtenerXId(this.ID, puntos_ruta);
         }
         public bool GuardarPuntos(PreRutaBC p, string id_destinos, string tiempos, string hora_salida)
         {
@@ -61,13 +70,13 @@ namespace Ruteador.App_Code.Models
         {
             return tran.PreRuta_GuardarPuntos(p);
         }
-        public bool GuardarDetalle()
+        public bool Guardar()
         {
-            return tran.PreRuta_GuardarDetalle(this);
+            return tran.PreRuta_Guardar(this);
         }
-        public bool GuardarDetalle(PreRutaBC p)
+        public bool Guardar(PreRutaBC p)
         {
-            return tran.PreRuta_GuardarDetalle(p);
+            return tran.PreRuta_Guardar(p);
         }
         public DataTable IngresarExcel(DataTable dt, int usua_id)
         {
@@ -77,10 +86,22 @@ namespace Ruteador.App_Code.Models
         {
             return tran.PreRuta_ProcesarExcel(usua_id);
         }
+        public bool Eliminar()
+        {
+            return tran.PreRuta_Eliminar(this.ID);
+        }
         public bool Eliminar(long id_ruta)
         {
             return tran.PreRuta_Eliminar(id_ruta);
         }
+
+        public bool EliminarMultiple(string id_ruta)
+        {
+            return tran.PreRuta_EliminarMultiple(id_ruta);
+        }
+
+        
+
         public string obtenerultimosprocesos()
         {
             return tran.PreRuta_ObtenerUltimosProcesos();
@@ -92,7 +113,7 @@ namespace Ruteador.App_Code.Models
     }
     public partial class PreRuta
     {
-        public int ID { get; set; }
+        public long ID { get; set; }
         public string NUMERO { get; set; }
         public DateTime FH_VIAJE { get; set; }
         public int ID_MOVIL { get; set; }
@@ -116,6 +137,7 @@ namespace Ruteador.App_Code.Models
         public DateTime FECHA_INICIOEXP { get; set; }
         public DateTime FECHA_FINEXP { get; set; }
         public string RUTA_COLOR { get; set; }
+        public int TIEMPO_RETORNO { get; set; }
         public ConductorBC CONDUCTOR { get; set; }
         public EnvioBC ENVIO { get; set; }
         public OperacionBC OPERACION { get; set; }
@@ -123,5 +145,7 @@ namespace Ruteador.App_Code.Models
         public TrailerBC TRAILER { get; set; }
         public TractoBC TRACTO { get; set; }
         public List<PedidoBC> PEDIDOS { get; set; }
+        public HorarioBC HORARIO { get; set; }
+        public List<RespuestaBC> RESPUESTA { get; set; }
     }
 }

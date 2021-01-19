@@ -60,7 +60,7 @@
         }
       ]
     },
-	{
+    {
       "name": "Envio_ruteador.aspx",
       "accion": [
         {
@@ -71,6 +71,34 @@
       ]
     },
 
+    {
+      "name": "mapa_global.aspx",
+      "accion": [
+        {
+          "nombre": "guardar",
+          "success_nuevo": "Propuesta ruta creada.",
+          "success_modificar": "Propuesta ruta modificada.",
+          "warn_pedidoNoExiste": "Pedido no existe.",
+          "warn_trailerNoExiste": "Vehículo no existe.",
+          "warn_trailerEnUso": "Vehículo en uso.",
+          "warn_tractoNoExiste": "Tracto no existe.",
+          "warn_tractoEnUso": "Tracto en uso.",
+          "warn_conductorNoExiste": "Conductor no existe.",
+          "warn_conductorEnUso": "Conductor en uso.",
+          "warn_numeroVacio": "Número ruta obligatorio."
+        },
+        {
+          "nombre": "eliminar",
+          "success": "Propuesta ruta eliminada.",
+          "error": "Error al eliminar la propuesta ruta."
+        },
+        {
+          "nombre": "enviar",
+          "warn_noSeleccionados": "Seleccione al menos un pedido."
+        }
+      ]
+
+    },
     {
       "name": "Parametro.aspx",
       "accion": [
@@ -90,6 +118,33 @@
     },
     {
       "name": "Pedido_Ruteador.aspx",
+      "accion": [
+        {
+          "nombre": "guardar",
+          "success_nuevo": "Pedido creado.",
+          "success_modificar": "Pedido modificado.",
+          "warn_numeroVacio": "Número obligatorio.",
+          "warn_codigoVacio": "Código obligatorio.",
+          "warn_fechaVacio": "Fecha obligatoria.",
+          "warn_pesoVacio": "Peso obligatorio.",
+          "warn_tiempoVacio": "Tiempo obligatorio.",
+          "warn_horarioVacio": "Horario obligatorio.",
+          "warn_regionVacio": "Región obligatoria.",
+          "warn_ciudadVacio": "Ciudad obligatoria.",
+          "warn_comunaVacio": "Comuna obligatoria.",
+          "warn_direccionVacio": "Dirección obligatoria.",
+          "warn_latLonVacio": "Latitud/Longitud obligatorias.",
+          "error": "Ocurrió un error. Revise los datos."
+        },
+        {
+          "nombre": "eliminar",
+          "success": "Pedido eliminado.",
+          "error": "Error al eliminar pedido."
+        }
+      ]
+    },
+	{
+      "name": "Pedido_RuteadorV2.aspx",
       "accion": [
         {
           "nombre": "guardar",
@@ -135,9 +190,9 @@
         }
       ]
     },
-	  {
-	   "name": "Pre_Rutas.aspx",
-	    "accion": [
+    {
+      "name": "Pre_Rutas.aspx",
+      "accion": [
         {
           "nombre": "guardar",
           "success_nuevo": "Propuesta ruta creada.",
@@ -156,9 +211,9 @@
           "nombre": "enviar",
           "warn_noSeleccionados": "Seleccione al menos un pedido."
         }
-		  ]
-	
-	  },
+      ]
+
+    },
     {
       "name": "Tracto.aspx",
       "accion": [

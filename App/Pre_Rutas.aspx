@@ -67,7 +67,7 @@
             <div class="col-xs-1">
                 <asp:TextBox ID="txt_buscaenvio" runat="server" AutoCompleteType="Search" CssClass="form-control" />
             </div>
-            <div class="col-xs-2">
+            <div class="col-xs-2 btn-group">
                 <asp:LinkButton ID="btn_buscar" runat="server" CssClass="btn btn-primary" OnClick="btn_buscar_Click" ToolTip="Buscar">
       <span class="glyphicon glyphicon-search" />
                 </asp:LinkButton>
@@ -78,20 +78,20 @@
             <span class="glyphicon glyphicon-send" /> 
                 </asp:LinkButton>
                 <asp:LinkButton ID="btn_pdf" runat="server" CssClass="btn btn-info" OnClick="btn_pre_pdf_click" ToolTip="pdf rutas">
-            <span class="glyphicon glyphicon-file" /></asp:LinkButton>
-                <asp:Button CssClass="ocultar" ID="pdf_post" runat="server" OnClick="btn_pdf_click" />
-
+            <span class="glyphicon glyphicon-file" />
+                </asp:LinkButton>
+                <asp:LinkButton ID="btn_eliminar_todos" CssClass="btn btn-danger" OnClick="btn_eliminar_todos_click" runat="server">
+                <span class="glyphicon glyphicon-remove" />
+                </asp:LinkButton>
             </div>
-            <div class="col-xs-12 separador"></div>
-            <div class="col-xs-push-10 col-xs-2">
+            <div class="col-xs-2 text-right">
                 Seleccionadas:
-            <asp:Label ID="lblgds" runat="server" Text="0" CssClass="tituloCh" />
+            <asp:Label ID="lblgds" ClientIDMode="Static" runat="server" Text="0" CssClass="tituloCh" />
             </div>
         </ContentTemplate>
         <Triggers>
             <asp:AsyncPostBackTrigger ControlID="ddl_buscarRegion" />
             <asp:AsyncPostBackTrigger ControlID="ddl_buscarCiudad" />
-            <asp:PostBackTrigger ControlID="pdf_post" />
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
@@ -197,8 +197,6 @@
                             </asp:UpdatePanel>
                         </div>
                         <div class="modal-body" style="height: auto; overflow: auto">
-                            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDjAnu30d80TbLCujKOmvnMKcEj2GI5H3o&sensor=false&lenguage=es&v=3.20"></script>
-                            <script src="../Scripts/ruteador.js" type="text/javascript"></script>
                             <div class="col-xs-7" style="height: 65vh" id="map">
                             </div>
                             <div class="col-xs-5">
@@ -223,10 +221,10 @@
                                 <div class="col-xs-3">
                                     <asp:Label ID="txt_cant_punt" ClientIDMode="Static" runat="server" Text="Cant Puntos" Style="float: left"></asp:Label>
                                 </div>
-                                <div class="col-xs-3">
-                                    <asp:LinkButton ID="btn_puntosGuardar" OnClick="btn_puntosGuardar_Click" CssClass="btn btn-success" runat="server">
+                                <div class="col-xs-3 btn-group" role="group">
+                                    <button id="btn_guardarRuta" onclick="guardarRuta();" class="btn btn-success">
                                         <span class="glyphicon glyphicon-floppy-disk" />
-                                    </asp:LinkButton>
+                                    </button>
                                     <button id="btn_puntosVehiculo" type="button" class="btn btn-info" data-toggle="modal" data-target="#modalVehiculo">
                                         <span class="glyphicon glyphicon-list" />
                                     </button>
@@ -242,7 +240,7 @@
                                     <label for="rb_ruta">Polígono</label>
                                 </div>
                                 <div class="col-xs-2">
-                                    <input type="radio" id="rb_ambos" name="rb_mostrar" />
+                                    <input type="radio" id="rb_ambos" name="rb_mostrar" checked="checked" />
                                     <br />
                                     <label for="rb_ruta">Ambos</label>
                                 </div>
@@ -268,10 +266,15 @@
                             </h4>
                         </div>
                         <div class="modal-body" style="height: auto; overflow-y: auto;">
+                        <div class="col-xs-4">
+                                Número
+                                <br />
+                                <asp:textbox id="txt_editNombre" ClientIDMode="Static" onchange="txt_editNombre_TextChanged(this, this.value);" cssclass="form-control" runat="server" />
+                            </div>
                             <div class="col-xs-4">
                                 Tracto
                                 <br />
-                                <telerik:RadComboBox ID="ddl_vehiculoTracto" OnClientSelectedIndexChanged="ddl_vehiculoTracto_SelectedIndexChanged" AllowCustomText="true" MarkFirstMatch="true" runat="server">
+                                <telerik:RadComboBox ID="ddl_vehiculoTracto" OnClientSelectedIndexChanged="ddl_vehiculoTracto_SelectedIndexChanged" AllowCustomText="false" MarkFirstMatch="true" runat="server">
                                 </telerik:RadComboBox>
                             </div>
                             <div class="col-xs-4">
@@ -283,13 +286,13 @@
                             <div class="col-xs-4">
                                 Vehículo
                                 <br />
-                                <telerik:RadComboBox ID="ddl_vehiculoTrailer" OnClientSelectedIndexChanged="ddl_vehiculoTrailer_SelectedIndexChanged" AllowCustomText="true" MarkFirstMatch="true" runat="server">
+                                <telerik:RadComboBox ID="ddl_vehiculoTrailer" OnClientSelectedIndexChanged="ddl_vehiculoTrailer_SelectedIndexChanged" AllowCustomText="false" MarkFirstMatch="true" runat="server">
                                 </telerik:RadComboBox>
                             </div>
                             <div class="col-xs-4">
                                 Conductor
                                 <br />
-                                <telerik:RadComboBox ID="ddl_vehiculoConductor" OnClientSelectedIndexChanged="ddl_vehiculoConductor_SelectedIndexChanged" AllowCustomText="true" MarkFirstMatch="true" runat="server">
+                                <telerik:RadComboBox ID="ddl_vehiculoConductor" OnClientSelectedIndexChanged="ddl_vehiculoConductor_SelectedIndexChanged" AllowCustomText="false" MarkFirstMatch="true" runat="server">
                                 </telerik:RadComboBox>
                             </div>
                             <div id="dv_detalle" runat="server">
@@ -326,8 +329,13 @@
                         </div>
                         <div class="modal-footer">
                             <asp:LinkButton ID="btn_confEliminar" CssClass="btn btn-success" OnClick="btn_confEliminar_Click" runat="server">
-                <span class="glyphicon glyphicon-ok" />
+                                      <span class="glyphicon glyphicon-ok" />
                             </asp:LinkButton>
+
+                            <asp:LinkButton ID="btn_confEliminarTodos" CssClass="btn btn-success" OnClick="btn_confEliminartodos_Click" runat="server" Visible="false">
+                                      <span class="glyphicon glyphicon-ok" />
+                            </asp:LinkButton>
+
                             <button type="button" class="btn btn-danger" data-dismiss="modal">
                                 <span class="glyphicon glyphicon-remove" />
                             </button>
@@ -404,19 +412,22 @@
 <asp:Content ID="Content6" ContentPlaceHolderID="ocultos" runat="server">
     <asp:UpdatePanel runat="server">
         <ContentTemplate>
-            <asp:HiddenField ID="hf_todos" ClientIDMode="Static" runat="server" />
-            <asp:HiddenField ID="hf_origenes" ClientIDMode="Static" runat="server" />
-            <asp:HiddenField ID="hf_puntosruta" ClientIDMode="Static" runat="server" />
-            <asp:HiddenField ID="hf_idRuta" runat="server" />
-            <asp:HiddenField ID="hf_idPunto" ClientIDMode="Static" runat="server" />
+            <asp:HiddenField ID="hf_jsonPedidos" ClientIDMode="Static" runat="server" />
+            <asp:HiddenField ID="hf_jsonOrigenes" ClientIDMode="Static" runat="server" />
+            <asp:HiddenField ID="hf_jsonRuta" ClientIDMode="Static" runat="server" />
+            <asp:HiddenField ID="hf_idRuta" ClientIDMode="Static" runat="server" />
+            <asp:HiddenField ID="hf_idPedido" ClientIDMode="Static" runat="server" />
             <asp:HiddenField ID="hf_origen" ClientIDMode="Static" runat="server" />
             <asp:HiddenField ID="hf_circular" ClientIDMode="Static" runat="server" />
             <asp:HiddenField ID="hseleccionado" runat="server" />
             <asp:HiddenField ID="respuesta_direcction" ClientIDMode="Static" runat="server" />
-            <asp:Button ID="btn_exportarExcel" runat="server" OnClick="btn_exportarExcel_Click" />
+            <asp:Button ID="btn_puntosGuardar" ClientIDMode="Static" OnClick="btn_puntosGuardar_Click" CssClass="ocultar" runat="server" />
+            <asp:Button ID="btn_exportarExcel" ClientIDMode="Static" OnClick="btn_exportarExcel_Click" CssClass="ocultar" runat="server" />
+            <asp:Button ID="pdf_post" ClientIDMode="Static" OnClick="btn_pdf_click" CssClass="ocultar" runat="server" />
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="btn_exportarExcel" />
+            <asp:PostBackTrigger ControlID="pdf_post" />
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
@@ -432,7 +443,7 @@
         }
 
             .sel-between.enabled > td {
-                height: 2px;
+                height: 3px;
                 border: 1px;
                 padding: 1px !important;
             }
@@ -441,56 +452,13 @@
                 background-color: red;
             }
     </style>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDjAnu30d80TbLCujKOmvnMKcEj2GI5H3o&sensor=false&lenguage=es&v=beta"></script>
+    <script src="../Scripts/ruteador.js" type="text/javascript"></script>
     <script type="text/javascript" src="../Scripts/farbtastic.js"></script>
     <link rel="stylesheet" href="../Scripts/farbtastic.css" type="text/css" />
     <script type="text/javascript">
-        var puntosTodos;
-        var puntosRuta;
-        var puntosOrigenes;
         const retorno_ruta = <%=ConfigurationManager.AppSettings["retorno_ruta"] %>;
-        // DropDownList
-        function ddl_vehiculoConductor_SelectedIndexChanged(sender, args) {
-            if (!args.get_item()) {
-                sender.findItemByValue('0').select();
-                showAlertClass('guardar', 'warn_conductorNoExiste');
-                return false;
-            }
-        }
-        function ddl_vehiculoTracto_SelectedIndexChanged(sender, args) {
-            if (!args.get_item()) {
-                sender.findItemByValue('0').select();
-                showAlertClass('guardar', 'warn_tractoNoExiste');
-                return false;
-            }
-        }
-        function ddl_vehiculoTrailer_SelectedIndexChanged(sender, args) {
-            if (!args.get_item()) {
-                sender.findItemByValue('0').select();
-                showAlertClass('guardar', 'warn_trailerNoExiste');
-                return false;
-            }
-        }
-        function ddl_puntoNombre_SelectedIndexChanged(sender, args) {
-            const selectedItem = args.get_item();
-            if (!selectedItem) {
-                sender.clearSelection();
-                $('#hf_idPunto').val('');
-                $('.sel-between').removeClass('enabled');
-                showAlertClass('guardar', 'warn_pedidoNoExiste');
-                return false;
-            }
-            if (selectedItem.get_index() < 1) {
-                $('#hf_idPunto').val('');
-                $('.sel-between').removeClass('enabled');
-            }
-            else {
-                const id = parseInt(selectedItem.get_value());
-                centrarPunto(id);
-                const m = markers["MARKERS"][buscarMarcadorXId(id)];
-                $('#hf_idPunto').val(id);
-                $('.sel-between').addClass('enabled');
-            }
-        }
+        const iconPath = '<%=ConfigurationManager.AppSettings["imgOrigen"] %>';
         // PageLoad
         Sys.WebForms.PageRequestManager.getInstance().add_pageLoaded(EndRequestHandler1);
         function EndRequestHandler1(sender, args) {
@@ -516,7 +484,7 @@
                     return false;
                 }
             });
-            $('#<%= btn_enviar.ClientID%>').click(function () {
+            $('#<%=btn_enviar.ClientID%>').click(function () {
                 $("#<%= hseleccionado.ClientID %>").val(ids.toString());
                 if ($("#<%=hseleccionado.ClientID %>").val() == '') {
                     showAlertClass("enviar", "warn_noSeleccionados");
@@ -524,353 +492,21 @@
                 }
             });
 
-            $('#<%= btn_pdf.ClientID%>').click(function () {
+            $('#<%=btn_pdf.ClientID%>').click(function () {
                 $("#<%= hseleccionado.ClientID %>").val(ids.toString());
                 if ($("#<%=hseleccionado.ClientID %>").val() == '') {
                     showAlertClass("enviar", "warn_noSeleccionados");
                     return false;
                 }
             });
-        }
 
-        var calcDataTableHeight = function () {
-            return $(window).height() - $("#scrolls").offset().top - 100;
-        };
-        function reOffset1() {
-            $('div.dataTables_scrollBody').height(calcDataTableHeight());
-        }
-        window.onresize = function (e) {
-            reOffset1();
-        }
-        function tabla2() {
-            if ($('#gv_puntos')[0] != undefined && $('#gv_puntos')[0].rows.length > 1) {
-                $('#gv_puntos').DataTable({
-                    "scrollY": "38vh",
-                    "scrollX": true,
-                    "scrollCollapse": true,
-                    "paging": false,
-                    "ordering": false,
-                    "searching": false,
-                    "lengthChange": false,
-                    "info": false
-                });
-            }
-        }
-        var pageScrollPos = 0;
-        var pageScrollPosleft = 0;
-
-        function mapa(nuevo) {
-            limpiarWaypoints();
-            puntosTodos = JSON.parse($('#hf_todos').val());
-            puntosRuta = JSON.parse($('#hf_puntosruta').val());
-            puntosOrigenes = JSON.parse($('#hf_origenes').val());
-            const json_origen = JSON.parse($('#hf_origen').val());
-            setOrigen(json_origen.LAT_PE, json_origen.LON_PE, "marker_blue.png", json_origen.NOMBRE_PE, '0');
-            setDestino(json_origen.LAT_PE, json_origen.LON_PE, "marker_blue.png", json_origen.NOMBRE_PE, '0');
-            if (nuevo) {
-                json_origen.PERU_LLEGADA = $('#<%=ddl_buscarHorario.ClientID%>  option:selected').text();
-            }
-
-            const mapObject = document.getElementById('map');
-            cargamapa(12, mapObject);
-            $('#tbl_puntos').html(jsonToTable(json_origen));
-            limpiarMarcadores();
-
-            puntosTodos.map((o) => {
-                insertarMarcador(o.PERU_ID, o.PERU_LATITUD, o.PERU_LONGITUD, 'icon_pedido.png', o.PERU_CODIGO, crearInfoWindow(o));
-            });
-            puntosOrigenes.map((o) => {
-                insertarOrigen(o.ID_PE, o.LAT_PE, o.LON_PE, 'marker_blue.png', o.NOMBRE_PE, '0');
-            });
-            const circular = $('#hf_circular').val() === 'S';
-            if (!nuevo) {
-                puntosRuta.map((o) => {
-                    insertarPuntoRuta(o.PERU_ID, NaN, 'marker_red.png');
-                });
-                crearPoligono();
-                crearRuta(circular);
-                var bounds = new google.maps.LatLngBounds();
-                bounds.extend(origen.position);
-                waypoints["WAYPOINTS"].map((o) => {
-                    bounds.extend(o.location);
-                });
-                setTimeout(function () { map.fitBounds(bounds) }, 500);
-            }
-            else {
-                crearPoligono();
-                refrescarPoligono();
-                direcciones = [];
-            }
-            $('#rb_ambos').prop('checked', true);
-        }
-        function crearInfoWindow(o) {
-            const contenido = `<div id="content">
-                <p>
-                Código: ${o.PERU_CODIGO}
-<br />
-                Número: ${o.PERU_NUMERO}
-<br />
-                Hora: ${o.HORA_COD}
-<br />
-                Dirección: ${o.PERU_DIRECCION}
-                </p>
-                </div>`;
-            return contenido;
-        }
-        function jsonToTable(json_origen) {
-            var tiempo0;
-            var tiempoFIN;
-            if (!json_origen) {
-                json_origen = JSON.parse($('#hf_origen').val());
-            }
-
-            var i1;
-            tiempo0 = moment.duration(json_origen.PERU_LLEGADA);
-            var output = `<table id="gv_puntos" style="width:100%" class="table table-condensed table-hover tablita">
-                            <thead>
-                            <tr style="white-space:normal">
-                            <th>
-                            <span class="glyphicon glyphicon-move" />
-                            </th>
-                            <th>
-                            <span class="glyphicon glyphicon-remove text-danger" />
-                            </th>
-                            <th>
-                            <span class="glyphicon glyphicon-flag" />
-                            </th>
-                            <th>
-                            Cliente
-                            </th>
-                            <th>
-                            Dirección
-                            </th>
-                            <th>
-                            Llegada
-                            </th>
-                            </tr>
-                            <tr>
-                            <td>
-                            </td>
-                            <td>
-                            </td>
-                            <td>
-                            <a style="font-weight:bold" href="#" onclick="centrarLatLon(${json_origen.LAT_PE},${json_origen.LON_PE});">0</a>
-                            </td>
-                            <td>
-                            ${json_origen.NOMBRE_PE}
-                            </td>
-                            <td>
-                            ${json_origen.DIRECCION_PE}
-                            </td>
-                            <td id="t_origen">
-                            ${json_origen.PERU_LLEGADA}
-                            </td>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr onclick="moverPunto(0);refrescar()" class="sel-between">
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            </tr>`;
-            puntosRuta.map((o, i) => {
-                output += '<tr style="white-space:normal">';
-                output += '<td>';
-                if (i > 0) {
-                    output += `<a href="#" onclick="moverPunto(${(i - 1)},${o.PERU_ID});refrescar();" data-id="${o.PERU_ID}">
-                                <span style="font-size:small" class="glyphicon glyphicon-menu-up"></span>
-                                </a>`;
-                }
-                if (i != puntosRuta.length - 1) {
-                    output += `<a href="#" onclick="moverPunto(${(i + 1)},${o.PERU_ID});refrescar();">
-                                <span style="font-size:small" class="glyphicon glyphicon-menu-down"></span >
-                                </a>`;
-                }
-                output += '</td>';
-                if (puntosRuta.length > 1) {
-                    output += `<td>
-                                <a href="#" onclick="quitarPunto(${o.PERU_ID});refrescar();"><span style="font-size:small" class="glyphicon glyphicon-remove text-danger" /></a>
-                                </td>`;
-                }
-                else {
-                    output += `<td>
-                                </td>`;
-                }
-                output += `<td class="letra">
-                            <a style="font-weight:bold" href="#" onclick="selecciona(${o.PERU_ID});centrarLatLon(${o.PERU_LATITUD},${o.PERU_LONGITUD});">${(i + 1).toString()}</a>
-                            </td>
-                            <td onclick="selecciona(${o.PERU_ID});">
-                            ${o.PERU_CODIGO}
-                            </td>
-                            <td>
-                            ${o.PERU_DIRECCION}
-                            </td>
-                            <td id="t_${o.PERU_CODIGO}">
-                            ${o.PERU_LLEGADA}
-                            </td>
-                            </tr>
-                            <tr onclick="moverPunto(${(i + 1)});refrescar();" class="sel-between">
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            </tr>`;
-                tiempoFIN = o.PERU_LLEGADA;
-                i1 = i;
-            });
-            const circular = $('#hf_circular').val() === 'S';
-            output += `</tbody>
-                        <tfoot>
-                        <tr>
-                        <td>`;
-            if (retorno_ruta) {
-                output += `<input id="chk_circular" type="checkbox" onclick="circular(this);" ${(circular) ? 'checked' : ''} />`
-            }
-            output += `</td>
-                        <td>
-                        </td>
-                        <td>
-                        <a style="font-weight:bold" href="#" onclick="centrarLatLon(${json_origen.LAT_PE}, ${json_origen.LON_PE});">0</a>
-                        </td>
-                        <td>
-                        ${json_origen.NOMBRE_PE}
-                        </td>
-                        <td>
-                        ${json_origen.DIRECCION_PE}
-                        </td>
-                        <td>&nbsp;
-                        </td>
-                        </tr>
-                        </tfoot>
-                        </table>`
-            cantidad_puntos(i1 + 1);
-
-            if (tiempoFIN != undefined) {
-                const tiempoviaje = tiempoFIN.split(':');
-                const tiempo = moment.duration(tiempo0.subtract(parseInt(tiempoviaje[0] * 60) + parseInt(tiempoviaje[1]), 'minutes') * -1);
-                $('#<%=lbl_puntoSalida.ClientID%>').text('Duración :' + tiempo.format('HH:mm'));
-            }
-            return output;
-        }
-        function moverPunto(pos, id) {
-            if (id) $('#hf_idPunto').val(id);
-            if ($('#hf_idPunto').val() == '') return false;
-            var id = parseInt($('#hf_idPunto').val());
-            var punto = buscarPuntosTodos(id);
-            var elim = quitarPunto(id);
-            if (elim > -1 && pos > (elim + 1)) pos = pos - 1;
-            insertarPuntoRuta(id, pos, 'marker_red.png');
-            puntosRuta.splice(pos, 0, punto);
-        }
-        function quitarPunto(id) {
-            var eliminado = -1;
-            for (var i = 0; i < puntosRuta.length; i++) {
-                if (puntosRuta[i].PERU_ID === id) {
-                    puntosRuta.splice(i, 1);
-                    eliminado = i;
-                    break;
-                }
-            }
-            quitarPuntoRuta(id);
-            return eliminado;
-        }
-        function centrarLatLon(lat, lon) {
-            const latLon = new google.maps.LatLng(lat, lon);
-            map.setCenter(latLon);
-        }
-        function centrarPunto(id) {
-            const p = buscarPuntosTodos(id);
-            centrarLatLon(p.PERU_LATITUD, p.PERU_LONGITUD);
-        }
-        function refrescar() {
-            $('#hf_puntosruta').val(JSON.stringify(puntosRuta));
-            pageScrollPos = $('#tbl_puntos div.dataTables_scrollBody').scrollTop();
-            pageScrollPosleft = $('#tbl_puntos div.dataTables_scrollBody').scrollLeft();
-            $('#tbl_puntos').html(jsonToTable());
-            tabla2();
-            $('#tbl_puntos div.dataTables_scrollBody').scrollTop(pageScrollPos);
-            $('#tbl_puntos div.dataTables_scrollBody').scrollLeft(pageScrollPosleft);
-            const poligono = $('#rb_poligono:checked,#rb_ambos:checked').length > 0;
-            const ruta = $('#rb_ruta:checked,#rb_ambos:checked').length > 0;
-            const circular = $('#hf_circular').val() === 'S';
-            refrescarRuta(ruta, circular);
-            refrescarPoligono(poligono);
-            limpiarPuntos();
-        }
-        function circular(obj) {
-            const circular = $(obj).prop('checked');
-            const circularStr = (circular) ? 'S' : 'N';
-            $('#hf_circular').val(circularStr);
-            const ruta = $('#rb_ruta:checked,#rb_ambos:checked').length > 0;
-            refrescarRuta(ruta, circular);
-        }
-        function buscarPuntosTodos(id) {
-            for (var i = 0; i < puntosTodos.length; i++) {
-                if (puntosTodos[i].PERU_ID === id) return puntosTodos[i];
-            }
-            return false;
-        }
-        function limpiarPuntos() {
-            $('#hf_idPunto').val('');
-            $('.sel-between').removeClass('enabled');
-            $find('ddl_puntoNombre').findItemByValue('0').select();
-        }
-        function selecciona(id) {
-
-            $('#hf_idPunto').val(id);
-            $find('ddl_puntoNombre').findItemByValue(id.toString()).select();
-            $('.sel-between').addClass('enabled');
-        }
-        var ids = [];
-        function checkAll(a) {
-            $(".gridCB:enabled").prop('checked', $(a).prop('checked'))
-            $(".gridCB:enabled").each(function (index, e) {
-                var id = $(e).attr("data-id");
-                var index = ids.indexOf(id);
-                if ($(a).prop('checked')) {
-                    if (index == -1) ids.push(id);
-                    $(e).parent().parent().addClass("seleccionado");
-                }
-                else {
-                    if (index != -1) ids.splice(index, 1);
-                    $(e).parent().parent().removeClass("seleccionado");
+            $('#<%=btn_eliminar_todos.ClientID%>').click(function () {
+                $("#<%= hseleccionado.ClientID %>").val(ids.toString());
+                if ($("#<%=hseleccionado.ClientID %>").val() == '') {
+                    showAlertClass("enviar", "warn_noSeleccionados");
+                    return false;
                 }
             });
-            $("#<%=lblgds.ClientID %>").html($(".gridCB:checked").length);
-            console.log(ids);
-        }
-        function checkIndividual(objeto) {
-            var cant = parseInt($("#<%= lblgds.ClientID %>").html());
-            $('#chkTodos').prop('checked', ($('.gridCB:checked').length == $('.gridCB:enabled').length));
-            var id = $(objeto).attr("data-id");
-            if ($(objeto).prop('checked')) {
-                ids.push(id);
-                $(objeto).parent().parent().addClass("seleccionado");
-            }
-            else {
-                ids.splice(ids.indexOf(id), 1);
-                $(objeto).parent().parent().removeClass("seleccionado");
-            }
-            $("#<%=lblgds.ClientID %>").html($(".gridCB:checked").length);
-            console.log(ids);
-        }
-        function exportar() {
-            ids = [];
-            setTimeout(timeexporta, 200);
-        }
-        function timeexporta() {
-            $("#<%= btn_exportarExcel.ClientID %>").click();
-        }
-        function exportarpdf() {
-            setTimeout(timeexportapdf, 200);
-        }
-        function timeexportapdf() {
-            $("#<%= pdf_post.ClientID %>").click();
         }
 
     </script>

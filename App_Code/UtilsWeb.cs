@@ -9,6 +9,7 @@ using System.Xml;
 using System.IO.Packaging;
 using System.Data.SqlClient;
 using Telerik.Web.UI;
+using System.Collections.Generic;
 
 /// <summary>
 /// Descripción breve de UtilsWeb
@@ -25,6 +26,19 @@ public class UtilsWeb
         {
             return this.intervalo_preingreso;
         }
+    }
+    public void TableSPag(Page p, Object objeto)
+    {
+        string id = "";
+        if (objeto.GetType() == typeof(GridView))
+        {
+            id = ((GridView)objeto).ClientID;
+        }
+        if (objeto.GetType() == typeof(string))
+        {
+            id = (string)objeto;
+        }
+        ScriptManager.RegisterStartupScript(p.Page, p.GetType(), "table", string.Format("tableSPag('{0}')", id), true);
     }
     public void ShowMessage(Page p, string msj, string clase, bool hide, string codigo)
     {
@@ -253,6 +267,7 @@ public class UtilsWeb
             RadComboBoxItem li = new RadComboBoxItem("Todos...", "0");
             drop.Items.Insert(0, li);
             drop.ClearSelection();
+            drop.SelectedIndex = 0;
         }
     }
     public void LimpiarDrop(object nombreDrop)
@@ -358,6 +373,38 @@ public class UtilsWeb
         }
 
         return null;
+    }
+    public List<string> buscarDirectorio(string conf = null, string fileName = null, string extension = null)
+    {
+        string path;
+        if (string.IsNullOrEmpty(conf))
+            path = System.Web.Configuration.WebConfigurationManager.AppSettings["pathFiles"];
+        else
+            path = System.Web.Configuration.WebConfigurationManager.AppSettings[conf];
+
+        // Create a reference to the current directory.
+        DirectoryInfo di = new DirectoryInfo(path);
+        // Create an array representing the files in the current directory.
+        FileInfo[] fi = di.GetFiles();
+        //Console.WriteLine("The following files exist in the current directory:");
+        // Print out the names of the files in the current directory.
+
+        List<string> li = new List<string>();
+
+        foreach (FileInfo fiTemp in fi)
+        {
+            if (string.IsNullOrEmpty(fileName) && string.IsNullOrEmpty(extension))
+            {
+                li.Add(fiTemp.FullName);
+            }
+            else if ((fiTemp.Name.Contains(fileName) || string.IsNullOrEmpty(fileName)) && 
+                (fiTemp.Extension == extension || string.IsNullOrEmpty(extension)))
+            {
+                li.Add(fiTemp.FullName);
+            }
+        }
+
+        return li;
     }
     public string pathviewstate()
     {

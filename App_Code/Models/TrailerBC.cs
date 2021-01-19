@@ -16,9 +16,9 @@ namespace Ruteador.App_Code.Models
         {
             TRAILER_TIPO = new TrailerTipoBC();
         }
-        public DataTable ObtenerTodo(string trai_numero = null, string trai_placa = null, int trti_id = 0)
+        public DataTable ObtenerTodo(DateTime fecha = new DateTime(), int hora_id = 0, string trai_numero = null, string trai_placa = null, int trti_id = 0)
         {
-            return tran.Trailer_ObtenerTodo(trai_numero, trai_placa, trti_id);
+            return tran.Trailer_ObtenerTodo(fecha, hora_id, trai_numero, trai_placa, trti_id);
         }
         public TrailerBC ObtenerXId(int trai_id)
         {

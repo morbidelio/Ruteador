@@ -150,7 +150,7 @@ public partial class App_Tracto : System.Web.UI.Page
     {
         if (ViewState["lista"] == null || forzarBD)
         {
-            ViewState["lista"] = new TractoBC().ObtenerTodo(txt_buscarPlaca.Text);
+            ViewState["lista"] = new TractoBC().ObtenerTodo(trac_placa: txt_buscarPlaca.Text);
         }
 
         DataView dw = new DataView((DataTable)ViewState["lista"]);

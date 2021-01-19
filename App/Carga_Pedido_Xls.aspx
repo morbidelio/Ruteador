@@ -39,18 +39,19 @@
                     <tr>
                         <th>NumeroPedido</th>
                         <th>CodigoCliente</th>
-                        <th>Fecha</th>
-                        <th>Peso</th>
-                        <th>TEntrega</th>
                         <th>NombreCliente</th>
                         <th>Direccion</th>
                         <th>Comuna</th>
                         <th>lat</th>
                         <th>lon</th>
-                        <th>Hora de Salida CD</th>
-                        <th>Hora de Apertura</th>
-                        <th>Hora de Cierre</th>
-                        <th>IdCamion</th>
+                        <th>Fecha</th>
+                        <th>Horario</th>
+                        <th>Peso</th>
+                        <th>TEntrega</th>
+                        <th style="visibility:hidden; display:none" >Hora de Salida CD</th>
+                        <th style="visibility:hidden; display:none">Hora de Apertura</th>
+                        <th style="visibility:hidden; display:none">Hora de Cierre</th>
+                        <th style="visibility:hidden; display:none">IdCamion</th>
                         
                     </tr>
                 </table>

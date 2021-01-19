@@ -18,9 +18,9 @@ namespace Ruteador.App_Code.Models
             // TODO: Agregar aquí la lógica del constructor
             //
         }
-        public DataTable ObtenerTodo(string trac_placa = null)
+        public DataTable ObtenerTodo(DateTime fecha = new DateTime(), int hora_id = 0, string trac_placa = null)
         {
-            return tran.Tracto_ObtenerTodo(trac_placa);
+            return tran.Tracto_ObtenerTodo(fecha, hora_id, trac_placa);
         }
         public TractoBC ObtenerXId(int trac_id)
         {

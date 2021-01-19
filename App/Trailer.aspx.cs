@@ -25,9 +25,9 @@ public partial class App_Trailer : System.Web.UI.Page
     #region GridView
     protected void gv_listar_Sorting(object sender, GridViewSortEventArgs e)
     {
-        string direccion = this.utils.ConvertSortDirectionToSql((String)this.ViewState["sortOrder"]);
-        this.ViewState["sortOrder"] = direccion;
-        this.ViewState["sortExpresion"] = string.Format("{0} {1}", e.SortExpression, direccion);
+        string direccion = this.utils.ConvertSortDirectionToSql((String)ViewState["sortOrder"]);
+        ViewState["sortOrder"] = direccion;
+        ViewState["sortExpresion"] = string.Format("{0} {1}", e.SortExpression, direccion);
         ObtenerTrailer(false);
     }
     protected void gv_listar_RowCommand(object sender, GridViewCommandEventArgs e)
@@ -195,19 +195,21 @@ public partial class App_Trailer : System.Web.UI.Page
     }
     private void ObtenerTrailer(bool forzarBD)
     {
-        if (this.ViewState["lista"] == null || forzarBD)
+        if (ViewState["lista"] == null || forzarBD)
         {
             TrailerBC trailer = new TrailerBC();
-            DataTable dt = trailer.ObtenerTodo(txt_buscarNro.Text, txt_buscarPlaca.Text, Convert.ToInt32(ddl_buscarTipo.SelectedValue));
+            DataTable dt = trailer.ObtenerTodo(trai_numero: txt_buscarNro.Text
+                                                , trai_placa: txt_buscarPlaca.Text
+                                                , trti_id: Convert.ToInt32(ddl_buscarTipo.SelectedValue));
             ViewState["lista"] = dt;
         }
-        DataView dw = new DataView((DataTable)this.ViewState["lista"]);
-        if (this.ViewState["sortExpresion"] != null && this.ViewState["sortExpresion"].ToString() != "")
+        DataView dw = new DataView((DataTable)ViewState["lista"]);
+        if (ViewState["sortExpresion"] != null && ViewState["sortExpresion"].ToString() != "")
         {
-            dw.Sort = (String)this.ViewState["sortExpresion"];
+            dw.Sort = (String)ViewState["sortExpresion"];
         }
-        this.gv_listar.DataSource = dw.ToTable();
-        this.gv_listar.DataBind();
+        gv_listar.DataSource = dw.ToTable();
+        gv_listar.DataBind();
     }
     private void Limpiar()
     {

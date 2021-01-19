@@ -108,3 +108,51 @@ function secondsToString(seconds) {
     second = (second < 10) ? '0' + second : second;
     return hour + ':' + minute + ':' + second;
 }
+function invertColor(hex) {
+    if (hex.indexOf('#') === 0) {
+        hex = hex.slice(1);
+    }
+    // convert 3-digit hex to 6-digits.
+    if (hex.length === 3) {
+        hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+    }
+    if (hex.length !== 6) {
+        throw new Error('Invalid HEX color.');
+    }
+    // invert color components
+    var r = (255 - parseInt(hex.slice(0, 2), 16)).toString(16),
+        g = (255 - parseInt(hex.slice(2, 4), 16)).toString(16),
+        b = (255 - parseInt(hex.slice(4, 6), 16)).toString(16);
+    // pad each with zeros and return
+    return '#' + padZero(r) + padZero(g) + padZero(b);
+}
+
+function padZero(str, len) {
+    len = len || 2;
+    var zeros = new Array(len).join('0');
+    return (zeros + str).slice(-len);
+}
+function showSpinner(obj) {
+    $(`#${obj} *`).css('opacity', '0.5');
+    $(`#${obj} button,input`).prop('disabled', true);
+    $(`#${obj} ul.nav>li`).addClass('disabled');
+    $(`#${obj} ul.nav>li>a[data-toggle="tab"]`).removeAttr('data-toggle');
+    $(`#${obj}`).append('<div class="spinner"></div>');
+}
+function closeSpinner(obj) {
+    $(`#${obj} *`).css('opacity', '1');
+    $(`#${obj} button,input:not(.disabled)`).prop('disabled', false);
+    $(`#${obj} ul.nav>li`).removeClass('disabled');
+    $(`#${obj} ul.nav>li>a`).attr('data-toggle', 'tab');
+    $(`#${obj} .spinner`).remove();
+}
+function maxScroll(obj) {
+    return parseInt($(obj).prop('scrollWidth') - $(obj).width());
+} 
+function limpiar(obj) {
+    $(`#${obj}`).find('input[type="text"]').val('');
+    $(`#${obj}`).find('input[type="radio"]').prop('checked', false);
+    $(`#${obj}`).find('input[type="check"]').prop('checked', false);
+    $(`#${obj}`).find('table>thead,table>tbody').html('');
+    $(`#${obj}`).find('select').val('0');
+}

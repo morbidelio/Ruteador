@@ -2,11 +2,12 @@
 using System;
 using System.Data;
 using System.IO;
+using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Ruteador.App_Code.Models;
-
+using Telerik.Web.UI;
 
 public partial class App2_envio_pedido : System.Web.UI.Page
 {
@@ -53,35 +54,32 @@ public partial class App2_envio_pedido : System.Web.UI.Page
         {
             bool enviado = Convert.ToBoolean(DataBinder.Eval(e.Row.DataItem, "PERU_ENVIADO_RUTEADOR"));
 
-            if (enviado)
-            {
-                ((LinkButton)e.Row.FindControl("btn_modificar")).Enabled = false;
-                ((LinkButton)e.Row.FindControl("btn_eliminar")).Enabled = false;
-                ((System.Web.UI.HtmlControls.HtmlInputCheckBox)e.Row.FindControl("check")).Visible = false;
-            }
-
             int propuesta_ruta = Convert.ToInt16(DataBinder.Eval(e.Row.DataItem, "propuesta_ruta"));
-            if (propuesta_ruta>0)
+            if (enviado || propuesta_ruta > 0)
             {
                 ((LinkButton)e.Row.FindControl("btn_modificar")).Enabled = false;
                 ((LinkButton)e.Row.FindControl("btn_eliminar")).Enabled = false;
                 ((System.Web.UI.HtmlControls.HtmlInputCheckBox)e.Row.FindControl("check")).Visible = false;
             }
 
+            //if (propuesta_ruta > 0)
+            //{
+            //    ((LinkButton)e.Row.FindControl("btn_modificar")).Enabled = false;
+            //    ((LinkButton)e.Row.FindControl("btn_eliminar")).Enabled = false;
+            //    ((System.Web.UI.HtmlControls.HtmlInputCheckBox)e.Row.FindControl("check")).Visible = false;
+            //}
         }
     }
     protected void gv_listar_RowCommand(object sender, GridViewCommandEventArgs e)
     {
-
-
         if (e.CommandName == "EDITAR")
         {
             Limpiar();
             int peru_id = Convert.ToInt32(e.CommandArgument);
             PedidoBC p = new PedidoBC().ObtenerXId(peru_id);
             LlenarDatos(p);
-            utils.AbrirModal(this, "modalEdit");
-            hf_idPeru.Value = e.CommandArgument.ToString();
+            up_modalEdit.Update();
+            //utils.AbrirModal(this, "modalEdit");
 
         }
         if (e.CommandName == "ELIMINAR")
@@ -90,6 +88,79 @@ public partial class App2_envio_pedido : System.Web.UI.Page
             lbl_confTitulo.Text = "Eliminar Pedido";
             lbl_confMensaje.Text = "Se eliminará el pedido seleccionado ¿Desea continuar?";
             utils.AbrirModal(this, "modalConf");
+        }
+    }
+    protected void gv_listar_Sorting(object sender, GridViewSortEventArgs e)
+    {
+        string direccion = utils.ConvertSortDirectionToSql((String)ViewState["sortOrder"]);
+        ViewState["sortOrder"] = direccion;
+        ViewState["sortExpresion"] = e.SortExpression + " " + direccion;
+        ObtenerPedidos(false);
+    }
+    protected void gv_detalle_RowCreated(object sender, GridViewRowEventArgs e)
+    {
+        if (e.Row.RowType == DataControlRowType.DataRow)
+        {
+            e.Row.TableSection = TableRowSection.TableBody;
+        }
+        if (e.Row.RowType == DataControlRowType.Header)
+        {
+            e.Row.TableSection = TableRowSection.TableHeader;
+        }
+        if (e.Row.RowType == DataControlRowType.Pager)
+        {
+            e.Row.TableSection = TableRowSection.TableFooter;
+        }
+    }
+    protected void gv_detalle_RowCommand(object sender, GridViewCommandEventArgs e)
+    {
+        if (e.CommandName == "EDITAR")
+        {
+            LimpiarDetalle();
+            int index = Convert.ToInt32(e.CommandArgument);
+            gv_detalle.SelectedIndex = index;
+            DataTable dt = (DataTable)ViewState["detalle"];
+            DataRow dr = dt.Rows[index];
+            txt_detalleCod.Text = Convert.ToString(dr["CODIGO_PRODUCTO"]);
+            txt_detalleDesc.Text = Convert.ToString(dr["PEDE_DESC_PRODUCTO"]);
+            txt_detalleCodCl.Text = Convert.ToString(dr["CODIGO_CLIENTE"]);
+            txt_detalleDireccionCl.Text = Convert.ToString(dr["DIRECCION_CLIENTE"]);
+            txt_detalleNomCl.Text = Convert.ToString(dr["NOMBRE_CLIENTE"]);
+            ddl_detalleRegionCl.SelectedValue = Convert.ToString(dr["REGI_ID_CLIENTE"]);
+            ddl_detalleRegionCl_SelectedIndexChanged(null, null);
+            ddl_detalleCiudadCl.SelectedValue = Convert.ToString(dr["CIUD_ID_CLIENTE"]);
+            ddl_detalleCiudadCl_SelectedIndexChanged(null, null);
+            ddl_detalleComunaCl.SelectedValue = Convert.ToString(dr["ID_COMUNA_CLIENTE"]);
+            txt_detalleNro.Text = Convert.ToString(dr["NUMERO_GUIA"]);
+            txt_detallePeso.Text = Convert.ToString(dr["PESO_PEDIDO"]);
+            txt_detalleCant.Text = Convert.ToString(dr["PEDE_CANTIDAD"]);
+            //utils.AbrirModal(this, "modalDetalle");
+        }
+        if (e.CommandName == "ELIMINAR")
+        {
+            gv_detalle.SelectedIndex = Convert.ToInt32(e.CommandArgument);
+            if (!string.IsNullOrEmpty(hf_idPeru.Value))
+            {
+                try
+                {
+                    long pede_id = Convert.ToInt64(gv_detalle.SelectedDataKey.Value);
+                    new PedidoDetalleBC().Eliminar(pede_id);
+                }
+                catch (Exception ex)
+                {
+                    utils.ShowMessage(this, ex.Message, "error", false);
+                }
+                finally
+                {
+                    ObtenerDetalle(true);
+                }
+            }
+            else
+            {
+                DataTable dt = (DataTable)ViewState["detalle"];
+                dt.Rows.RemoveAt(gv_detalle.SelectedIndex);
+                ObtenerDetalle(false);
+            }
         }
     }
     #endregion
@@ -111,7 +182,7 @@ public partial class App2_envio_pedido : System.Web.UI.Page
             ddl_editComuna.ClearSelection();
             ddl_editComuna.Enabled = false;
         }
-        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "map", "mapa();", true);
+        //ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "map", "mapa();", true);
     }
     protected void ddl_editCiudad_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -127,21 +198,55 @@ public partial class App2_envio_pedido : System.Web.UI.Page
             ddl_editComuna.ClearSelection();
             ddl_editComuna.Enabled = false;
         }
-        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "map", "mapa();", true);
+        //ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "map", "mapa();", true);
     }
-    protected void ddl_buscarRegion_SelectedIndexChanged(object sender, EventArgs e)
+    protected void ddl_buscarRegion_SelectedIndexChanged(object sender, Telerik.Web.UI.RadComboBoxSelectedIndexChangedEventArgs e)
     {
         int regi_id = Convert.ToInt32(ddl_buscarRegion.SelectedValue);
         DataTable dt = new CiudadBC().ObtenerTodo(regi_id);
         utils.CargaDropTodos(ddl_buscarCiudad, "CIUD_ID", "CIUD_NOMBRE", dt);
         ddl_buscarCiudad_SelectedIndexChanged(null, null);
     }
-    protected void ddl_buscarCiudad_SelectedIndexChanged(object sender, EventArgs e)
+    protected void ddl_buscarCiudad_SelectedIndexChanged(object sender, Telerik.Web.UI.RadComboBoxSelectedIndexChangedEventArgs e)
     {
         int regi_id = Convert.ToInt32(ddl_buscarRegion.SelectedValue);
         int ciud_id = Convert.ToInt32(ddl_buscarCiudad.SelectedValue);
         DataTable dt = new ComunaBC().ObtenerTodo(regi_id, ciud_id);
-        utils.CargaDropTodos(ddl_buscarComuna, "COMU_ID", "COMU_NOMBRE", dt);
+        utils.CargaDropNormal(ddl_buscarComuna, "COMU_ID", "COMU_NOMBRE", dt);
+    }
+    protected void ddl_detalleRegionCl_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (ddl_detalleRegionCl.SelectedIndex > 0)
+        {
+            int regi_id = Convert.ToInt32(ddl_detalleRegionCl.SelectedValue);
+            DataTable dt = new CiudadBC().ObtenerTodo(regi_id);
+            utils.CargaDrop(ddl_detalleCiudadCl, "CIUD_ID", "CIUD_NOMBRE", dt);
+            ddl_detalleCiudadCl_SelectedIndexChanged(null, null);
+            ddl_detalleCiudadCl.Enabled = true;
+        }
+        else
+        {
+            ddl_detalleCiudadCl.ClearSelection();
+            ddl_detalleCiudadCl.Enabled = false;
+
+            ddl_detalleComunaCl.ClearSelection();
+            ddl_detalleComunaCl.Enabled = false;
+        }
+    }
+    protected void ddl_detalleCiudadCl_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (ddl_detalleCiudadCl.SelectedIndex > 0)
+        {
+            int ciud_id = Convert.ToInt32(ddl_detalleCiudadCl.SelectedValue);
+            DataTable dt = new ComunaBC().ObtenerTodo(ciud_id: ciud_id);
+            utils.CargaDrop(ddl_detalleComunaCl, "COMU_ID", "COMU_NOMBRE", dt);
+            ddl_detalleComunaCl.Enabled = true;
+        }
+        else
+        {
+            ddl_detalleComunaCl.ClearSelection();
+            ddl_detalleComunaCl.Enabled = false;
+        }
     }
     #endregion
     #region boton
@@ -159,19 +264,19 @@ public partial class App2_envio_pedido : System.Web.UI.Page
             if (gd.CrearEnvio(hseleccionado.Value.ToString(), user.USUA_ID, out id))
             {
                 hf_idEnvio.Value = id.ToString();
-                lbl_cedible.Text = string.Format("Envío cedible N°{0}",id);
+                lbl_cedible.Text = string.Format("Envío cedible N°{0}", id);
                 Session["ID_Seleccionados_1"] = hseleccionado.Value;
                 UpdatePanel1.Update();
-               // utils.AbrirModal(this, "modalFOTO");
-                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "zip_script", "zip1();", true);
-
+                // utils.AbrirModal(this, "modalFOTO");
+                //  ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "zip_script", "zip1();", true);
+                btnzip_Click(null, null);
             }
             else
             {
                 utils.ShowMessage(this, "Error", "error", false);
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             utils.ShowMessage(this, ex.Message, "error", false);
         }
@@ -180,7 +285,6 @@ public partial class App2_envio_pedido : System.Web.UI.Page
             ObtenerPedidos(true);
         }
     }
-
     protected void btnzip_Click(object sender, EventArgs e)
     {
         int id = int.Parse(hf_idEnvio.Value);
@@ -192,6 +296,7 @@ public partial class App2_envio_pedido : System.Web.UI.Page
         try
         {
             envio.archivo2(enviados, id);
+            utils.ShowMessage(this, "Pedidos enviados correctamente", "success", true);
         }
         catch (Exception ex)
         {
@@ -200,9 +305,9 @@ public partial class App2_envio_pedido : System.Web.UI.Page
         }
 
 
-        utils.ShowMessage(this.Page, "Pedidos enviados correctamente", "sucess", true);
+
         return;
-           
+
 
         UtilsWeb.AddFileToZip("C:\\ViewState\\multiple.zip", "C:\\ViewState\\cliente.txt");
         UtilsWeb.AddFileToZip("C:\\ViewState\\multiple.zip", "C:\\ViewState\\pedido.txt");
@@ -215,22 +320,20 @@ public partial class App2_envio_pedido : System.Web.UI.Page
         File.Delete("C:\\ViewState\\multiple.zip");
 
         Response.End();
-        
+
 
     }
-
     protected void btn_Agendar_Click(object sender, EventArgs e)
     {
         this.txt_fechaAg.Text = DateTime.Now.ToShortDateString();
         this.ddl_edithorario.SelectedIndex = 0;
         utils.AbrirModal(this, "modalFechaAg");
     }
-
     protected void btn_AgendarMasivo_Click(object sender, EventArgs e)
     {
         DateTime desde, hasta;
-        if (ddl_edithorario.SelectedValue!="0")
-        desde = Convert.ToDateTime(string.Format("{0} {1}", this.txt_fechaAg.Text, this.ddl_edithorario.SelectedItem.Text));
+        if (ddl_edithorario.SelectedValue != "0")
+            desde = Convert.ToDateTime(string.Format("{0} {1}", this.txt_fechaAg.Text, this.ddl_edithorario.SelectedItem.Text));
         else
             desde = Convert.ToDateTime(string.Format("{0}", this.txt_fechaAg.Text));
 
@@ -247,12 +350,10 @@ public partial class App2_envio_pedido : System.Web.UI.Page
         }
         this.btnBuscar_Click(null, null);
     }
-
-
     protected void btn_nuevo_Click(object sender, EventArgs e)
     {
         Limpiar();
-        utils.AbrirModal(this, "modalEdit");
+        ObtenerDetalle(false);
         ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "map", "mapa();", true);
     }
     protected void btnBuscar_Click(object sender, EventArgs e)
@@ -280,34 +381,35 @@ public partial class App2_envio_pedido : System.Web.UI.Page
                 PERU_LONGITUD = Convert.ToDecimal(txt_editLon.Text.Replace(".", ","))
             };
             p.HORA_SALIDA.HORA_ID = Convert.ToInt32(rb_editHorario.SelectedValue);
-            //if (rb_editHoraAm.Checked) p.PERU_HORASALIDA = "AM";
-            //else if (rb_editHoraPm.Checked) p.PERU_HORASALIDA = "PM";
             p.COMUNA.COMU_ID = Convert.ToInt32(ddl_editComuna.SelectedValue);
             p.USUARIO_PEDIDO = user;
             if (string.IsNullOrEmpty(hf_idPeru.Value))
             {
-                if (p.Guardar())
-                {
-                    utils.ShowMessage2(this, "guardar", "success_nuevo");
-                    utils.CerrarModal(this, "modalEdit");
-                }
-                else
-                    utils.ShowMessage2(this, "guardar", "error");
+                DataTable dt = ((DataTable)ViewState["detalle"]).DefaultView.ToTable(false
+                , "PEDE_ID"
+                , "PERU_ID"
+                , "CODIGO_PRODUCTO"
+                , "PEDE_DESC_PRODUCTO"
+                , "CODIGO_CLIENTE"
+                , "DIRECCION_CLIENTE"
+                , "NOMBRE_CLIENTE"
+                , "ID_COMUNA_CLIENTE"
+                , "NUMERO_GUIA"
+                , "PESO_PEDIDO"
+                , "PEDE_CANTIDAD");
+                p.Guardar(dt);
+                utils.ShowMessage2(this, "guardar", "success_nuevo");
+                utils.CerrarModal(this, "modalEdit");
             }
             else
             {
                 p.PERU_ID = Convert.ToInt64(hf_idPeru.Value);
-
-                if (p.Guardar())
-                {
-                    utils.ShowMessage2(this, "guardar", "success_modificar");
-                    utils.CerrarModal(this, "modalEdit");
-                }
-                else
-                    utils.ShowMessage2(this, "guardar", "error");
+                p.Guardar();
+                ObtenerDetalle(true);
+                utils.ShowMessage2(this, "guardar", "success_modificar");
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             utils.ShowMessage(this, ex.Message, "error", true);
         }
@@ -342,30 +444,119 @@ public partial class App2_envio_pedido : System.Web.UI.Page
             ObtenerPedidos(true);
         }
     }
+    protected void btn_detalleGuardar_Click(object sender, EventArgs e)
+    {
+        if (!string.IsNullOrEmpty(hf_idPeru.Value))
+        {
+            try
+            {
+                PedidoDetalleBC dp = new PedidoDetalleBC()
+                {
+                    CODIGO_PRODUCTO = txt_detalleCod.Text,
+                    PEDE_DESC_PRODUCTO = txt_detalleDesc.Text,
+                    CODIGO_CLIENTE = txt_detalleCodCl.Text,
+                    DIRECCION_CLIENTE = txt_detalleDireccionCl.Text,
+                    NOMBRE_CLIENTE = txt_detalleNomCl.Text,
+                    NUMERO_GUIA = txt_detalleNro.Text,
+                    PESO_PEDIDO = Convert.ToDecimal(txt_detallePeso.Text),
+                    PEDE_CANTIDAD = Convert.ToDecimal(txt_detalleCant.Text)
+                };
+                if (gv_detalle.SelectedIndex != -1)
+                {
+                    dp.PEDE_ID = Convert.ToInt64(gv_detalle.SelectedDataKey.Value);
+                }
+                dp.PEDIDO.PERU_ID = Convert.ToInt64(hf_idPeru.Value);
+                dp.COMUNA_CLIENTE.COMU_ID = Convert.ToInt32(ddl_detalleComunaCl.SelectedValue);
+                dp.Guardar();
+            }
+            catch(Exception ex)
+            {
+                utils.ShowMessage(this, ex.Message, "error", false);
+            }
+            finally
+            {
+                utils.CerrarModal(this, "modalDetalle");
+                ObtenerDetalle(true);
+            }
+        }
+        else
+        {
+            DataTable dt = (DataTable)ViewState["detalle"];
+            DataRow dr;
+            if (gv_detalle.SelectedIndex == -1)
+            {
+                dr = dt.NewRow();
+            }
+            else
+            {
+                dr = dt.Rows[gv_detalle.SelectedIndex];
+            }
+            //if (!string.IsNullOrEmpty(hf_idPede.Value))
+            //{
+            //    foreach (DataRow row in dt.Rows)
+            //    {
+            //        if (row["PEDE_ID"].ToString() == hf_idPede.Value)
+            //        {
+            //            dr = row;
+            //            break;
+            //        }
+            //    }
+            //}
+            //dr["PERU_ID"] = Convert.ToInt64(hf_idPeru.Value);
+            dr["CODIGO_PRODUCTO"] = txt_detalleCod.Text;
+            dr["PEDE_DESC_PRODUCTO"] = txt_detalleDesc.Text;
+            dr["CODIGO_CLIENTE"] = txt_detalleCodCl.Text;
+            dr["DIRECCION_CLIENTE"] = txt_detalleDireccionCl.Text;
+            dr["NOMBRE_CLIENTE"] = txt_detalleNomCl.Text;
+            dr["ID_COMUNA_CLIENTE"] = Convert.ToInt32(ddl_detalleComunaCl.SelectedValue);
+            dr["COMUNA_CLIENTE"] = ddl_detalleComunaCl.SelectedItem.Text;
+            dr["CIUD_ID_CLIENTE"] = Convert.ToInt32(ddl_detalleCiudadCl.SelectedValue);
+            dr["CIUD_NOMBRE_CLIENTE"] = ddl_detalleCiudadCl.SelectedItem.Text;
+            dr["REGI_ID_CLIENTE"] = Convert.ToInt32(ddl_detalleRegionCl.SelectedValue);
+            dr["REGI_NOMBRE_CLIENTE"] = ddl_detalleRegionCl.SelectedItem.Text;
+            dr["NUMERO_GUIA"] = txt_detalleNro.Text;
+            dr["PESO_PEDIDO"] = Convert.ToDecimal(txt_detallePeso.Text);
+            dr["PEDE_CANTIDAD"] = Convert.ToDecimal(txt_detalleCant.Text);
+            if (gv_detalle.SelectedIndex == -1)
+            {
+                dt.Rows.Add(dr);
+            }
+            ObtenerDetalle(false);
+            utils.CerrarModal(this, "modalDetalle");
+        }
+    }
+    protected void btn_editDetalle_Click(object sender, EventArgs e)
+    {
+        LimpiarDetalle();
+        //utils.AbrirModal(this, "modalDetalle");
+    }
     #endregion
     #region utilsPaginas
     private void ObtenerPedidos(bool forzarBD)
     {
         if (ViewState["listar"] == null || forzarBD)
         {
-            PedidoBC p = new PedidoBC();
             hseleccionado.Value = "";
             DateTime desde = (string.IsNullOrEmpty(txt_buscarDesde.Text)) ? DateTime.MinValue : Convert.ToDateTime(txt_buscarDesde.Text);
             DateTime hasta = (string.IsNullOrEmpty(txt_buscarHasta.Text)) ? DateTime.MinValue : Convert.ToDateTime(txt_buscarHasta.Text);
             int regi_id = Convert.ToInt32(ddl_buscarRegion.SelectedValue);
             int ciud_id = Convert.ToInt32(ddl_buscarCiudad.SelectedValue);
-            int comu_id = Convert.ToInt32(ddl_buscarComuna.SelectedValue);
+            StringBuilder comu_id = new StringBuilder();
+            foreach (RadComboBoxItem item in ddl_buscarComuna.CheckedItems)
+            {
+                if (comu_id.Length > 0)
+                    comu_id.Append(',');
+                comu_id.Append(item.Value);
+            }
             int hora_id = Convert.ToInt32(ddl_buscarHorario.SelectedValue);
-            DataTable dt = p.ObtenerTodo(desde: desde
-                                        ,hasta: hasta
+            ViewState["listar"] = new PedidoBC().ObtenerTodo(desde: desde
+                                        , hasta: hasta
                                         , hora_id: hora_id
-                                        ,regi_id: regi_id
-                                        ,ciud_id: ciud_id
-                                        ,comu_id: comu_id
-                                        ,usua_id: user.USUA_ID
-                                        ,peru_numero: txt_buscarNro.Text
-                                       );   //guiaDespacho.ObtenerGuiasEnviarContabilidad(id_bodega, rut_cliente, fechaInicio, fechaFin, this.txtBuscarNumero.Text, this.id_operacion);
-            ViewState["listar"] = dt;
+                                        , regi_id: regi_id
+                                        , ciud_id: ciud_id
+                                        , comu_id: comu_id.ToString()
+                                        , usua_id: user.USUA_ID
+                                        , peru_numero: txt_buscarNro.Text);
         }
         DataView dw = new DataView((DataTable)ViewState["listar"]);
         if (ViewState["sortExpresion"] != null && ViewState["sortExpresion"].ToString() != "")
@@ -374,6 +565,18 @@ public partial class App2_envio_pedido : System.Web.UI.Page
         }
         gv_listar.DataSource = dw.ToTable();
         gv_listar.DataBind();
+        utils.TableSPag(this, gv_listar);
+    }
+    private void ObtenerDetalle(bool forzarBD)
+    {
+        if (ViewState["detalle"] == null || forzarBD)
+        {
+            long peru_id = Convert.ToInt64(hf_idPeru.Value);
+            ViewState["detalle"] = new PedidoDetalleBC().ObtenerTodo(peru_id: peru_id);
+        }
+        gv_detalle.DataSource = ViewState["detalle"];
+        gv_detalle.DataBind();
+        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "dibujaTable", "drawTableDetalles();", true);
     }
     private void CargaDrops()
     {
@@ -382,14 +585,30 @@ public partial class App2_envio_pedido : System.Web.UI.Page
         ddl_editRegion_SelectedIndexChanged(null, null);
         utils.CargaDropTodos(ddl_buscarRegion, "REGI_ID", "REGI_NOMBRE", dt);
         ddl_buscarRegion_SelectedIndexChanged(null, null);
+        utils.CargaDrop(ddl_detalleRegionCl, "REGI_ID", "REGI_NOMBRE", dt);
+        ddl_detalleRegionCl_SelectedIndexChanged(null, null);
         dt = new HorarioBC().ObtenerTodo();
         utils.CargaDropNormal(ddl_buscarHorario, "HORA_ID", "HORA_COD", dt);
         utils.CargaDropNormal(ddl_edithorario, "HORA_ID", "HORA_COD", dt);
-        ddl_edithorario.Items.Insert(0, new ListItem("No Cambiar","0"));
+        ddl_edithorario.Items.Insert(0, new ListItem("No Cambiar", "0"));
         rb_editHorario.DataValueField = "HORA_ID";
         rb_editHorario.DataTextField = "HORA_COD";
         rb_editHorario.DataSource = dt;
         rb_editHorario.DataBind();
+    }
+    private void LimpiarDetalle()
+    {
+        gv_detalle.SelectedIndex = -1;
+        txt_detalleCodCl.Text = "";
+        txt_detalleNomCl.Text = "";
+        ddl_detalleRegionCl.ClearSelection();
+        ddl_detalleRegionCl_SelectedIndexChanged(null, null);
+        txt_detalleDireccionCl.Text = "";
+        txt_detalleNro.Text = "";
+        txt_detalleCod.Text = "";
+        txt_detalleDesc.Text = "";
+        txt_detalleCant.Text = "";
+        txt_detallePeso.Text = ""; 
     }
     private void Limpiar()
     {
@@ -407,6 +626,26 @@ public partial class App2_envio_pedido : System.Web.UI.Page
         rb_editHorario.ClearSelection();
         ddl_editRegion.ClearSelection();
         ddl_editRegion_SelectedIndexChanged(null, null);
+        DataTable dt = new DataTable();
+        dt.Columns.Add("PEDE_ID");
+        dt.Columns.Add("PERU_ID");
+        dt.Columns.Add("PERU_NUMERO");
+        dt.Columns.Add("PERU_NOMBRE");
+        dt.Columns.Add("CODIGO_PRODUCTO");
+        dt.Columns.Add("PEDE_DESC_PRODUCTO");
+        dt.Columns.Add("CODIGO_CLIENTE");
+        dt.Columns.Add("DIRECCION_CLIENTE");
+        dt.Columns.Add("NOMBRE_CLIENTE");
+        dt.Columns.Add("COMUNA_CLIENTE");
+        dt.Columns.Add("ID_COMUNA_CLIENTE");
+        dt.Columns.Add("CIUD_ID_CLIENTE");
+        dt.Columns.Add("CIUD_NOMBRE_CLIENTE");
+        dt.Columns.Add("REGI_ID_CLIENTE");
+        dt.Columns.Add("REGI_NOMBRE_CLIENTE");
+        dt.Columns.Add("NUMERO_GUIA");
+        dt.Columns.Add("PESO_PEDIDO");
+        dt.Columns.Add("PEDE_CANTIDAD");
+        ViewState["detalle"] = dt;
     }
     private void LlenarDatos(PedidoBC p)
     {
@@ -425,8 +664,19 @@ public partial class App2_envio_pedido : System.Web.UI.Page
         txt_editLat.Text = p.PERU_LATITUD.ToString();
         txt_editLon.Text = p.PERU_LONGITUD.ToString();
         rb_editHorario.SelectedValue = p.HORA_SALIDA.HORA_ID.ToString();
-        //if (p.PERU_HORASALIDA == "AM") rb_editHoraAm.Checked = true;
-        //else rb_editHoraPm.Checked = true;
+
+        int detalle = int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["usa_Detalle"]);
+        if (detalle == 1)
+        {
+            ObtenerDetalle(true);
+            gv_detalle.Visible = true;
+            btn_editDetalle.Visible = true;
+        }
+        else
+        {
+            gv_detalle.Visible = false;
+            btn_editDetalle.Visible = false;
+        }
         ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "map", "mapa();", true);
     }
     #endregion
@@ -478,11 +728,4 @@ public partial class App2_envio_pedido : System.Web.UI.Page
         return file;
     }
 
-    protected void gv_listar_Sorting(object sender, GridViewSortEventArgs e)
-    {
-        string direccion = utils.ConvertSortDirectionToSql((String)ViewState["sortOrder"]);
-        ViewState["sortOrder"] = direccion;
-        ViewState["sortExpresion"] = e.SortExpression + " " + direccion;
-        ObtenerPedidos(false);
-    }
 }

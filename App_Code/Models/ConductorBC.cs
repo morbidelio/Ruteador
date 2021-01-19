@@ -20,13 +20,13 @@ namespace Ruteador.App_Code.Models
             // TODO: Agregar aquí la lógica del constructor
             //
         }
-        public DataTable ObtenerTodo(bool cond_activo, bool cond_bloqueado, string cond_rut = null, string cond_nombre = null)
+        public DataTable ObtenerTodo(bool cond_activo, bool cond_bloqueado, DateTime fecha = new DateTime(), int hora_id = 0, string cond_rut = null, string cond_nombre = null)
         {
-            return tran.Conductor_ObtenerTodo(cond_activo, cond_bloqueado, cond_rut, cond_nombre);
+            return tran.Conductor_ObtenerTodo(fecha, hora_id, cond_activo, cond_bloqueado, cond_rut, cond_nombre);
         }
-        public DataTable ObtenerTodo(string cond_rut = null, string cond_nombre = null)
+        public DataTable ObtenerTodo(DateTime fecha = new DateTime(), int hora_id = 0, string cond_rut = null, string cond_nombre = null)
         {
-            return tran.Conductor_ObtenerTodo(cond_rut, cond_nombre);
+            return tran.Conductor_ObtenerTodo(fecha, hora_id, cond_rut, cond_nombre);
         }
         public ConductorBC ObtenerXId(int cond_id)
         {
